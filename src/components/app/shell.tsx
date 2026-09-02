@@ -8,6 +8,7 @@ import {
   Menu,
   Moon,
   Receipt,
+  LogOut,
   Settings,
   Sun,
   Target,
@@ -17,10 +18,11 @@ import {
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useDiscretion, useEstMonte } from '@/components/providers';
 import { cn } from '@/lib/cn';
+import { supabaseNavigateur } from '@/lib/db/client';
 
 const NAVIGATION = [
   { href: '/dashboard', libelle: 'Vue d’ensemble', icone: LayoutDashboard },
@@ -114,7 +116,47 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+
+function BoutonDeconnexion() {
+  const router = useRouter();
+  const [enCours, setEnCours] = useState(false);
+
+  async function deconnecter() {
+    setEnCours(true);
+    try {
+      await supabaseNavigateur().auth.signOut();
+      // `refresh()` vide le cache des Server Components : sans lui, les données
+      // du compte précédent resteraient affichées.
+      router.replace('/connexion');
+      router.refresh();
+    } catch {
+      setEnCours(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={deconnecter}
+      disabled={enCours}
+      className="flex min-h-11 w-full items-center gap-3 rounded-[var(--radius)] px-3 text-[14px] text-text-muted transition-colors hover:bg-surface-hover hover:text-text disabled:opacity-60"
+    >
+      <LogOut className="size-[18px]" />
+      Se déconnecter
+    </button>
+  );
+}
+
+export function AppShell({
+  children,
+  email = null,
+  modeDemo = true,
+}: {
+  children: React.ReactNode;
+  /** Email de l'utilisateur connecté, `null` en mode démo. */
+  email?: string | null;
+  modeDemo?: boolean;
+}) {
   const [menuOuvert, setMenuOuvert] = useState(false);
 
   return (
@@ -151,11 +193,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Settings className="size-[18px]" />
             Paramètres
           </Link>
-          <p className="px-3 pt-3 text-[11px] leading-relaxed text-text-subtle">
-            Mode démo — données fictives.
-            <br />
-            Aucune donnée réelle n’est stockée.
-          </p>
+          {email ? (
+            <>
+              <p className="truncate px-3 pt-3 text-[11px] text-text-subtle" title={email}>
+                {email}
+              </p>
+              <div className="pt-1">
+                <BoutonDeconnexion />
+              </div>
+            </>
+          ) : (
+            <p className="px-3 pt-3 text-[11px] leading-relaxed text-text-subtle">
+              {modeDemo ? (
+                <>
+                  Mode démo — données fictives.
+                  <br />
+                  Aucune donnée réelle n’est stockée.
+                </>
+              ) : (
+                <>Session absente.</>
+              )}
+            </p>
+          )}
         </div>
       </aside>
 
