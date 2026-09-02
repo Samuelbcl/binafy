@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# fichier SQL derive, regenere par scripts/generer-sql-complet.mjs
+supabase/schema-complet.generated.sql
