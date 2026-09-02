@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nestor — Le patrimoine, version belge
 
-## Getting Started
+> Suivre. Comprendre. Décider. Sans devoir traduire la fiscalité française.
 
-First, run the development server:
+Nestor est une application de suivi et de pilotage de patrimoine pensée **pour la Belgique** :
+connexion aux banques belges, fiscalité belge intégrée dans chaque calcul, et un moteur
+pédagogique qui explique *pourquoi* un chiffre est ce qu'il est.
+
+Projet porté par **Biancola Studio** (Samuel Biancola, Liège).
+
+---
+
+## Pourquoi ce projet existe
+
+Les outils du marché (Finary en tête) sont excellents sur l'UX et **structurellement français** :
+
+| Problème constaté | Réponse Nestor |
+|---|---|
+| Connexions bancaires belges instables ou absentes | Agrégateur PSD2 choisi pour sa couverture BE + import CODA/CSV natif en secours |
+| Fiscalité PEA / assurance-vie / PER, inapplicable en Belgique | Moteur fiscal belge : précompte mobilier, TOB, taxe sur les plus-values, RC indexé, droits d'enregistrement par Région |
+| Fonctionnalités de base derrière un paywall | Le suivi complet reste gratuit ; le payant porte sur l'automatisation et le conseil |
+| Aucun contenu sur le statut d'indépendant belge | Module dédié : complémentaire vs principal, cotisations, TVA, IPP marginal |
+
+**Positionnement en une phrase :** l'outil que tout jeune actif ou indépendant belge ouvre
+pour savoir où il en est et ce que ça lui coûtera vraiment en impôts.
+
+---
+
+## État du projet
+
+Le socle est en place et l'application tourne en mode démo, sur des données
+fictives cohérentes — aucune base n'est nécessaire pour l'ouvrir.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm test         # 177 tests, moteur fiscal et financier
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Ce qui est fait**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Brique | État |
+|---|---|
+| Moteur fiscal belge (`src/lib/tax`) | Précompte, TOB, plus-values 2026, Reynders, RC indexé, droits d'enregistrement par Région, IPP, indépendant complémentaire |
+| Moteurs financiers (`src/lib/finance`) | Intérêts composés, crédit et amortissement, capacité d'emprunt, projection de patrimoine, rendement locatif, taux d'épargne |
+| Tests | 177 tests, dont les cas métier chiffrés de `docs/06` et `docs/07` |
+| Design system | Tokens de `docs/05`, thèmes sombre et clair, mode discrétion |
+| Écrans | Dashboard, Patrimoine, Budget, Objectifs, Fiscalité, Projections, Paramètres |
+| Outils publics | Frais d'acquisition, intérêts composés — état encodé dans l'URL |
+| Base de données | Migrations SQL versionnées, RLS sur chaque table, seed fiscal généré |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Ce qui reste**
 
-## Learn More
+Persistance Supabase et authentification, import CSV puis CODA, connexion PSD2,
+Sankey budgétaire, écrans des simulateurs de patrimoine et de rendement locatif,
+`nl-BE`. Voir `docs/08-roadmap.md`.
 
-To learn more about Next.js, take a look at the following resources:
+**Avant toute mise en production :** les 44 paramètres fiscaux listés dans
+`docs/11-parametres-a-verifier.md` doivent être confirmés à leur source officielle.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Organisation du dossier
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+CLAUDE.md                              ← à lire par Claude Code à chaque session
+docs/01-vision-produit.md              ← positionnement, cible, ce qu'on ne fait pas
+docs/02-specifications-fonctionnelles.md ← tous les écrans, module par module
+docs/03-architecture-technique.md      ← stack, agrégation bancaire, cotations
+docs/04-modele-de-donnees.md           ← schéma Postgres complet + RLS
+docs/05-design-system.md               ← tokens, typo, composants, graphiques
+docs/06-fiscalite-belge.md             ← le cœur métier, à traiter comme une spec
+docs/07-moteurs-de-calcul.md           ← formules exactes des simulateurs
+docs/08-roadmap.md                     ← MVP → V1 → V2, avec critères de sortie
+docs/09-contenu-seo.md                 ← site public, pages piliers, outils gratuits
+docs/10-benchmark-finary.md            ← ce qu'on reprend, ce qu'on fait autrement
+docs/11-parametres-a-verifier.md       ← généré : les taux à confirmer à la source
 
-## Deploy on Vercel
+src/lib/tax/      moteur fiscal belge — fonctions pures, testées
+src/lib/finance/  intérêts composés, amortissement, projections
+src/lib/demo/     données fictives du mode démo
+supabase/         migrations versionnées et seed fiscal
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Nom et identité
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`Nestor` — le majordome belge qui tient les comptes. Court, prononçable en FR et NL,
+`.be` probablement libre, et ça ne ressemble à aucun concurrent.
+
+Alternatives si le domaine est pris : **Kapitaan**, **Patrimo**, **Ostra**, **Belvest**.
+
+---
+
+## Règle non négociable
+
+Nestor **informe**, il ne conseille pas. Aucun écran ne dit « investis dans X ».
+Le conseil en investissement est une activité réglementée en Belgique (FSMA).
+Voir `docs/01-vision-produit.md` § Cadre réglementaire.
