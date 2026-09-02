@@ -1,26 +1,259 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/*
+ * Nestor — design system (docs/05-design-system.md)
+ *
+ * Registre : « dark editorial fintech ». Sombre, dense, mais avec une typographie
+ * de magazine plutôt que de terminal. Accent laiton chaud, jamais de néon.
+ * Trois mots directeurs : précis, calme, sérieux. On manipule l'argent de gens qui
+ * n'en ont pas beaucoup — l'interface ne doit ni gamifier ni dramatiser.
+ */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* Fonds */
+  --bg: #0b0d10;
+  --surface: #14181d;
+  --surface-2: #1c2128;
+  --surface-hover: #232a33;
+  --border: #2a323c;
+
+  /* Texte */
+  --text: #eceff3;
+  --text-muted: #8a94a0;
+  --text-subtle: #5c6570;
+
+  /* Marque — laiton */
+  --primary: #c6a15b;
+  --primary-hover: #d9b673;
+  --primary-soft: #c6a15b1a;
+  --on-primary: #0b0d10;
+
+  /* Sémantique */
+  --positive: #4ade9b;
+  --negative: #f2725c;
+  --warning: #f5b841;
+  --info: #6e9df7;
+
+  /* Palette de données — donut, Sankey, séries */
+  --data-1: #c6a15b;
+  --data-2: #6e9df7;
+  --data-3: #4ade9b;
+  --data-4: #b07fe0;
+  --data-5: #f2725c;
+  --data-6: #45c4d6;
+  --data-7: #f5b841;
+  --data-8: #7c8794;
+
+  /* Rayons et ombres */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.18);
+  --glow-primary: 0 0 48px rgb(198 161 91 / 0.12);
+}
+
+/*
+ * Thème clair — obligatoire, pas optionnel : beaucoup de Belges consultent
+ * leurs comptes en plein jour.
+ */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --surface-2: #f4f4f1;
+  --surface-hover: #ececeA;
+  --border: #e4e4df;
+
+  --text: #14181d;
+  --text-muted: #5c6570;
+  --text-subtle: #8a94a0;
+
+  --primary: #8a6d2f;
+  --primary-hover: #6f571f;
+  --primary-soft: #8a6d2f14;
+  --on-primary: #ffffff;
+
+  --positive: #128a5a;
+  --negative: #c4432c;
+  --warning: #a67908;
+  --info: #2f5fc4;
+
+  --data-1: #8a6d2f;
+  --data-2: #2f5fc4;
+  --data-3: #128a5a;
+  --data-4: #7b4bb0;
+  --data-5: #c4432c;
+  --data-6: #14808f;
+  --data-7: #a67908;
+  --data-8: #5c6570;
+
+  --shadow-card: 0 1px 2px rgb(20 24 29 / 0.06), 0 8px 24px rgb(20 24 29 / 0.05);
+  --glow-primary: 0 0 48px rgb(138 109 47 / 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+
+  --color-data-1: var(--data-1);
+  --color-data-2: var(--data-2);
+  --color-data-3: var(--data-3);
+  --color-data-4: var(--data-4);
+  --color-data-5: var(--data-5);
+  --color-data-6: var(--data-6);
+  --color-data-7: var(--data-7);
+  --color-data-8: var(--data-8);
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-card: var(--shadow-card);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    height: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: 'kern' 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * Chiffres tabulaires partout où un montant apparaît. Ce n'est pas un détail :
+   * en chiffres tabulaires, les colonnes s'alignent et les valeurs deviennent
+   * comparables d'un coup d'œil.
+   */
+  .tabular,
+  table,
+  [data-montant] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  /* Focus visible partout, jamais d'outline supprimé sans remplacement. */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--text);
+  }
+
+  /* Barres de défilement discrètes, accordées au thème. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Chiffre héros du dashboard — doc 05 § typographie. */
+  .chiffre-hero {
+    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(2.5rem, 6vw, 3.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label-kpi {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .carte {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Hover d'une carte KPI : 1px vers le haut, 160 ms. Sobre. */
+  .carte-interactive {
+    transition:
+      background-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .carte-interactive:hover {
+    background: var(--surface-hover);
+    transform: translateY(-1px);
+  }
+}
+
+@layer utilities {
+  .texte-positif {
+    color: var(--positive);
+  }
+  .texte-negatif {
+    color: var(--negative);
+  }
+}
+
+/*
+ * Les graphiques s'animent une seule fois au montage. Sur des chiffres d'argent,
+ * une animation permanente donne une impression d'instabilité.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
