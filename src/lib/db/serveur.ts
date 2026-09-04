@@ -4,6 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 import { envClient, envServeur, exigerEnv, supabaseConfigure } from '@/lib/env';
+import type { Database } from './types';
 
 /**
  * Clients Supabase côté serveur.
@@ -30,7 +31,7 @@ export async function supabaseServeur() {
   exigerConfiguration();
   const magasin = await cookies();
 
-  return createServerClient(
+  return createServerClient<Database>(
     envClient.NEXT_PUBLIC_SUPABASE_URL!,
     envClient.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -63,7 +64,7 @@ export async function supabaseServeur() {
 export function supabaseAdmin() {
   exigerConfiguration();
 
-  return createClient(
+  return createClient<Database>(
     envClient.NEXT_PUBLIC_SUPABASE_URL!,
     exigerEnv('SUPABASE_SERVICE_ROLE_KEY'),
     {

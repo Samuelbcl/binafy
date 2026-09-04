@@ -2,6 +2,7 @@
 
 import { createBrowserClient } from '@supabase/ssr';
 import { envClient, supabaseConfigure } from '@/lib/env';
+import type { Database } from './types';
 
 /**
  * Client Supabase pour les Client Components.
@@ -10,7 +11,7 @@ import { envClient, supabaseConfigure } from '@/lib/env';
  * seule barrière de sécurité. Une table sans policy est une table publique.
  */
 
-let cache: ReturnType<typeof createBrowserClient> | null = null;
+let cache: ReturnType<typeof createBrowserClient<Database>> | null = null;
 
 export function supabaseNavigateur() {
   if (!supabaseConfigure) {
@@ -22,7 +23,7 @@ export function supabaseNavigateur() {
 
   // Un seul client par onglet : en recréer un à chaque rendu casse la session
   // et multiplie les connexions temps réel.
-  cache ??= createBrowserClient(
+  cache ??= createBrowserClient<Database>(
     envClient.NEXT_PUBLIC_SUPABASE_URL!,
     envClient.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
