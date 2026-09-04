@@ -14,7 +14,8 @@
     "db:migrer": "node --env-file=.env.local scripts/appliquer-migrations.mjs --seed",
     "db:types": "node --env-file=.env.local scripts/generer-types-db.mjs",
     "db:verifier": "node --env-file=.env.local scripts/verifier-rls.mjs",
-    "fiscal:seed": "node scripts/generer-seed-fiscal.mjs"
+    "fiscal:seed": "node scripts/generer-seed-fiscal.mjs",
+    "db:cron": "node --env-file=.env.local scripts/verifier-cron.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",
