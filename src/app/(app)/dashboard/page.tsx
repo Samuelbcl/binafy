@@ -1,27 +1,25 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
 import { DonutAllocation } from '@/components/charts/donut-allocation';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
 import { Montant, Variation } from '@/components/ui/montant';
 import { PanneauExplication } from '@/components/ui/panneau-explication';
-import {
-  ACTIFS_DEMO,
-  allocationDemo,
-  budgetDemo,
-  historiqueDemo,
-  MOUVEMENTS_DEMO,
-  patrimoineNetCents,
-  PROFIL_DEMO,
-  totalActifsCents,
-  totalPassifsCents,
-  variationJourCents,
-} from '@/lib/demo/donnees';
+import { chargerPatrimoine } from '@/lib/db/patrimoine';
+import { budgetDemo, MOUVEMENTS_DEMO, PROFIL_DEMO } from '@/lib/demo/donnees';
 import { calculerTauxEpargneCompare } from '@/lib/finance/epargne';
 import { formatPercent } from '@/lib/money';
-import { calculerImpotLatent } from '@/lib/tax/plus-values';
+import {
+  allocation,
+  patrimoineNet,
+  totalActifs,
+  totalPassifs,
+  valeurQuotePart,
+  variationJour,
+} from '@/lib/patrimoine/types';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
+import { calculerImpotLatent } from '@/lib/tax/plus-values';
 
 export const metadata: Metadata = {
   title: 'Vue d’ensemble',
@@ -34,21 +32,20 @@ export const metadata: Metadata = {
  * Objectif : en 5 secondes, savoir si ça monte ou si ça descend, et pourquoi.
  * Server Component, avec des îlots clients pour les graphiques (doc 03 § performance).
  */
-export default function DashboardPage() {
-  const net = patrimoineNetCents();
-  const variation = variationJourCents();
-  const historique = historiqueDemo();
-  const allocation = allocationDemo();
+export default async function DashboardPage() {
+  const { actifs, passifs, historique, demo } = await chargerPatrimoine();
 
-  const epargne = calculerTauxEpargneCompare(budgetDemo());
+  const net = patrimoineNet(actifs, passifs);
+  const variation = variationJour(actifs);
+  const ratioVariation = net > 0 ? variation / net : 0;
 
   // Le KPI signature : patrimoine net d'impôt latent. Personne d'autre ne le fait.
   const impotLatent = calculerImpotLatent(
     {
-      positions: ACTIFS_DEMO.filter((a) => a.supportTOB !== undefined).map((a) => ({
+      positions: actifs.map((a) => ({
         id: a.id,
         nom: a.nom,
-        valeurActuelleCents: Math.round(a.valeurCents * (a.quotePart / 100)),
+        valeurActuelleCents: valeurQuotePart(a),
         prixAcquisitionCents: a.prixAcquisitionCents ?? null,
         valeurReference2025Cents: a.valeurReference2025Cents ?? null,
         dateAcquisition: a.dateAcquisition ?? null,
@@ -58,27 +55,33 @@ export default function DashboardPage() {
     TAX_PARAMS_2026,
   );
 
-  const ratioVariation = net > 0 ? variation / net : 0;
-
-  // Revenus passifs projetés : intérêts d'épargne et dividendes attendus sur 12 mois.
-  const revenusPassifs12Mois = ACTIFS_DEMO.reduce((somme, a) => {
-    if (a.classe === 'compte_epargne' && a.tauxBase !== undefined) {
-      const taux = (a.tauxBase + (a.primeFidelite ?? 0)) / 100;
-      return somme + Math.round(a.valeurCents * taux);
-    }
-    return somme;
+  // Intérêts d'épargne attendus sur 12 mois, avant précompte.
+  const revenusPassifs12Mois = actifs.reduce((somme, a) => {
+    if (a.classe !== 'compte_epargne' || a.tauxBase == null) return somme;
+    const taux = (a.tauxBase + (a.primeFidelite ?? 0)) / 100;
+    return somme + Math.round(valeurQuotePart(a) * taux);
   }, 0);
+
+  // Le budget n'est pas encore persisté : il reste sur le jeu de démo.
+  const epargne = calculerTauxEpargneCompare(budgetDemo());
+
+  // Premier écran après inscription : pas de graphique vide et triste (doc 02).
+  if (actifs.length === 0 && passifs.length === 0) {
+    return <EtatVide />;
+  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <header>
-        <p className="label-kpi">Bonsoir {PROFIL_DEMO.prenom}</p>
+        <p className="label-kpi">{demo ? `Bonsoir ${PROFIL_DEMO.prenom}` : 'Patrimoine net'}</p>
         <h1 className="mt-3 chiffre-hero">
           <Montant cents={net} decimals={2} />
         </h1>
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
           <Variation cents={variation} ratio={ratioVariation} decimals={2} />
-          <span className="text-[13px] text-text-subtle">sur la journée</span>
+          <span className="text-[13px] text-text-subtle">
+            {variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'}
+          </span>
         </div>
       </header>
 
@@ -110,10 +113,20 @@ export default function DashboardPage() {
         />
       </div>
 
-      <CourbePatrimoine historique={historique} />
+      {historique.length > 1 ? (
+        <CourbePatrimoine historique={historique} />
+      ) : (
+        <section className="carte p-5 sm:p-6">
+          <h2 className="font-display text-[17px] font-semibold">Évolution du patrimoine net</h2>
+          <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-text-muted">
+            L’historique se construit à partir d’un instantané quotidien. La courbe
+            apparaîtra dès qu’il y aura au moins deux points — compte quelques jours.
+          </p>
+        </section>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
-        <DonutAllocation allocation={allocation} totalCents={totalActifsCents()} />
+        <DonutAllocation allocation={allocation(actifs)} totalCents={totalActifs(actifs)} />
 
         <section className="carte p-5 sm:p-6">
           <div className="flex items-baseline justify-between gap-3">
@@ -127,23 +140,30 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <ul className="mt-4 divide-y divide-border/50">
-            {MOUVEMENTS_DEMO.map((m) => (
-              <li key={m.id} className="flex items-center justify-between gap-4 py-3">
-                <div className="min-w-0">
-                  <p className="truncate text-[14px]">{m.libelle}</p>
-                  <p className="text-[12px] text-text-subtle">{m.detail}</p>
-                </div>
-                <Montant
-                  cents={m.montantCents}
-                  sign="always"
-                  decimals={2}
-                  colore
-                  className="shrink-0 text-[14px]"
-                />
-              </li>
-            ))}
-          </ul>
+          {demo ? (
+            <ul className="mt-4 divide-y divide-border/50">
+              {MOUVEMENTS_DEMO.map((m) => (
+                <li key={m.id} className="flex items-center justify-between gap-4 py-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-[14px]">{m.libelle}</p>
+                    <p className="text-[12px] text-text-subtle">{m.detail}</p>
+                  </div>
+                  <Montant
+                    cents={m.montantCents}
+                    sign="always"
+                    decimals={2}
+                    colore
+                    className="shrink-0 text-[14px]"
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-4 text-[13px] leading-relaxed text-text-muted">
+              Les mouvements apparaîtront ici dès que les cotations quotidiennes ou un
+              import de transactions seront en place.
+            </p>
+          )}
         </section>
       </div>
 
@@ -154,13 +174,13 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <dt className="text-text-muted">Total des actifs</dt>
               <dd>
-                <Montant cents={totalActifsCents()} />
+                <Montant cents={totalActifs(actifs)} />
               </dd>
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-text-muted">Total des passifs</dt>
               <dd>
-                <Montant cents={-totalPassifsCents()} />
+                <Montant cents={-totalPassifs(passifs)} />
               </dd>
             </div>
             <div className="flex items-center justify-between border-t border-border pt-3 font-medium">
@@ -178,6 +198,87 @@ export default function DashboardPage() {
           className="self-start"
         />
       </div>
+    </div>
+  );
+}
+
+/**
+ * État vide du dashboard (doc 02 § module 1).
+ * C'est le premier écran après inscription : pas de graphique vide et triste,
+ * mais un parcours qui dit quoi faire.
+ */
+function EtatVide() {
+  const etapes = [
+    {
+      titre: 'Saisir manuellement',
+      texte:
+        'Un compte, un ETF, un crédit. C’est le plus rapide pour voir à quoi ressemble ton patrimoine consolidé.',
+      href: '/patrimoine',
+      libelle: 'Ajouter un actif',
+      disponible: true,
+    },
+    {
+      titre: 'Importer un CSV',
+      texte:
+        'Tes extraits bancaires, avec un mapping de colonnes. C’est ce qui donne le budget et le taux d’épargne réel.',
+      href: '/budget',
+      libelle: 'Bientôt',
+      disponible: false,
+    },
+    {
+      titre: 'Connecter une banque',
+      texte:
+        'Synchronisation PSD2, en lecture seule. Elle arrive après, parce que l’app doit déjà être utile sans.',
+      href: '/parametres',
+      libelle: 'Bientôt',
+      disponible: false,
+    },
+  ];
+
+  return (
+    <div className="mx-auto max-w-4xl space-y-6">
+      <header>
+        <h1 className="font-display text-[28px] font-semibold tracking-tight">
+          Ton patrimoine est vide
+        </h1>
+        <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">
+          Trois façons de le remplir. La première suffit pour commencer, et elle prend
+          deux minutes.
+        </p>
+      </header>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        {etapes.map((etape, i) => (
+          <div key={etape.titre} className="carte flex flex-col p-5">
+            <span className="label-kpi">Étape {i + 1}</span>
+            <h2 className="mt-3 font-display text-[16px] font-semibold">{etape.titre}</h2>
+            <p className="mt-2 flex-1 text-[13px] leading-relaxed text-text-muted">
+              {etape.texte}
+            </p>
+            {etape.disponible ? (
+              <Link
+                href={etape.href}
+                className="mt-4 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[var(--radius)] bg-primary px-4 text-[13px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+              >
+                <Plus className="size-4" />
+                {etape.libelle}
+              </Link>
+            ) : (
+              <span className="mt-4 inline-flex min-h-11 items-center justify-center rounded-[var(--radius)] border border-border px-4 text-[13px] text-text-subtle">
+                {etape.libelle}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <p className="text-[12px] leading-relaxed text-text-subtle">
+        Les simulateurs, eux, fonctionnent déjà sans aucune donnée : va voir les{' '}
+        <Link href="/projections" className="text-text-muted underline underline-offset-2">
+          projections
+        </Link>
+        .
+      </p>
     </div>
   );
 }

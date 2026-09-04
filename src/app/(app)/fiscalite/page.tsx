@@ -6,7 +6,9 @@ import {
   MentionInformative,
   PanneauExplication,
 } from '@/components/ui/panneau-explication';
-import { ACTIFS_DEMO, PROFIL_DEMO } from '@/lib/demo/donnees';
+import { chargerPatrimoine } from '@/lib/db/patrimoine';
+import { PROFIL_DEMO } from '@/lib/demo/donnees';
+import { valeurQuotePart } from '@/lib/patrimoine/types';
 import { formatEUR, formatPercent } from '@/lib/money';
 import { calculerIPP } from '@/lib/tax/ipp';
 import { TAX_PARAMS_2026, parametresNonVerifies } from '@/lib/tax/parametres';
@@ -23,8 +25,9 @@ export const metadata: Metadata = {
  *
  * « C'est ce module qui justifie l'existence du produit. Il doit être le plus soigné. »
  */
-export default function FiscalitePage() {
+export default async function FiscalitePage() {
   const params = TAX_PARAMS_2026;
+  const { actifs } = await chargerPatrimoine();
 
   const ipp = calculerIPP(
     {
@@ -36,10 +39,10 @@ export default function FiscalitePage() {
 
   const impotLatent = calculerImpotLatent(
     {
-      positions: ACTIFS_DEMO.map((a) => ({
+      positions: actifs.map((a) => ({
         id: a.id,
         nom: a.nom,
-        valeurActuelleCents: Math.round(a.valeurCents * (a.quotePart / 100)),
+        valeurActuelleCents: valeurQuotePart(a),
         prixAcquisitionCents: a.prixAcquisitionCents ?? null,
         valeurReference2025Cents: a.valeurReference2025Cents ?? null,
         dateAcquisition: a.dateAcquisition ?? null,
@@ -49,13 +52,15 @@ export default function FiscalitePage() {
     params,
   );
 
-  const epargne = ACTIFS_DEMO.find((a) => a.classe === 'compte_epargne');
+  const epargne = actifs.find((a) => a.classe === 'compte_epargne' && a.tauxBase != null);
   const interetsEpargne = epargne
     ? calculerPrecompteEpargneReglementee(
         {
-          interetsBaseCents: Math.round(epargne.valeurCents * ((epargne.tauxBase ?? 0) / 100)),
+          interetsBaseCents: Math.round(
+            valeurQuotePart(epargne) * ((epargne.tauxBase ?? 0) / 100),
+          ),
           primeFideliteCents: Math.round(
-            epargne.valeurCents * ((epargne.primeFidelite ?? 0) / 100),
+            valeurQuotePart(epargne) * ((epargne.primeFidelite ?? 0) / 100),
           ),
         },
         params,

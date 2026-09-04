@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { useDiscretion } from '@/components/providers';
 import { cn } from '@/lib/cn';
-import type { AllocationPoche } from '@/lib/demo/donnees';
+import type { AllocationPoche } from '@/lib/patrimoine/types';
 import { formatEUR, formatPercent, MASK, NBSP } from '@/lib/money';
 
 /**

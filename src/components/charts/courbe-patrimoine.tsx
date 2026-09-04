@@ -13,7 +13,7 @@ import {
 import { useDiscretion } from '@/components/providers';
 import { cn } from '@/lib/cn';
 import { formatEUR, formatEURCompact, MASK, NBSP } from '@/lib/money';
-import type { PointHistorique } from '@/lib/demo/donnees';
+import type { PointHistorique } from '@/lib/patrimoine/types';
 
 /**
  * Courbe d'évolution du patrimoine net (doc 05 § graphique d'évolution).

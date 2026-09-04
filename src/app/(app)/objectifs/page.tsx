@@ -3,11 +3,9 @@ import Link from 'next/link';
 import { CarteKPI } from '@/components/ui/carte-kpi';
 import { Montant } from '@/components/ui/montant';
 import { PanneauExplication } from '@/components/ui/panneau-explication';
-import {
-  ACTIFS_DEMO,
-  budgetDemo,
-  CATEGORIES_DEMO,
-} from '@/lib/demo/donnees';
+import { chargerPatrimoine } from '@/lib/db/patrimoine';
+import { budgetDemo, CATEGORIES_DEMO } from '@/lib/demo/donnees';
+import { valeurQuotePart } from '@/lib/patrimoine/types';
 import { calculerEpargnePrecaution, calculerTauxEpargneCompare } from '@/lib/finance/epargne';
 import { calculerCashNecessaire } from '@/lib/tax/enregistrement';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
@@ -26,7 +24,8 @@ export const metadata: Metadata = {
  * depuis le module frais d'acquisition. Et la date d'atteinte est projetée au
  * rythme d'épargne réel des derniers mois, pas au rythme déclaré.
  */
-export default function ObjectifsPage() {
+export default async function ObjectifsPage() {
+  const { actifs } = await chargerPatrimoine();
   const budget = calculerTauxEpargneCompare(budgetDemo());
   const capaciteMensuelle = Math.round(
     budget.result.lisse12Mois.nonDepenseCents / (budget.result.lisse12Mois.moisComptes || 1),
@@ -37,9 +36,9 @@ export default function ObjectifsPage() {
     ['Logement', 'Transport', 'Abonnements'].includes(c.nom),
   ).reduce((s, c) => s + c.montantCents, 0);
 
-  const epargneLiquide = ACTIFS_DEMO.filter((a) =>
-    ['compte_epargne', 'compte_courant'].includes(a.classe),
-  ).reduce((s, a) => s + a.valeurCents, 0);
+  const epargneLiquide = actifs
+    .filter((a) => ['compte_epargne', 'compte_courant'].includes(a.classe))
+    .reduce((somme, a) => somme + valeurQuotePart(a), 0);
 
   const precaution = calculerEpargnePrecaution({
     chargesFixesMensuellesCents: chargesFixes,

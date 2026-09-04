@@ -10,7 +10,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:migrer": "node --env-file=.env.local scripts/appliquer-migrations.mjs --seed",
+    "db:types": "node --env-file=.env.local scripts/generer-types-db.mjs",
+    "db:verifier": "node --env-file=.env.local scripts/verifier-rls.mjs",
+    "fiscal:seed": "node scripts/generer-seed-fiscal.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",
