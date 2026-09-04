@@ -371,6 +371,7 @@ export type Database = {
       }
       categories: {
         Row: {
+          cle: string | null
           couleur: string | null
           created_at: string
           icone: string | null
@@ -381,6 +382,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          cle?: string | null
           couleur?: string | null
           created_at?: string
           icone?: string | null
@@ -391,6 +393,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          cle?: string | null
           couleur?: string | null
           created_at?: string
           icone?: string | null
@@ -558,6 +561,57 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "holders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      imports: {
+        Row: {
+          asset_id: string | null
+          created_at: string
+          id: string
+          lignes_ignorees: number
+          lignes_importees: number
+          lignes_rejetees: number
+          nom_fichier: string
+          source: Database["public"]["Enums"]["source_transaction"]
+          user_id: string
+        }
+        Insert: {
+          asset_id?: string | null
+          created_at?: string
+          id?: string
+          lignes_ignorees?: number
+          lignes_importees?: number
+          lignes_rejetees?: number
+          nom_fichier: string
+          source?: Database["public"]["Enums"]["source_transaction"]
+          user_id: string
+        }
+        Update: {
+          asset_id?: string | null
+          created_at?: string
+          id?: string
+          lignes_ignorees?: number
+          lignes_importees?: number
+          lignes_rejetees?: number
+          nom_fichier?: string
+          source?: Database["public"]["Enums"]["source_transaction"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "imports_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "imports_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -907,8 +961,10 @@ export type Database = {
           contrepartie: string | null
           created_at: string
           date: string
+          empreinte: string | null
           exclue_du_budget: boolean
           id: string
+          import_id: string | null
           libelle: string
           montant_cents: number
           recurrente: boolean
@@ -922,8 +978,10 @@ export type Database = {
           contrepartie?: string | null
           created_at?: string
           date: string
+          empreinte?: string | null
           exclue_du_budget?: boolean
           id?: string
+          import_id?: string | null
           libelle: string
           montant_cents: number
           recurrente?: boolean
@@ -937,8 +995,10 @@ export type Database = {
           contrepartie?: string | null
           created_at?: string
           date?: string
+          empreinte?: string | null
           exclue_du_budget?: boolean
           id?: string
+          import_id?: string | null
           libelle?: string
           montant_cents?: number
           recurrente?: boolean
@@ -959,6 +1019,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "imports"
             referencedColumns: ["id"]
           },
           {
