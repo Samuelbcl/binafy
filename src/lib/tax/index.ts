@@ -7,3 +7,4 @@ export * from './ipp';
 export * from './immobilier';
 export * from './enregistrement';
 export * from './independant';
+export * from './epargne-fiscale';

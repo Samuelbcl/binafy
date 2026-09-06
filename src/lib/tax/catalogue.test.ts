@@ -26,18 +26,16 @@ import {
  * `verificateur-fiscal`.
  */
 const DETTE_CONNUE = new Set([
-  'notaire.achat.tranche_4.plafond',
-  'notaire.achat.tranche_4.taux',
-  'notaire.achat.tranche_5.plafond',
-  'notaire.achat.tranche_5.taux',
-  'notaire.achat.tranche_6.plafond',
-  'notaire.achat.tranche_6.taux',
-  'notaire.achat.partie_fixe',
-  'notaire.achat.reduction_jbis',
   'credit.droit_hypotheque',
   'credit.frais_acte_forfait',
   'independant.cout_bce',
   'independant.cout_activation_tva',
+  // Le barème qui calcule le plafond de l'épargne à long terme selon les
+  // revenus n'est publié ni par le SPF ni par Wikifin, qui renvoient au
+  // conseiller. Valeurs issues d'une source secondaire, assumées comme telles.
+  'epargne_long_terme.seuil_bareme',
+  'epargne_long_terme.taux_premiere_tranche',
+  'epargne_long_terme.taux_tranche_superieure',
 ]);
 
 describe('catalogue fiscal — garde-fou', () => {

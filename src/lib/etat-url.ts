@@ -16,7 +16,9 @@ export function nombreDepuisUrl(
 ): number {
   const brut = params[cle];
   const valeur = Array.isArray(brut) ? brut[0] : brut;
-  if (valeur === undefined) return defaut;
+  // Une valeur absente ou vide retombe sur le défaut : `Number('')` vaut zéro,
+  // ce qui afficherait un patrimoine nul sur une URL du type `?prix=`.
+  if (valeur === undefined || valeur.trim() === '') return defaut;
 
   // La virgule décimale est acceptée : c'est ce qu'un utilisateur belge tape.
   const nombre = Number(valeur.replace(',', '.'));

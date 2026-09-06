@@ -3,10 +3,10 @@
 > **Fichier généré.** Régénérer avec `node scripts/generer-seed-fiscal.mjs`.
 > Source : `src/lib/tax/parametres.ts`.
 
-90 paramètres sont chargés pour 2026.
+83 paramètres sont chargés pour 2026.
 **78 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**12 règles légales attendent une confirmation** à la source officielle.
+**5 règles légales attendent une confirmation** à la source officielle.
 7 autres valeurs sont des pratiques de marché ou des hypothèses de
 simulation : elles ne relèvent d'aucun texte et ne figurent pas dans cette liste.
 
@@ -36,14 +36,15 @@ bonne valeur.
 
 ## Liste par domaine
 
-### credit
+### epargne_long_terme
 
-Source à consulter : Banque nationale de Belgique et pratique bancaire
+Source à consulter : à déterminer
 
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
-| `credit.droit_hypotheque` | 1 pourcent | Droit d'hypothèque sur le montant emprunté |
-| `credit.frais_acte_forfait` | 2200 eur | Acte de crédit — honoraires, inscription hypothécaire et débours |
+| `epargne_long_terme.seuil_bareme` | 17070 eur | Épargne à long terme — seuil de revenus du barème du plafond |
+| `epargne_long_terme.taux_premiere_tranche` | 15 pourcent | Épargne à long terme — taux sur la première tranche de revenus |
+| `epargne_long_terme.taux_tranche_superieure` | 6 pourcent | Épargne à long terme — taux au-delà du seuil |
 
 ### independant
 
@@ -53,21 +54,6 @@ Source à consulter : INASTI et caisses d’assurances sociales
 |---|---|---|
 | `independant.cout_bce` | 105.5 eur | Inscription à la BCE via un guichet d'entreprises |
 | `independant.cout_activation_tva` | 78 eur | Activation du numéro de TVA (TVAC) |
-
-### notaire
-
-Source à consulter : Barème légal des honoraires notariaux (notaire.be)
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `notaire.achat.tranche_4.plafond` | 45495 eur | Honoraires notaire — plafond tranche 4 |
-| `notaire.achat.tranche_4.taux` | 1.71 pourcent | Honoraires notaire — taux tranche 4 |
-| `notaire.achat.tranche_5.plafond` | 64095 eur | Honoraires notaire — plafond tranche 5 |
-| `notaire.achat.tranche_5.taux` | 1.14 pourcent | Honoraires notaire — taux tranche 5 |
-| `notaire.achat.tranche_6.plafond` | 250095 eur | Honoraires notaire — plafond tranche 6 |
-| `notaire.achat.tranche_6.taux` | 0.57 pourcent | Honoraires notaire — taux tranche 6 |
-| `notaire.achat.partie_fixe` | 71.99 eur | Honoraires — partie fixe ajoutée aux tranches (barème J) |
-| `notaire.achat.reduction_jbis` | 276.5 eur | Honoraires — réduction du barème Jbis (habitation propre et unique) |
 
 ## Rappel
 

@@ -3,6 +3,7 @@ import { euros } from '../money';
 import {
   calculerCashNecessaire,
   calculerDroitsEnregistrement,
+  calculerFraisActeCredit,
   calculerHonorairesNotaire,
   coutOrdreAchat,
 } from './enregistrement';
@@ -246,6 +247,88 @@ describe('frais d’acte — calés sur le calculateur officiel de notaire.be', 
     );
     expect(r.hypotheses.join(' ')).toContain('habitation propre et unique');
     expect(r.hypotheses.join(' ')).toContain('domicile');
+  });
+});
+
+describe('honoraires — les six mesures de notaire.be', () => {
+  // Relevées le 06/09/2026, Wallonie. Ce sont les points qui font foi :
+  // si le calcul dérive, ces tests tombent.
+  const MESURES: [number, number, number][] = [
+    // [prix, honoraires Jbis, honoraires J]
+    [150_000, 1_686.56, 1_907.88],
+    [280_000, 2_261.74, 2_538.24],
+    [450_000, 2_771.74, 2_878.24],
+  ];
+
+  it.each(MESURES)('reproduit les honoraires à %s €', (prix, jbis, j) => {
+    const propre = calculerHonorairesNotaire(
+      { prixCents: euros(prix), typeAchat: 'propre_unique' },
+      P,
+    );
+    const autre = calculerHonorairesNotaire({ prixCents: euros(prix), typeAchat: 'locatif' }, P);
+
+    expect(propre.result.honorairesHTVACents).toBe(euros(jbis));
+    expect(autre.result.honorairesHTVACents).toBe(euros(j));
+    expect(propre.result.fiabilite).toBe('mesure');
+  });
+
+  it('signale un montant interpolé entre deux mesures', () => {
+    const r = calculerHonorairesNotaire({ prixCents: euros(200_000) }, P);
+    expect(r.result.fiabilite).toBe('interpole');
+    // Entre les deux mesures encadrantes.
+    expect(r.result.honorairesHTVACents).toBeGreaterThan(euros(1_907.88));
+    expect(r.result.honorairesHTVACents).toBeLessThan(euros(2_538.24));
+  });
+
+  it('signale un montant extrapolé hors de la plage mesurée', () => {
+    const cher = calculerHonorairesNotaire({ prixCents: euros(800_000) }, P);
+    const bonMarche = calculerHonorairesNotaire({ prixCents: euros(60_000) }, P);
+    expect(cher.result.fiabilite).toBe('extrapole');
+    expect(bonMarche.result.fiabilite).toBe('extrapole');
+    // Sous la plage, on reste proportionnel : jamais plus que la mesure basse.
+    expect(bonMarche.result.honorairesHTVACents).toBeLessThan(euros(1_907.88));
+  });
+
+  it('reste croissant avec le prix', () => {
+    let precedent = 0;
+    for (const prix of [50_000, 150_000, 200_000, 280_000, 350_000, 450_000, 600_000]) {
+      const r = calculerHonorairesNotaire({ prixCents: euros(prix) }, P);
+      expect(r.result.honorairesHTVACents).toBeGreaterThan(precedent);
+      precedent = r.result.honorairesHTVACents;
+    }
+  });
+});
+
+describe('acte de crédit — les deux mesures de notaire.be', () => {
+  it('reproduit la simulation à 150 000 € (4 785,25 €)', () => {
+    const r = calculerFraisActeCredit({ montantEmprunteCents: euros(150_000) }, P);
+    expect(r.result.montantInscritCents).toBe(euros(165_000));
+    expect(r.result.droitsEnregistrementCents).toBe(euros(1_650));
+    expect(r.result.droitHypothequeCents).toBe(euros(495));
+    expect(r.result.retributionCents).toBe(euros(270));
+    expect(r.result.honorairesCents).toBe(euros(612.24));
+    expect(r.result.tvaCents).toBe(euros(394.01));
+    expect(r.result.totalCents).toBe(euros(4_785.25));
+  });
+
+  it('reproduit la simulation à 252 000 € (6 465,10 €)', () => {
+    const r = calculerFraisActeCredit({ montantEmprunteCents: euros(252_000) }, P);
+    expect(r.result.montantInscritCents).toBe(euros(277_200));
+    expect(r.result.droitsEnregistrementCents).toBe(euros(2_772));
+    expect(r.result.droitHypothequeCents).toBe(euros(831.6));
+    expect(r.result.honorairesCents).toBe(euros(795.09));
+    expect(r.result.tvaCents).toBe(euros(432.41));
+    expect(r.result.totalCents).toBe(euros(6_465.1));
+  });
+
+  it('ne facture rien sans emprunt', () => {
+    const r = calculerFraisActeCredit({ montantEmprunteCents: 0 }, P);
+    expect(r.result.totalCents).toBe(0);
+  });
+
+  it('rappelle que c’est un second acte', () => {
+    const r = calculerFraisActeCredit({ montantEmprunteCents: euros(200_000) }, P);
+    expect(r.hypotheses.join(' ')).toContain('second acte');
   });
 });
 

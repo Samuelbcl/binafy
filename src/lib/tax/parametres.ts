@@ -359,38 +359,7 @@ const DEFS_2026: Def[] = [
     verifie: true,
   },
   // Frais d'acte — barème notarial dégressif sur le prix d'achat
-  // ⚠️ **Un seul barème est modélisé, il en existe deux.**
-  //
-  // Depuis la réforme du 01/01/2023, l'AR du 16/12/1950 distingue le barème J
-  // (cas général) du barème **Jbis**, réduit, qui s'applique à l'acquisition en
-  // pleine propriété par des personnes physiques d'un immeuble qu'elles
-  // occuperont comme habitation propre et unique — c'est-à-dire le cas central
-  // de la cible de Nestor.
-  //
-  // Les taux du Jbis ne sont pas publiés en clair : seul le calculateur de
-  // notaire.be les applique. Les honoraires calculés ici suivent donc le barème
-  // J et sont **surestimés** pour une première acquisition. Tant que le Jbis
-  // n'est pas obtenu, l'écart joue en faveur de la prudence — l'utilisateur
-  // prévoit plus de cash qu'il n'en faudra — mais il doit être comblé.
-  //
-  // Conditions du Jbis, telles que le tarif les énonce : pleine propriété,
-  // immeuble affecté uniquement à l'habitation, aucun autre droit réel
-  // immobilier détenu, et domicile légal fixé dans l'année sous peine de devoir
-  // verser la différence au notaire.
-  { cle: 'notaire.achat.tranche_1.plafond', valeur: 7500, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 1', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-  { cle: 'notaire.achat.tranche_1.taux', valeur: 4.56, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 1', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-  { cle: 'notaire.achat.tranche_2.plafond', valeur: 17500, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 2', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-  { cle: 'notaire.achat.tranche_2.taux', valeur: 2.85, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 2', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-  { cle: 'notaire.achat.tranche_3.plafond', valeur: 30000, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 3', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-  { cle: 'notaire.achat.tranche_3.taux', valeur: 2.28, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 3', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-  { cle: 'notaire.achat.tranche_4.plafond', valeur: 45495, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 4', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_4.taux', valeur: 1.71, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 4', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_5.plafond', valeur: 64095, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 5', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_5.taux', valeur: 1.14, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 5', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_6.plafond', valeur: 250095, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 6', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_6.taux', valeur: 0.57, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 6', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_7.taux', valeur: 0.057, unite: 'pourcent', libelle: 'Honoraires notaire — taux au-delà de la tranche 6', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
-
+                          
   // ── Postes d'un acte d'achat ────────────────────────────────
   // Relevés sur le calculateur officiel de notaire.be, deux simulations
   // concordantes du 06/09/2026. La formule de TVA en a été déduite et vérifiée
@@ -442,31 +411,7 @@ const DEFS_2026: Def[] = [
     verifie: true,
     verifieLe: '2026-09-06',
   },
-  {
-    cle: 'notaire.achat.partie_fixe',
-    valeur: 71.99,
-    unite: 'eur',
-    libelle: 'Honoraires — partie fixe ajoutée aux tranches (barème J)',
-    // Depuis la réforme du 01/01/2023, le tarif comporte une partie fixe en
-    // plus des tranches dégressives. Sa valeur est ici **calibrée sur un seul
-    // point** — 280 000 € — par écart entre le barème par tranches et le
-    // montant rendu par notaire.be. Deux simulations de plus, à des prix
-    // différents, permettraient de vérifier qu'elle est bien fixe.
-    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
-    verifieLe: '2026-09-06',
-  },
-  {
-    cle: 'notaire.achat.reduction_jbis',
-    valeur: 276.5,
-    unite: 'eur',
-    libelle: 'Honoraires — réduction du barème Jbis (habitation propre et unique)',
-    // Écart relevé entre les deux simulations au même prix : 2 538,24 € en
-    // barème J contre 2 261,74 € en Jbis. Comme la partie fixe, cette valeur
-    // est calibrée sur un point et reste à confirmer sur d'autres prix.
-    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
-    verifieLe: '2026-09-06',
-  },
-    {
+        {
     cle: 'notaire.tva_honoraires',
     valeur: 21,
     unite: 'pourcent',
@@ -474,21 +419,49 @@ const DEFS_2026: Def[] = [
     sourceUrl: NOTAIRE,
     verifie: true,
   },
+
+  // ── Acte de crédit hypothécaire ─────────────────────────────
+  // Relevés sur le calculateur officiel de notaire.be, deux simulations
+  // concordantes du 06/09/2026 (150 000 € et 252 000 €). Les deux formules
+  // proportionnelles portent sur le montant emprunté majoré des accessoires,
+  // et reproduisent les deux relevés au centime.
   {
-    cle: 'credit.droit_hypotheque',
+    cle: 'credit.accessoires',
+    valeur: 10,
+    unite: 'pourcent',
+    libelle: "Accessoires de l'hypothèque — majoration du montant inscrit",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/credit-hypothecaire',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'credit.droits_enregistrement',
     valeur: 1,
     unite: 'pourcent',
-    libelle: "Droit d'hypothèque sur le montant emprunté",
-    sourceUrl: `${SPF}/fr/particuliers/habitation/emprunt`,
+    libelle: "Droits d'enregistrement de l'inscription hypothécaire",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/credit-hypothecaire',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
-    cle: 'credit.frais_acte_forfait',
-    valeur: 2200,
+    cle: 'credit.retribution_hypotheque',
+    valeur: 270,
     unite: 'eur',
-    libelle: "Acte de crédit — honoraires, inscription hypothécaire et débours",
-    sourceUrl: NOTAIRE,
+    libelle: "Rétribution du bureau Sécurité juridique",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/credit-hypothecaire',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
+    cle: 'credit.droit_hypotheque',
+    valeur: 0.3,
+    unite: 'pourcent',
+    libelle: "Droit d'hypothèque sur le montant inscrit",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/credit-hypothecaire',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+    {
     cle: 'credit.frais_dossier',
     valeur: 500,
     unite: 'eur',
@@ -540,7 +513,6 @@ const DEFS_2026: Def[] = [
   // ───────────────────────────────────────────────────────────
   // 3. Impôt des personnes physiques
   // ───────────────────────────────────────────────────────────
-  // Barème des revenus 2026 (exercice d'imposition 2027), publié par le SPF.
   {
     cle: 'ipp.tranche_1.plafond',
     valeur: 16720,
@@ -787,6 +759,66 @@ const DEFS_2026: Def[] = [
     libelle: 'Épargne-pension — taxe anticipative prélevée à 60 ans',
     sourceUrl: 'https://www.wikifin.be/fr/pension-et-preparation-de-la-retraite/epargne-pension/comment-votre-epargne-pension-est-elle-taxee',
     verifie: true,
+    verifieLe: '2026-09-06',
+  },
+
+  // ── Épargne à long terme ────────────────────────────────────
+  // Dispositif distinct de l'épargne-pension : son plafond dépend des revenus
+  // et se partage avec les réductions liées au crédit hypothécaire.
+  {
+    cle: 'epargne_long_terme.plafond_absolu',
+    valeur: 2450,
+    unite: 'eur',
+    libelle: 'Épargne à long terme — plafond annuel de versement',
+    sourceUrl: 'https://www.wikifin.be/fr/impots-emploi-et-revenus/declaration-dimpots/reductions-fiscales/reduction-pour-lepargne-long-terme',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'epargne_long_terme.reduction',
+    valeur: 30,
+    unite: 'pourcent',
+    libelle: "Épargne à long terme — taux de réduction d'impôt",
+    sourceUrl: 'https://www.wikifin.be/fr/impots-emploi-et-revenus/declaration-dimpots/reductions-fiscales/reduction-pour-lepargne-long-terme',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'epargne_long_terme.taxe_anticipative',
+    valeur: 10,
+    unite: 'pourcent',
+    libelle: 'Épargne à long terme — taxe prélevée à 60 ans',
+    // À ne pas confondre avec celle de l'épargne-pension, qui est de 8 %.
+    sourceUrl: 'https://www.wikifin.be/fr/impots-emploi-et-revenus/declaration-dimpots/reductions-fiscales/reduction-pour-lepargne-long-terme',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'epargne_long_terme.seuil_bareme',
+    valeur: 17070,
+    unite: 'eur',
+    libelle: 'Épargne à long terme — seuil de revenus du barème du plafond',
+    // Le barème qui calcule le plafond selon les revenus n'est publié ni par le
+    // SPF ni par Wikifin, qui renvoient au conseiller. Les trois valeurs
+    // ci-dessous viennent d'une source secondaire et restent à confirmer :
+    // elles sont déclarées dans la dette de `catalogue.test.ts`.
+    sourceUrl: 'https://calculateur-de-salaire.be/guide/epargne-long-terme-belgique',
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'epargne_long_terme.taux_premiere_tranche',
+    valeur: 15,
+    unite: 'pourcent',
+    libelle: 'Épargne à long terme — taux sur la première tranche de revenus',
+    sourceUrl: 'https://calculateur-de-salaire.be/guide/epargne-long-terme-belgique',
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'epargne_long_terme.taux_tranche_superieure',
+    valeur: 6,
+    unite: 'pourcent',
+    libelle: 'Épargne à long terme — taux au-delà du seuil',
+    sourceUrl: 'https://calculateur-de-salaire.be/guide/epargne-long-terme-belgique',
     verifieLe: '2026-09-06',
   },
   {

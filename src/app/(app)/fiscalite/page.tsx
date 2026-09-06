@@ -9,7 +9,11 @@ import {
 import { chargerPatrimoine } from '@/lib/db/patrimoine';
 import { PROFIL_DEMO } from '@/lib/demo/donnees';
 import { valeurQuotePart } from '@/lib/patrimoine/types';
-import { formatEUR, formatPercent } from '@/lib/money';
+import { euros, formatEUR, formatPercent } from '@/lib/money';
+import {
+  calculerEpargneLongTerme,
+  calculerEpargnePension,
+} from '@/lib/tax/epargne-fiscale';
 import { calculerIPP } from '@/lib/tax/ipp';
 import { TAX_PARAMS_2026, parametresNonVerifies } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
@@ -66,6 +70,17 @@ export default async function FiscalitePage() {
         params,
       )
     : null;
+
+  // Les deux enveloppes d'épargne fiscale, au plafond, pour montrer ce que
+  // chacune rapporterait. On chiffre, on ne recommande pas.
+  const pension = calculerEpargnePension({ versementCents: euros(1_050) }, params);
+  const longTerme = calculerEpargneLongTerme(
+    {
+      revenuNetImposableCents: PROFIL_DEMO.revenuImposableAnnuelCents,
+      versementCents: euros(2_450),
+    },
+    params,
+  );
 
   const nonVerifies = parametresNonVerifies(params);
 
@@ -228,6 +243,113 @@ export default async function FiscalitePage() {
           />
         </section>
       )}
+
+      {/* 5 — Enveloppes d'épargne fiscale */}
+      <section className="space-y-4">
+        <h2 className="label-kpi">Enveloppes d’épargne</h2>
+
+        <div className="carte p-5 sm:p-6">
+          <h3 className="font-display text-[17px] font-semibold">Épargne-pension</h3>
+          <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-text-muted">
+            Deux plafonds coexistent, et le plus élevé n’est pas mécaniquement le meilleur :
+            au-delà du plafond bas, le taux réduit s’applique à la totalité du versement, pas
+            au seul dépassement.
+          </p>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            {[
+              {
+                titre: 'Au plafond bas',
+                verse: pension.result.comparaison.plafondBas.versementCents,
+                reduction: pension.result.comparaison.plafondBas.reductionCents,
+              },
+              {
+                titre: 'Au plafond haut',
+                verse: pension.result.comparaison.plafondHaut.versementCents,
+                reduction: pension.result.comparaison.plafondHaut.reductionCents,
+              },
+            ].map((option) => (
+              <div key={option.titre} className="rounded-[var(--radius)] border border-border p-4">
+                <p className="label-kpi">{option.titre}</p>
+                <p className="mt-2 text-[13px] text-text-muted">
+                  Verser <Montant cents={option.verse} decimals={0} jamaisMasque />
+                </p>
+                <p className="mt-1 font-mono text-[20px] tabular-nums text-primary">
+                  <Montant cents={option.reduction} decimals={0} jamaisMasque />
+                </p>
+                <p className="text-[11px] text-text-subtle">de réduction d’impôt</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-4 text-[13px] leading-relaxed text-text-muted">
+            Soit{' '}
+            <Montant
+              cents={
+                pension.result.comparaison.plafondHaut.versementCents -
+                pension.result.comparaison.plafondBas.versementCents
+              }
+              decimals={0}
+              jamaisMasque
+            />{' '}
+            versés en plus pour{' '}
+            <Montant
+              cents={
+                pension.result.comparaison.plafondHaut.reductionCents -
+                pension.result.comparaison.plafondBas.reductionCents
+              }
+              decimals={0}
+              jamaisMasque
+            />{' '}
+            de réduction supplémentaire. À toi de voir.
+          </p>
+
+          <div className="mt-4">
+            <PanneauExplication calcul={pension} titre="Le détail du calcul" />
+          </div>
+        </div>
+
+        <div className="carte p-5 sm:p-6">
+          <h3 className="font-display text-[17px] font-semibold">Épargne à long terme</h3>
+          <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-text-muted">
+            Son plafond dépend de tes revenus et se partage avec les réductions liées à un
+            crédit hypothécaire. En Wallonie, les crédits conclus depuis 2025 n’ouvrent plus
+            droit à réduction pour l’habitation propre : le panier est alors entièrement
+            disponible.
+          </p>
+
+          <dl className="mt-5 grid gap-4 sm:grid-cols-3">
+            <div>
+              <dt className="label-kpi">Plafond disponible</dt>
+              <dd className="mt-1.5">
+                <Montant
+                  cents={longTerme.result.plafondDisponibleCents}
+                  decimals={0}
+                  className="text-[18px]"
+                />
+              </dd>
+            </div>
+            <div>
+              <dt className="label-kpi">Réduction si tu verses le maximum</dt>
+              <dd className="mt-1.5">
+                <Montant
+                  cents={longTerme.result.reductionCents}
+                  decimals={0}
+                  className="text-[18px] text-primary"
+                />
+              </dd>
+            </div>
+            <div>
+              <dt className="label-kpi">Taxe à 60 ans</dt>
+              <dd className="mt-1.5 font-mono text-[18px] tabular-nums">10 %</dd>
+            </div>
+          </dl>
+
+          <div className="mt-4">
+            <PanneauExplication calcul={longTerme} titre="Le détail du calcul" />
+          </div>
+        </div>
+      </section>
 
       {/* Transparence sur l'état des paramètres fiscaux */}
       <section className="carte p-5 sm:p-6">

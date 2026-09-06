@@ -1,8 +1,14 @@
 import { formatEUR, formatTaux } from '../money';
 import {
+  CALIBRAGE_J,
+  CALIBRAGE_JBIS,
+  CALIBRE_LE,
+  CALIBRAGE_CREDIT,
+  interpolerHonoraires,
+  mentionFiabilite,
+} from './bareme-notaire';
+import {
   type BreakdownLine,
-  appliquerBaremeProgressif,
-  getBareme,
   getCents,
   getParam,
   getRate,
@@ -161,13 +167,13 @@ export function calculerDroitsEnregistrement(
 /**
  * Honoraires du notaire pour l'acte d'achat.
  *
- * Depuis la réforme du 01/01/2023, le tarif comporte une partie fixe en plus
- * des tranches dégressives, et distingue deux barèmes : le **J** pour le cas
- * général, le **Jbis**, réduit, pour l'acquisition en pleine propriété d'un
- * immeuble que les acquéreurs occuperont comme habitation propre et unique.
+ * Deux barèmes coexistent depuis la réforme du tarif de 2023 : le **J** pour le
+ * cas général, le **Jbis** pour l'acquisition d'une habitation propre et unique
+ * — le cas le plus fréquent de la cible.
  *
- * Le Jbis est le cas le plus fréquent de la cible : l'ignorer surestimait les
- * honoraires d'environ 11 %.
+ * Les montants viennent d'une table de mesures relevées sur le calculateur
+ * officiel, pas d'un barème par tranches : voir `bareme-notaire.ts` pour les
+ * raisons de ce choix.
  */
 export function calculerHonorairesNotaire(
   input: { prixCents: number; typeAchat?: TypeAchat },
@@ -177,77 +183,202 @@ export function calculerHonorairesNotaire(
   tvaCents: number;
   totalCents: number;
   bareme: 'J' | 'Jbis';
+  fiabilite: 'mesure' | 'interpole' | 'extrapole';
 }> {
   const prix = Math.max(0, input.prixCents);
-  const { tranches, sources } = getBareme(params, 'notaire.achat');
   const pTva = getParam(params, 'notaire.tva_honoraires');
   const tauxTva = getRate(params, 'notaire.tva_honoraires');
 
-  const pPartieFixe = getParam(params, 'notaire.achat.partie_fixe');
-  const partieFixeCents = getCents(params, 'notaire.achat.partie_fixe');
-
-  const { impotCents: parTranches, detail } = appliquerBaremeProgressif(prix, tranches);
-
-  // Le barème réduit ne s'applique qu'à l'habitation propre et unique.
+  // Le barème réduit ne vaut que pour l'habitation propre et unique.
   const jbis = input.typeAchat === 'propre_unique';
-  const pReduction = getParam(params, 'notaire.achat.reduction_jbis');
-  const reductionCents = jbis ? getCents(params, 'notaire.achat.reduction_jbis') : 0;
+  const { honorairesCents, fiabilite } = interpolerHonoraires(
+    prix,
+    jbis ? CALIBRAGE_JBIS : CALIBRAGE_J,
+  );
 
-  // Un prix nul ne produit pas d'honoraires : la partie fixe ne s'ajoute qu'à
-  // un acte réel.
-  const brutCents = prix > 0 ? parTranches + partieFixeCents : 0;
-  const honorairesHTVACents = Math.max(0, brutCents - reductionCents);
-  const tvaCents = Math.round(honorairesHTVACents * tauxTva);
-  const totalCents = honorairesHTVACents + tvaCents;
+  const tvaCents = Math.round(honorairesCents * tauxTva);
 
-  const breakdown: BreakdownLine[] = detail.map((ligne) => ({
-    libelle: `Tranche à ${formatTaux(ligne.taux * 100)}`,
-    valeur: ligne.impotCents,
-    unite: 'eur' as const,
-    precision: `De ${formatEUR(ligne.deCents, { decimals: 0 })} à ${
-      Number.isFinite(ligne.aCents) ? formatEUR(ligne.aCents, { decimals: 0 }) : 'au-delà'
-    }`,
-  }));
-
-  if (prix > 0) {
-    breakdown.push({
-      libelle: 'Partie fixe',
-      valeur: partieFixeCents,
+  const breakdown: BreakdownLine[] = [
+    { libelle: "Prix d'acquisition", valeur: prix, unite: 'eur' },
+    {
+      libelle: jbis ? 'Honoraires — barème réduit (Jbis)' : 'Honoraires — barème J',
+      valeur: honorairesCents,
       unite: 'eur',
-      precision: 'Ajoutée aux tranches depuis la réforme du tarif de 2023',
-    });
-  }
-
-  if (jbis && reductionCents > 0) {
-    breakdown.push({
-      libelle: 'Réduction — barème Jbis',
-      valeur: -reductionCents,
-      unite: 'eur',
-      precision: 'Habitation propre et unique : le tarif prévoit un barème réduit',
-    });
-  }
-
-  breakdown.push(
-    { libelle: 'Honoraires hors TVA', valeur: honorairesHTVACents, unite: 'eur' },
+      precision: mentionFiabilite(fiabilite),
+    },
     {
       libelle: 'TVA sur honoraires',
       valeur: tvaCents,
       unite: 'eur',
       precision: formatTaux(pTva.valeur, 0),
     },
-    { libelle: 'Honoraires TVAC', valeur: totalCents, unite: 'eur', total: true },
-  );
+    { libelle: 'Honoraires TVAC', valeur: honorairesCents + tvaCents, unite: 'eur', total: true },
+  ];
+
+  if (!jbis && prix > 0) {
+    const reduit = interpolerHonoraires(prix, CALIBRAGE_JBIS).honorairesCents;
+    breakdown.push({
+      libelle: 'Pour une habitation propre et unique',
+      valeur: reduit,
+      unite: 'eur',
+      precision: `Le barème réduit ramènerait les honoraires à ${formatEUR(reduit)}`,
+    });
+  }
 
   return {
-    result: { honorairesHTVACents, tvaCents, totalCents, bareme: jbis ? 'Jbis' : 'J' },
+    result: {
+      honorairesHTVACents: honorairesCents,
+      tvaCents,
+      totalCents: honorairesCents + tvaCents,
+      bareme: jbis ? 'Jbis' : 'J',
+      fiabilite,
+    },
     breakdown,
-    sources: mergeSources(sources, [toSource(pTva), toSource(pPartieFixe)], jbis ? [toSource(pReduction)] : []),
+    sources: [toSource(pTva)],
     hypotheses: [
       'Le barème des honoraires notariaux est légal : il est identique chez tous les notaires belges.',
       jbis
-        ? "Le barème réduit suppose que tu occuperas le bien comme habitation propre et unique, et que tu n'as aucun autre droit réel immobilier. Le domicile doit y être établi dans l'année, sous peine de devoir verser la différence au notaire."
+        ? "Le barème réduit suppose que tu occuperas le bien comme habitation propre et unique, et que tu ne détiens aucun autre droit réel immobilier. Le domicile doit y être établi dans l'année, sous peine de devoir verser la différence au notaire."
         : 'Une acquisition destinée à devenir ton habitation propre et unique donnerait droit à un barème réduit.',
-      'La partie fixe et la réduction du barème réduit sont calibrées sur le calculateur de notaire.be pour un prix de 280 000 €. Elles restent à confirmer sur d’autres montants.',
+      `Les honoraires proviennent de relevés faits sur le calculateur officiel de notaire.be le ${CALIBRE_LE.split('-').reverse().join('/')}, entre 150 000 € et 450 000 €.`,
+    ],
+  };
+}
+
+
+export type FraisActeCreditResult = {
+  totalCents: number;
+  /** Montant sur lequel portent les taxes : emprunt majoré des accessoires. */
+  montantInscritCents: number;
+  droitsEnregistrementCents: number;
+  droitHypothequeCents: number;
+  retributionCents: number;
+  honorairesCents: number;
+  fraisFixesCents: number;
+  tvaCents: number;
+};
+
+/**
+ * Frais de l'acte de crédit hypothécaire.
+ *
+ * Emprunter donne lieu à un **second acte**, distinct de l'acte d'achat, avec
+ * ses propres frais. Ils portent non pas sur le montant emprunté mais sur le
+ * montant inscrit : l'emprunt majoré d'accessoires, une réserve destinée à
+ * couvrir intérêts et frais en cas de défaut.
+ *
+ * Les taux et forfaits sont relevés sur le calculateur officiel de notaire.be
+ * et reproduisent ses deux simulations au centime.
+ */
+export function calculerFraisActeCredit(
+  input: { montantEmprunteCents: number },
+  params: TaxParamSet,
+): CalcResult<FraisActeCreditResult> {
+  const emprunt = Math.max(0, input.montantEmprunteCents);
+
+  const pAccessoires = getParam(params, 'credit.accessoires');
+  const pDroits = getParam(params, 'credit.droits_enregistrement');
+  const pHypotheque = getParam(params, 'credit.droit_hypotheque');
+  const pRetribution = getParam(params, 'credit.retribution_hypotheque');
+  const pAdmin = getParam(params, 'notaire.frais_administratifs');
+  const pDebours = getParam(params, 'notaire.debours');
+  const pEcriture = getParam(params, 'notaire.droit_ecriture');
+  const pAnnexes = getParam(params, 'notaire.droit_annexes');
+  const pTva = getParam(params, 'notaire.tva_honoraires');
+
+  const tauxAccessoires = getRate(params, 'credit.accessoires');
+  const montantInscritCents = Math.round(emprunt * (1 + tauxAccessoires));
+
+  const droitsEnregistrementCents = Math.round(
+    montantInscritCents * getRate(params, 'credit.droits_enregistrement'),
+  );
+  const droitHypothequeCents = Math.round(
+    montantInscritCents * getRate(params, 'credit.droit_hypotheque'),
+  );
+  const retributionCents = emprunt > 0 ? getCents(params, 'credit.retribution_hypotheque') : 0;
+
+  const { honorairesCents, fiabilite } = interpolerHonoraires(emprunt, CALIBRAGE_CREDIT);
+
+  const adminCents = emprunt > 0 ? getCents(params, 'notaire.frais_administratifs') : 0;
+  const deboursCents = emprunt > 0 ? getCents(params, 'notaire.debours') : 0;
+  const ecritureCents = emprunt > 0 ? getCents(params, 'notaire.droit_ecriture') : 0;
+  const annexesCents = emprunt > 0 ? getCents(params, 'notaire.droit_annexes') : 0;
+  const fraisFixesCents = adminCents + deboursCents + ecritureCents + annexesCents;
+
+  // Même assiette de TVA que pour l'acte d'achat.
+  const tvaCents = Math.round(
+    (honorairesCents + adminCents + deboursCents + ecritureCents) *
+      getRate(params, 'notaire.tva_honoraires'),
+  );
+
+  const totalCents =
+    droitsEnregistrementCents +
+    droitHypothequeCents +
+    retributionCents +
+    honorairesCents +
+    fraisFixesCents +
+    tvaCents;
+
+  return {
+    result: {
+      totalCents,
+      montantInscritCents,
+      droitsEnregistrementCents,
+      droitHypothequeCents,
+      retributionCents,
+      honorairesCents,
+      fraisFixesCents,
+      tvaCents,
+    },
+    breakdown: [
+      { libelle: 'Montant emprunté', valeur: emprunt, unite: 'eur' },
+      {
+        libelle: 'Montant inscrit',
+        valeur: montantInscritCents,
+        unite: 'eur',
+        precision: `Emprunt majoré de ${formatTaux(pAccessoires.valeur, 0)} d'accessoires — c'est sur ce montant que portent les taxes`,
+      },
+      {
+        libelle: "Droits d'enregistrement",
+        valeur: droitsEnregistrementCents,
+        unite: 'eur',
+        precision: formatTaux(pDroits.valeur, 0),
+      },
+      {
+        libelle: "Droit d'hypothèque",
+        valeur: droitHypothequeCents,
+        unite: 'eur',
+        precision: formatTaux(pHypotheque.valeur, 1),
+      },
+      { libelle: 'Rétribution du bureau Sécurité juridique', valeur: retributionCents, unite: 'eur' },
+      {
+        libelle: 'Honoraires du notaire',
+        valeur: honorairesCents,
+        unite: 'eur',
+        precision: mentionFiabilite(fiabilite),
+      },
+      {
+        libelle: 'Frais administratifs, débours et droits divers',
+        valeur: fraisFixesCents,
+        unite: 'eur',
+      },
+      { libelle: 'TVA', valeur: tvaCents, unite: 'eur', precision: formatTaux(pTva.valeur, 0) },
+      { libelle: "Frais d'acte de crédit", valeur: totalCents, unite: 'eur', total: true },
+    ],
+    sources: mergeSources([
+      toSource(pAccessoires),
+      toSource(pDroits),
+      toSource(pHypotheque),
+      toSource(pRetribution),
+      toSource(pAdmin),
+      toSource(pDebours),
+      toSource(pEcriture),
+      toSource(pAnnexes),
+      toSource(pTva),
+    ]),
+    hypotheses: [
+      "Emprunter donne lieu à un second acte, distinct de l'acte d'achat : ces frais s'ajoutent à ceux de l'achat.",
+      "Les taxes portent sur le montant inscrit, pas sur le montant emprunté : les accessoires couvrent intérêts et frais en cas de défaut.",
+      "Le montant des frais administratifs suppose un crédit destiné à financer un achat immobilier. Pour un crédit rénovation ou mobilier, notaire.be indique qu'il n'existe pas de forfait et conseille de compter entre 500 € et 800 €.",
     ],
   };
 }
@@ -347,13 +478,8 @@ export function calculerCashNecessaire(
 
   const montantEmprunteCents = Math.round(prix * quotite);
 
-  const pHypotheque = getParam(params, 'credit.droit_hypotheque');
-  const tauxHypotheque = getRate(params, 'credit.droit_hypotheque');
-  const droitHypothequeCents = Math.round(montantEmprunteCents * tauxHypotheque);
-
-  const pActeCredit = getParam(params, 'credit.frais_acte_forfait');
-  const fraisActeCreditCents = getCents(params, 'credit.frais_acte_forfait');
-  const acteCreditCents = droitHypothequeCents + fraisActeCreditCents;
+  const acteCredit = calculerFraisActeCredit({ montantEmprunteCents }, params);
+  const acteCreditCents = acteCredit.result.totalCents;
 
   const pDossier = getParam(params, 'credit.frais_dossier');
   const fraisDossierCents = getCents(params, 'credit.frais_dossier');
@@ -421,7 +547,7 @@ export function calculerCashNecessaire(
         libelle: 'Acte de cr\u00e9dit',
         valeur: acteCreditCents,
         unite: 'eur',
-        precision: `Droit d'hypoth\u00e8que de ${formatTaux(pHypotheque.valeur, 0)} sur ${formatEUR(montantEmprunteCents, { decimals: 0 })}, honoraires et inscription`,
+        precision: `Second acte chez le notaire : droits, droit d'hypothèque, honoraires et frais, sur ${formatEUR(acteCredit.result.montantInscritCents, { decimals: 0 })} inscrits`,
       },
       { libelle: 'Frais de dossier bancaire', valeur: fraisDossierCents, unite: 'eur' },
       {
@@ -433,14 +559,12 @@ export function calculerCashNecessaire(
       { libelle: 'Cash n\u00e9cessaire \u00e0 l\u2019acte', valeur: cashTotalCents, unite: 'eur', total: true },
       { libelle: 'Montant emprunt\u00e9', valeur: montantEmprunteCents, unite: 'eur' },
     ],
-    sources: mergeSources(droits.sources, notaire.sources, [
+    sources: mergeSources(droits.sources, notaire.sources, acteCredit.sources, [
       toSource(pAnnexes),
       toSource(pAdmin),
       toSource(pDebours),
       toSource(pTranscription),
       toSource(pEcriture),
-      toSource(pHypotheque),
-      toSource(pActeCredit),
       toSource(pDossier),
       toSource(pQuotite),
     ]),
