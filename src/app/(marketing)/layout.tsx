@@ -27,9 +27,32 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-5xl px-5 py-8 sm:px-6">
-          <p className="text-[12px] leading-relaxed text-text-subtle">
+          <nav aria-label="Liens de pied de page" className="flex flex-wrap gap-x-5 gap-y-2">
+            {[
+              { href: '/outils/frais-acquisition', libelle: 'Frais d’acquisition' },
+              { href: '/outils/interets-composes', libelle: 'Intérêts composés' },
+              { href: '/confidentialite', libelle: 'Confidentialité' },
+              { href: '/conditions', libelle: 'Conditions' },
+              { href: '/mentions-legales', libelle: 'Mentions légales' },
+            ].map((lien) => (
+              <Link
+                key={lien.href}
+                href={lien.href}
+                className="text-[13px] text-text-muted transition-colors hover:text-primary"
+              >
+                {lien.libelle}
+              </Link>
+            ))}
+          </nav>
+
+          <p className="mt-5 text-[12px] leading-relaxed text-text-subtle">
             Nestor informe, il ne conseille pas. Aucun texte de ce site ne constitue un conseil
-            en investissement au sens de la réglementation FSMA. Biancola Studio, Liège.
+            en investissement au sens de la réglementation FSMA, ni un conseil fiscal. Les
+            simulations reposent sur des paramètres fiscaux belges dont la source et la date de
+            vérification sont affichées sous chaque calcul.
+          </p>
+          <p className="mt-2 text-[12px] text-text-subtle">
+            Biancola Studio, Liège — données hébergées dans l’Union européenne.
           </p>
         </div>
       </footer>
