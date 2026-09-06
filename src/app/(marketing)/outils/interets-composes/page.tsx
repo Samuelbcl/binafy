@@ -2,12 +2,37 @@ import type { Metadata } from 'next';
 import { OutilInteretsComposes } from '@/components/outils/interets-composes';
 import { booleenDepuisUrl, nombreDepuisUrl } from '@/lib/etat-url';
 
-export const metadata: Metadata = {
-  title: 'Calculateur d’intérêts composés — version belge',
-  description:
-    'Projette ton capital avec versements mensuels, et vois ce qu’il en reste après la taxe belge sur les plus-values. Résultat en euros d’aujourd’hui.',
-  alternates: { canonical: '/outils/interets-composes' },
-};
+/**
+ * L'image de partage reprend les chiffres de la simulation : c'est ce qui fait
+ * circuler un lien plutôt qu'une carte générique de plus.
+ */
+export async function generateMetadata({
+  searchParams,
+}: PageProps<'/outils/interets-composes'>): Promise<Metadata> {
+  const p = await searchParams;
+
+  const og = new URLSearchParams({ outil: 'interets-composes' });
+    if (p.capital_initial !== undefined) og.set('capital_initial', String(Array.isArray(p.capital_initial) ? p.capital_initial[0] : p.capital_initial));
+    if (p.epargne_mensuelle !== undefined) og.set('epargne_mensuelle', String(Array.isArray(p.epargne_mensuelle) ? p.epargne_mensuelle[0] : p.epargne_mensuelle));
+    if (p.horizon !== undefined) og.set('horizon', String(Array.isArray(p.horizon) ? p.horizon[0] : p.horizon));
+    if (p.taux !== undefined) og.set('taux', String(Array.isArray(p.taux) ? p.taux[0] : p.taux));
+    if (p.inflation !== undefined) og.set('inflation', String(Array.isArray(p.inflation) ? p.inflation[0] : p.inflation));
+
+  const image = `/api/og?${og.toString()}`;
+
+  return {
+    title: 'Calculateur d’intérêts composés — version belge',
+    description: 'Projette ton capital avec versements mensuels, et vois ce qu’il en reste après la taxe belge sur les plus-values.',
+    alternates: { canonical: '/outils/interets-composes' },
+    openGraph: {
+      title: 'Calculateur d’intérêts composés — version belge',
+      description: 'Projette ton capital avec versements mensuels, et vois ce qu’il en reste après la taxe belge sur les plus-values.',
+      url: '/outils/interets-composes',
+      images: [{ url: image, width: 1200, height: 630 }],
+    },
+    twitter: { card: 'summary_large_image', images: [image] },
+  };
+}
 
 export default async function InteretsComposesPage({
   searchParams,

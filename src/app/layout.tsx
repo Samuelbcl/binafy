@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, JetBrains_Mono, Manrope } from 'next/font/google';
 import { AppProviders } from '@/components/providers';
+import { siteUrl } from '@/lib/env';
 import './globals.css';
 
 /** Display — titres et chiffres héros. */
@@ -36,11 +37,14 @@ export const metadata: Metadata = {
     'Suivre, comprendre et piloter son patrimoine en Belgique : fiscalité belge intégrée à chaque calcul, et chaque chiffre s’explique.',
   applicationName: 'Nestor',
   authors: [{ name: 'Biancola Studio' }],
+  metadataBase: new URL(siteUrl),
   openGraph: {
     type: 'website',
     locale: 'fr_BE',
     siteName: 'Nestor',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
+  twitter: { card: 'summary_large_image', images: ['/api/og'] },
   robots: { index: true, follow: true },
 };
 

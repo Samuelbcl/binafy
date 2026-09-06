@@ -32,9 +32,37 @@ const OUTILS = [
   },
 ];
 
+
+/**
+ * Données structurées (doc 09 § technique SEO).
+ *
+ * Décrites en JSON-LD plutôt qu'en microdonnées : le balisage reste séparé du
+ * contenu, et il ne risque pas d'être cassé par une refonte visuelle.
+ */
+const DONNEES_STRUCTUREES = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Nestor',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Web',
+  inLanguage: 'fr-BE',
+  description:
+    'Suivi de patrimoine pour la Belgique : fiscalité belge intégrée à chaque calcul — précompte mobilier, TOB, taxe sur les plus-values, droits d’enregistrement par Région.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  author: { '@type': 'Organization', name: 'Biancola Studio', address: 'Liège, Belgique' },
+  audience: { '@type': 'Audience', geographicArea: { '@type': 'Country', name: 'Belgique' } },
+};
+
 export default function AccueilPage() {
   return (
     <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-24">
+      <script
+        type="application/ld+json"
+        // Contenu constant, défini juste au-dessus : aucune donnée utilisateur
+        // n'entre ici, donc aucune surface d'injection.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(DONNEES_STRUCTUREES) }}
+      />
+
       <header className="max-w-3xl">
         <div className="flex items-center gap-2.5">
           <span

@@ -95,7 +95,9 @@ export function reinitialiserLimites() {
  *
  * Ce que cela ne protège pas : une injection de script inline dans une page.
  * Le rempart contre ce risque est ailleurs — React échappe par défaut tout ce
- * qu'il rend, et aucun `dangerouslySetInnerHTML` n'existe dans le projet.
+ * qu'il rend. Le seul `dangerouslySetInnerHTML` du projet sert le JSON-LD de
+ * la page d'accueil, dont le contenu est une constante littérale : aucune
+ * donnée utilisateur n'y entre.
  */
 export function construireCSP(developpement: boolean): string {
   const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';

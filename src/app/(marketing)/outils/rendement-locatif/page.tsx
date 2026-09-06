@@ -3,12 +3,41 @@ import { OutilRendementLocatif } from '@/components/outils/rendement-locatif';
 import { booleenDepuisUrl, choixDepuisUrl, nombreDepuisUrl } from '@/lib/etat-url';
 import { REGIONS } from '@/lib/tax/types';
 
-export const metadata: Metadata = {
-  title: 'Rendement locatif en Belgique : le calcul juste',
-  description:
-    'En Belgique, tu n’es pas taxé sur tes loyers mais sur le revenu cadastral indexé majoré de 40 %. Calcule ton rendement net d’impôt et ton cash-flow mensuel réel, crédit compris.',
-  alternates: { canonical: '/outils/rendement-locatif' },
-};
+/**
+ * L'image de partage reprend les chiffres de la simulation : c'est ce qui fait
+ * circuler un lien plutôt qu'une carte générique de plus.
+ */
+export async function generateMetadata({
+  searchParams,
+}: PageProps<'/outils/rendement-locatif'>): Promise<Metadata> {
+  const p = await searchParams;
+
+  const og = new URLSearchParams({ outil: 'rendement-locatif' });
+    if (p.prix !== undefined) og.set('prix', String(Array.isArray(p.prix) ? p.prix[0] : p.prix));
+    if (p.loyer !== undefined) og.set('loyer', String(Array.isArray(p.loyer) ? p.loyer[0] : p.loyer));
+    if (p.rc !== undefined) og.set('rc', String(Array.isArray(p.rc) ? p.rc[0] : p.rc));
+    if (p.marginal !== undefined) og.set('marginal', String(Array.isArray(p.marginal) ? p.marginal[0] : p.marginal));
+    if (p.region !== undefined) og.set('region', String(Array.isArray(p.region) ? p.region[0] : p.region));
+    if (p.credit !== undefined) og.set('credit', String(Array.isArray(p.credit) ? p.credit[0] : p.credit));
+    if (p.quotite !== undefined) og.set('quotite', String(Array.isArray(p.quotite) ? p.quotite[0] : p.quotite));
+    if (p.taux !== undefined) og.set('taux', String(Array.isArray(p.taux) ? p.taux[0] : p.taux));
+    if (p.duree !== undefined) og.set('duree', String(Array.isArray(p.duree) ? p.duree[0] : p.duree));
+
+  const image = `/api/og?${og.toString()}`;
+
+  return {
+    title: 'Rendement locatif en Belgique : le calcul juste',
+    description: 'En Belgique, tu n’es pas taxé sur tes loyers mais sur le revenu cadastral indexé majoré de 40 %. Calcule ton cash-flow réel.',
+    alternates: { canonical: '/outils/rendement-locatif' },
+    openGraph: {
+      title: 'Rendement locatif en Belgique : le calcul juste',
+      description: 'En Belgique, tu n’es pas taxé sur tes loyers mais sur le revenu cadastral indexé majoré de 40 %. Calcule ton cash-flow réel.',
+      url: '/outils/rendement-locatif',
+      images: [{ url: image, width: 1200, height: 630 }],
+    },
+    twitter: { card: 'summary_large_image', images: [image] },
+  };
+}
 
 /**
  * Les paramètres sont lus côté serveur et passés au calculateur : le résultat
