@@ -82,10 +82,8 @@ export function calculerRendementLocatif(
     params,
   );
 
-  const fraisAcquisitionCents =
-    acquisition.result.droitsCents +
-    acquisition.result.honorairesNotaireCents +
-    acquisition.result.fraisDeboursCents;
+  // Le total des frais d'acte, TVA comprise, tel que le notaire le facture.
+  const fraisAcquisitionCents = acquisition.result.fraisActeAchatCents;
   const investissementTotalCents = prix + fraisAcquisitionCents;
 
   // Pertes récurrentes sur le loyer.

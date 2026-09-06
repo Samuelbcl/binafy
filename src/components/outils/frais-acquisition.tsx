@@ -64,8 +64,14 @@ export function OutilFraisAcquisition({ initiales }: { initiales: ValeursAcquisi
 
   const postes = [
     { libelle: 'Droits d’enregistrement', valeur: cash.result.droitsCents },
-    { libelle: 'Honoraires du notaire', valeur: cash.result.honorairesNotaireCents },
-    { libelle: 'Frais et débours', valeur: cash.result.fraisDeboursCents },
+    {
+      libelle: 'Honoraires du notaire',
+      valeur: cash.result.honorairesCents,
+      precision:
+        cash.result.baremeNotaire === 'Jbis' ? 'Barème réduit — habitation propre et unique' : undefined,
+    },
+    { libelle: 'Frais d’acte, débours et droits divers', valeur: cash.result.fraisActeCents },
+    { libelle: 'TVA', valeur: cash.result.tvaCents },
     { libelle: 'Acte de crédit', valeur: cash.result.acteCreditCents },
     { libelle: 'Frais de dossier', valeur: cash.result.fraisDossierCents },
     { libelle: 'Apport propre', valeur: cash.result.apportCents },
@@ -126,7 +132,12 @@ export function OutilFraisAcquisition({ initiales }: { initiales: ValeursAcquisi
             return (
               <li key={poste.libelle}>
                 <div className="flex items-baseline justify-between gap-3 text-[14px]">
-                  <span className="text-text-muted">{poste.libelle}</span>
+                  <span className="text-text-muted">
+                    {poste.libelle}
+                    {poste.precision && (
+                      <span className="ml-2 text-[11px] text-primary">{poste.precision}</span>
+                    )}
+                  </span>
                   <Montant cents={poste.valeur} decimals={0} jamaisMasque />
                 </div>
                 <div className="mt-1 h-1 overflow-hidden rounded-full bg-surface-2">

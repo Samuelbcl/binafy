@@ -390,14 +390,83 @@ const DEFS_2026: Def[] = [
   { cle: 'notaire.achat.tranche_6.plafond', valeur: 250095, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 6', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_6.taux', valeur: 0.57, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 6', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_7.taux', valeur: 0.057, unite: 'pourcent', libelle: 'Honoraires notaire — taux au-delà de la tranche 6', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
+
+  // ── Postes d'un acte d'achat ────────────────────────────────
+  // Relevés sur le calculateur officiel de notaire.be, deux simulations
+  // concordantes du 06/09/2026. La formule de TVA en a été déduite et vérifiée
+  // au centime sur les deux : elle porte sur les honoraires, les frais
+  // administratifs, les débours et le droit d'écriture — pas sur les droits
+  // d'enregistrement ni sur la transcription hypothécaire.
   {
-    cle: 'notaire.frais_debours',
-    valeur: 1100,
+    cle: 'notaire.droit_annexes',
+    valeur: 100,
     unite: 'eur',
-    libelle: 'Frais et débours administratifs forfaitaires (recherches, transcription)',
-    sourceUrl: NOTAIRE,
+    libelle: "Droit pour les annexes de l'acte",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
+    cle: 'notaire.frais_administratifs',
+    valeur: 855,
+    unite: 'eur',
+    libelle: 'Frais administratifs du notaire',
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'notaire.debours',
+    valeur: 309,
+    unite: 'eur',
+    libelle: 'Débours — recherches et formalités avancées par le notaire',
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'notaire.transcription_hypothecaire',
+    valeur: 285,
+    unite: 'eur',
+    libelle: "Transcription hypothécaire de l'acte d'achat",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'notaire.droit_ecriture',
+    valeur: 100,
+    unite: 'eur',
+    libelle: "Droit d'écriture",
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'notaire.achat.partie_fixe',
+    valeur: 71.99,
+    unite: 'eur',
+    libelle: 'Honoraires — partie fixe ajoutée aux tranches (barème J)',
+    // Depuis la réforme du 01/01/2023, le tarif comporte une partie fixe en
+    // plus des tranches dégressives. Sa valeur est ici **calibrée sur un seul
+    // point** — 280 000 € — par écart entre le barème par tranches et le
+    // montant rendu par notaire.be. Deux simulations de plus, à des prix
+    // différents, permettraient de vérifier qu'elle est bien fixe.
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'notaire.achat.reduction_jbis',
+    valeur: 276.5,
+    unite: 'eur',
+    libelle: 'Honoraires — réduction du barème Jbis (habitation propre et unique)',
+    // Écart relevé entre les deux simulations au même prix : 2 538,24 € en
+    // barème J contre 2 261,74 € en Jbis. Comme la partie fixe, cette valeur
+    // est calibrée sur un point et reste à confirmer sur d'autres prix.
+    sourceUrl: 'https://www.notaire.be/calcul-de-frais/achat',
+    verifieLe: '2026-09-06',
+  },
+    {
     cle: 'notaire.tva_honoraires',
     valeur: 21,
     unite: 'pourcent',
@@ -426,6 +495,8 @@ const DEFS_2026: Def[] = [
     libelle: 'Frais de dossier bancaire',
     sourceUrl: BNB,
     hypothese: true,
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   // Quotités de financement recommandées par la BNB
   {
@@ -453,6 +524,8 @@ const DEFS_2026: Def[] = [
     libelle: 'Ratio de charge maximum usuel — mensualité sur revenus nets',
     sourceUrl: BNB,
     hypothese: true,
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'credit.part_loyer_prise_en_compte',
@@ -461,6 +534,8 @@ const DEFS_2026: Def[] = [
     libelle: 'Part du loyer attendu prise en compte dans les revenus (locatif)',
     sourceUrl: BNB,
     hypothese: true,
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   // ───────────────────────────────────────────────────────────
   // 3. Impôt des personnes physiques
@@ -749,6 +824,8 @@ const DEFS_2026: Def[] = [
     libelle: 'Taux de retrait annuel retenu par défaut',
     sourceUrl: STATBEL,
     hypothese: true,
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
 ];
 

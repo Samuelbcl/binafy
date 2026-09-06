@@ -17,7 +17,8 @@
     "fiscal:seed": "node scripts/generer-seed-fiscal.mjs",
     "db:cron": "node --env-file=.env.local scripts/verifier-cron.mjs",
     "db:import": "node --env-file=.env.local scripts/verifier-import.mjs",
-    "db:rgpd": "node --env-file=.env.local scripts/verifier-rgpd.mjs"
+    "db:rgpd": "node --env-file=.env.local scripts/verifier-rgpd.mjs",
+    "fiscal:audit": "vitest run src/lib/tax/catalogue.test.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",

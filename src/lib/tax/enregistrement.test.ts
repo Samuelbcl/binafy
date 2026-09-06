@@ -139,9 +139,7 @@ describe('cash nécessaire à l’acte', () => {
       P,
     );
     const somme =
-      r.result.droitsCents +
-      r.result.honorairesNotaireCents +
-      r.result.fraisDeboursCents +
+      r.result.fraisActeAchatCents +
       r.result.acteCreditCents +
       r.result.fraisDossierCents +
       r.result.apportCents;
@@ -189,6 +187,65 @@ describe('cash nécessaire à l’acte', () => {
     // 35 000 de droits + 56 000 d'apport, plus notaire et acte de crédit.
     expect(r.result.droitsCents).toBe(euros(35_000));
     expect(r.result.cashTotalCents).toBeGreaterThan(euros(95_000));
+  });
+});
+
+describe('frais d’acte — calés sur le calculateur officiel de notaire.be', () => {
+  // Deux simulations relevées le 06/09/2026 sur notaire.be, Wallonie, 280 000 €.
+  // Ce sont les seuls points de calibrage dont on dispose : si le calcul dérive,
+  // c'est ici qu'on le verra.
+  const TOLERANCE = euros(1);
+
+  it('reproduit la simulation « habitation propre et unique » (13 051,15 €)', () => {
+    const r = calculerCashNecessaire(
+      { prixCents: euros(280_000), region: 'wallonie', typeAchat: 'propre_unique' },
+      P,
+    );
+    expect(r.result.droitsCents).toBe(euros(8_400));
+    expect(r.result.baremeNotaire).toBe('Jbis');
+    expect(Math.abs(r.result.honorairesCents - euros(2_261.74))).toBeLessThan(TOLERANCE);
+    expect(Math.abs(r.result.tvaCents - euros(740.41))).toBeLessThan(TOLERANCE);
+    expect(Math.abs(r.result.fraisActeAchatCents - euros(13_051.15))).toBeLessThan(TOLERANCE);
+  });
+
+  it('reproduit la simulation « bien d’investissement » (39 985,71 €)', () => {
+    const r = calculerCashNecessaire(
+      { prixCents: euros(280_000), region: 'wallonie', typeAchat: 'locatif' },
+      P,
+    );
+    expect(r.result.droitsCents).toBe(euros(35_000));
+    expect(r.result.baremeNotaire).toBe('J');
+    expect(Math.abs(r.result.honorairesCents - euros(2_538.24))).toBeLessThan(TOLERANCE);
+    expect(Math.abs(r.result.tvaCents - euros(798.47))).toBeLessThan(TOLERANCE);
+    expect(Math.abs(r.result.fraisActeAchatCents - euros(39_985.71))).toBeLessThan(TOLERANCE);
+  });
+
+  it('applique le barème réduit à la seule habitation propre et unique', () => {
+    const propre = calculerHonorairesNotaire(
+      { prixCents: euros(280_000), typeAchat: 'propre_unique' },
+      P,
+    );
+    const autre = calculerHonorairesNotaire({ prixCents: euros(280_000), typeAchat: 'locatif' }, P);
+
+    expect(propre.result.bareme).toBe('Jbis');
+    expect(autre.result.bareme).toBe('J');
+    // L'écart relevé entre les deux simulations officielles.
+    expect(autre.result.honorairesHTVACents - propre.result.honorairesHTVACents).toBe(euros(276.5));
+  });
+
+  it('ne facture aucun honoraire sur un prix nul', () => {
+    const r = calculerHonorairesNotaire({ prixCents: 0, typeAchat: 'propre_unique' }, P);
+    expect(r.result.honorairesHTVACents).toBe(0);
+    expect(r.result.totalCents).toBe(0);
+  });
+
+  it('rappelle les conditions du barème réduit', () => {
+    const r = calculerHonorairesNotaire(
+      { prixCents: euros(280_000), typeAchat: 'propre_unique' },
+      P,
+    );
+    expect(r.hypotheses.join(' ')).toContain('habitation propre et unique');
+    expect(r.hypotheses.join(' ')).toContain('domicile');
   });
 });
 

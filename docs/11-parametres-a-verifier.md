@@ -3,10 +3,10 @@
 > **Fichier généré.** Régénérer avec `node scripts/generer-seed-fiscal.mjs`.
 > Source : `src/lib/tax/parametres.ts`.
 
-84 paramètres sont chargés pour 2026.
-**69 sont confirmés** — leur valeur est chiffrée explicitement dans
+90 paramètres sont chargés pour 2026.
+**78 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**11 règles légales attendent une confirmation** à la source officielle.
+**12 règles légales attendent une confirmation** à la source officielle.
 7 autres valeurs sont des pratiques de marché ou des hypothèses de
 simulation : elles ne relèvent d'aucun texte et ne figurent pas dans cette liste.
 
@@ -66,7 +66,8 @@ Source à consulter : Barème légal des honoraires notariaux (notaire.be)
 | `notaire.achat.tranche_5.taux` | 1.14 pourcent | Honoraires notaire — taux tranche 5 |
 | `notaire.achat.tranche_6.plafond` | 250095 eur | Honoraires notaire — plafond tranche 6 |
 | `notaire.achat.tranche_6.taux` | 0.57 pourcent | Honoraires notaire — taux tranche 6 |
-| `notaire.frais_debours` | 1100 eur | Frais et débours administratifs forfaitaires (recherches, transcription) |
+| `notaire.achat.partie_fixe` | 71.99 eur | Honoraires — partie fixe ajoutée aux tranches (barème J) |
+| `notaire.achat.reduction_jbis` | 276.5 eur | Honoraires — réduction du barème Jbis (habitation propre et unique) |
 
 ## Rappel
 
