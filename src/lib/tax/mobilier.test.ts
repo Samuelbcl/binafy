@@ -103,15 +103,15 @@ describe('TOB', () => {
 
 describe('précompte mobilier sur dividendes', () => {
   it('applique 30 % au-delà de la tranche exonérée', () => {
-    const r = calculerPrecompteDividendes({ dividendesBrutsCents: euros(1_859) }, P);
-    // 1 859 − 859 exonérés = 1 000 taxables × 30 %
+    const r = calculerPrecompteDividendes({ dividendesBrutsCents: euros(1_833) }, P);
+    // 1 833 − 833 exonérés = 1 000 taxables × 30 %
     expect(r.result.precompteDuCents).toBe(euros(300));
   });
 
   it('n’impose rien tant que le dividende reste sous la tranche exonérée', () => {
     const r = calculerPrecompteDividendes({ dividendesBrutsCents: euros(500) }, P);
     expect(r.result.precompteDuCents).toBe(0);
-    expect(r.result.exonerationRestanteCents).toBe(euros(359));
+    expect(r.result.exonerationRestanteCents).toBe(euros(333));
   });
 
   it('chiffre ce qui est récupérable quand la banque belge a tout retenu', () => {
@@ -120,7 +120,7 @@ describe('précompte mobilier sur dividendes', () => {
       { dividendesBrutsCents: euros(1_000), precompteRetenuCents: euros(300) },
       P,
     );
-    expect(r.result.recuperableCents).toBe(euros(257.7)); // 859 × 30 %
+    expect(r.result.recuperableCents).toBe(euros(249.9)); // 833 × 30 %
     expect(r.result.aDeclarerCents).toBe(0);
   });
 
@@ -135,7 +135,7 @@ describe('précompte mobilier sur dividendes', () => {
 
   it('tient compte de l’exonération déjà consommée ailleurs', () => {
     const r = calculerPrecompteDividendes(
-      { dividendesBrutsCents: euros(1_000), exonerationDejaUtiliseeCents: euros(859) },
+      { dividendesBrutsCents: euros(1_000), exonerationDejaUtiliseeCents: euros(833) },
       P,
     );
     expect(r.result.precompteDuCents).toBe(euros(300));
@@ -151,9 +151,9 @@ describe('précompte mobilier sur dividendes', () => {
 
 describe('compte d’épargne réglementé', () => {
   it('exonère jusqu’au plafond puis applique le précompte réduit de 15 %', () => {
-    const r = calculerPrecompteEpargneReglementee({ interetsBaseCents: euros(1_550) }, P);
-    // 1 550 − 1 050 exonérés = 500 × 15 %
-    expect(r.result.exonereCents).toBe(euros(1_050));
+    const r = calculerPrecompteEpargneReglementee({ interetsBaseCents: euros(1_520) }, P);
+    // 1 520 − 1 020 exonérés = 500 × 15 %
+    expect(r.result.exonereCents).toBe(euros(1_020));
     expect(r.result.precompteCents).toBe(euros(75));
   });
 
@@ -163,7 +163,7 @@ describe('compte d’épargne réglementé', () => {
       P,
     );
     expect(r.result.interetsTotauxCents).toBe(euros(1_200));
-    expect(r.result.taxableCents).toBe(euros(150));
+    expect(r.result.taxableCents).toBe(euros(180));
   });
 
   it('rappelle qu’un retrait fait perdre la prime de fidélité', () => {
@@ -174,7 +174,7 @@ describe('compte d’épargne réglementé', () => {
   it('n’impose rien sous le plafond', () => {
     const r = calculerPrecompteEpargneReglementee({ interetsBaseCents: euros(300) }, P);
     expect(r.result.precompteCents).toBe(0);
-    expect(r.result.exonerationRestanteCents).toBe(euros(750));
+    expect(r.result.exonerationRestanteCents).toBe(euros(720));
   });
 });
 

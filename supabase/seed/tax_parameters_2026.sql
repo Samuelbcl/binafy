@@ -5,8 +5,8 @@
 -- Source : src/lib/tax/parametres.ts
 -- Régénérer : node scripts/generer-seed-fiscal.mjs
 --
--- 76 paramètres, dont 32 confirmés à la source
--- et 44 en attente de vérification
+-- 76 paramètres, dont 38 confirmés à la source
+-- et 38 en attente de vérification
 -- (voir docs/11-parametres-a-verifier.md).
 --
 -- Mettre à jour un taux pour une nouvelle année = insérer des lignes ici,
@@ -17,15 +17,15 @@ insert into tax_parameters
   (cle, annee, region, valeur, unite, libelle, source_url, verifie_le, verifie)
 values
   ('precompte_mobilier.taux', 2026, null, 30, 'pourcent', 'Précompte mobilier — taux standard sur dividendes et intérêts', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', true),
-  ('precompte_mobilier.exoneration_dividendes', 2026, null, 859, 'eur', 'Dividendes — première tranche exonérée par personne et par an (via déclaration)', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', false),
-  ('epargne_reglementee.exoneration_interets', 2026, null, 1050, 'eur', 'Compte d''épargne réglementé — plafond annuel d''intérêts exonérés', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', false),
-  ('epargne_reglementee.taux_precompte_reduit', 2026, null, 15, 'pourcent', 'Compte d''épargne réglementé — précompte réduit au-delà du plafond exonéré', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', false),
+  ('precompte_mobilier.exoneration_dividendes', 2026, null, 833, 'eur', 'Dividendes — première tranche exonérée par personne et par an (via déclaration)', 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers', '2026-09-06', true),
+  ('epargne_reglementee.exoneration_interets', 2026, null, 1020, 'eur', 'Compte d''épargne réglementé — plafond annuel d''intérêts exonérés', 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers', '2026-09-06', true),
+  ('epargne_reglementee.taux_precompte_reduit', 2026, null, 15, 'pourcent', 'Compte d''épargne réglementé — précompte réduit au-delà du plafond exonéré', 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers', '2026-09-06', true),
   ('tob.taux.actions_etrangeres', 2026, null, 0.12, 'pourcent', 'TOB — actions et ETF cotés hors registre belge', 'https://finances.belgium.be/fr/particuliers/declaration_impot/taxe-operations-boursieres', '2026-09-01', true),
   ('tob.taux.distribuant_belge', 2026, null, 0.35, 'pourcent', 'TOB — actions et ETF distribuants inscrits en Belgique', 'https://finances.belgium.be/fr/particuliers/declaration_impot/taxe-operations-boursieres', '2026-09-01', true),
   ('tob.taux.capitalisant_belge', 2026, null, 1.32, 'pourcent', 'TOB — fonds capitalisants inscrits en Belgique', 'https://finances.belgium.be/fr/particuliers/declaration_impot/taxe-operations-boursieres', '2026-09-01', true),
-  ('tob.plafond.actions_etrangeres', 2026, null, 1300, 'eur', 'TOB — plafond par opération, actions et ETF hors registre belge', 'https://finances.belgium.be/fr/particuliers/declaration_impot/taxe-operations-boursieres', '2026-09-01', false),
-  ('tob.plafond.distribuant_belge', 2026, null, 1600, 'eur', 'TOB — plafond par opération, distribuants inscrits en Belgique', 'https://finances.belgium.be/fr/particuliers/declaration_impot/taxe-operations-boursieres', '2026-09-01', false),
-  ('tob.plafond.capitalisant_belge', 2026, null, 4000, 'eur', 'TOB — plafond par opération, fonds capitalisants inscrits en Belgique', 'https://finances.belgium.be/fr/particuliers/declaration_impot/taxe-operations-boursieres', '2026-09-01', false),
+  ('tob.plafond.actions_etrangeres', 2026, null, 1300, 'eur', 'TOB — plafond par opération, actions et ETF hors registre belge', 'https://blog.oeccbb.be/fr/article/circulaire-2026c42-faq-tob-taxe-sur-les-operations-de-bourse-version-2/30750', '2026-09-06', true),
+  ('tob.plafond.distribuant_belge', 2026, null, 1600, 'eur', 'TOB — plafond par opération, distribuants inscrits en Belgique', 'https://blog.oeccbb.be/fr/article/circulaire-2026c42-faq-tob-taxe-sur-les-operations-de-bourse-version-2/30750', '2026-09-06', true),
+  ('tob.plafond.capitalisant_belge', 2026, null, 4000, 'eur', 'TOB — plafond par opération, fonds capitalisants inscrits en Belgique', 'https://blog.oeccbb.be/fr/article/circulaire-2026c42-faq-tob-taxe-sur-les-operations-de-bourse-version-2/30750', '2026-09-06', true),
   ('plus_values.taux', 2026, null, 10, 'pourcent', 'Taxe sur les plus-values sur actifs financiers', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', true),
   ('plus_values.exoneration_annuelle', 2026, null, 10000, 'eur', 'Taxe sur les plus-values — exonération annuelle par personne', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', true),
   ('reynders.seuil_part_obligataire', 2026, null, 10, 'pourcent', 'Taxe Reynders — seuil de part obligataire déclenchant la taxe', 'https://finances.belgium.be/fr/particuliers/declaration_impot/revenus-mobiliers', '2026-09-01', true),

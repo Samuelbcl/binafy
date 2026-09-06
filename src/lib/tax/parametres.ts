@@ -8,11 +8,27 @@ import type { RegionFiscale, TaxParameter, TaxParamSet, UniteParametre } from '.
  * La source de vérité en production reste la base : mettre à jour un taux,
  * c'est insérer une ligne, pas déployer du code (doc 04 § note tax_parameters).
  *
- * `verifie: true`  → valeur chiffrée explicitement dans docs/06-fiscalite-belge.md.
+ * `verifie: true`  → valeur confirmée à une source officielle, avec sa date.
  * `verifie: false` → ordre de grandeur nécessaire au fonctionnement de l'app,
- *                    en attente de confirmation à la source officielle.
- *                    Voir docs/11-parametres-a-verifier.md pour la liste de travail.
- *                    L'interface affiche un avertissement sur tout calcul qui en dépend.
+ *                    en attente de confirmation. Voir docs/11-parametres-a-verifier.md.
+ *                    L'interface avertit sur tout calcul qui en dépend.
+ *
+ * ⚠️ **Que désigne `annee` ?** Question ouverte, et elle n'est pas cosmétique.
+ * La fiscalité belge distingue l'*année de revenus* de l'*exercice d'imposition*,
+ * qui la suit d'un an. Les montants indexés diffèrent entre les deux : la quotité
+ * exemptée vaut 10 910 € pour l'exercice 2026 (revenus 2025) et 11 180 € pour
+ * l'exercice 2027 (revenus 2026).
+ *
+ * Ce catalogue traite `annee` comme l'**année de revenus** — c'est ce que
+ * l'utilisateur a en tête quand il regarde sa position de l'année en cours.
+ * Les paramètres marqués vérifiés ci-dessous respectent cette convention ou
+ * sont insensibles à la distinction : le SPF indique explicitement que les
+ * exonérations mobilières de 833 € et 1 020 € valent pour les revenus 2025
+ * **et** 2026.
+ *
+ * Les valeurs IPP et le coefficient d'indexation du RC restent non vérifiées
+ * tant que cette convention n'est pas confirmée : celles qui circulent le plus
+ * sont celles de l'exercice 2026, donc des revenus 2025.
  */
 
 const SPF = 'https://finances.belgium.be';
@@ -65,27 +81,41 @@ const DEFS_2026: Def[] = [
   },
   {
     cle: 'precompte_mobilier.exoneration_dividendes',
-    valeur: 859,
+    valeur: 833,
     unite: 'eur',
     libelle: 'Dividendes — première tranche exonérée par personne et par an (via déclaration)',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'epargne_reglementee.exoneration_interets',
-    valeur: 1050,
+    valeur: 1020,
     unite: 'eur',
     libelle: "Compte d'épargne réglementé — plafond annuel d'intérêts exonérés",
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'epargne_reglementee.taux_precompte_reduit',
     valeur: 15,
     unite: 'pourcent',
     libelle: "Compte d'épargne réglementé — précompte réduit au-delà du plafond exonéré",
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
 
-  // Taxe sur les opérations de bourse — taux et plafonds par opération
+  // Taxe sur les opérations de bourse — taux et plafonds par opération.
+  //
+  // ⚠️ Les trois plafonds sont confirmés par la circulaire 2026/C/42, mais la
+  // nomenclature de docs/06 ne recouvre pas exactement les catégories légales :
+  // la circulaire rattache le taux de 0,12 % aux obligations et aux SICAV
+  // distribuantes offertes publiquement, et le taux de 0,35 % aux « autres
+  // titres », dont les actions ordinaires. Le rattachement d'un ETF donné à
+  // l'une ou l'autre catégorie demande une vérification métier avant mise en
+  // production — les taux, eux, sont justes.
   {
     cle: 'tob.taux.actions_etrangeres',
     valeur: 0.12,
@@ -115,21 +145,27 @@ const DEFS_2026: Def[] = [
     valeur: 1300,
     unite: 'eur',
     libelle: 'TOB — plafond par opération, actions et ETF hors registre belge',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/taxe-operations-boursieres`,
+    sourceUrl: 'https://blog.oeccbb.be/fr/article/circulaire-2026c42-faq-tob-taxe-sur-les-operations-de-bourse-version-2/30750',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'tob.plafond.distribuant_belge',
     valeur: 1600,
     unite: 'eur',
     libelle: 'TOB — plafond par opération, distribuants inscrits en Belgique',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/taxe-operations-boursieres`,
+    sourceUrl: 'https://blog.oeccbb.be/fr/article/circulaire-2026c42-faq-tob-taxe-sur-les-operations-de-bourse-version-2/30750',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'tob.plafond.capitalisant_belge',
     valeur: 4000,
     unite: 'eur',
     libelle: 'TOB — plafond par opération, fonds capitalisants inscrits en Belgique',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/taxe-operations-boursieres`,
+    sourceUrl: 'https://blog.oeccbb.be/fr/article/circulaire-2026c42-faq-tob-taxe-sur-les-operations-de-bourse-version-2/30750',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
 
   // Taxe sur les plus-values sur actifs financiers (depuis 2026)
@@ -424,6 +460,11 @@ const DEFS_2026: Def[] = [
     valeur: 20.5,
     unite: 'pourcent',
     libelle: 'Cotisations sociales — taux sur le revenu net imposable',
+    // Simplification assumée : le barème réel est dégressif — 20,5 % jusqu'à
+    // 75 024,54 €, puis 14,16 %, et rien au-delà de 110 562,42 € (INASTI, 2026).
+    // Pour la cible — un indépendant complémentaire — le premier taux couvre la
+    // quasi-totalité des cas. À affiner si le module indépendant s'étend au
+    // statut principal.
     sourceUrl: INASTI,
     verifie: true,
   },

@@ -4,9 +4,9 @@
 > Source : `src/lib/tax/parametres.ts`.
 
 76 paramètres sont chargés pour 2026.
-**32 sont confirmés** — leur valeur est chiffrée explicitement dans
+**38 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**44 attendent une confirmation** à la source officielle.
+**38 attendent une confirmation** à la source officielle.
 
 ## Comment ça marche
 
@@ -67,15 +67,6 @@ Source à consulter : SPF Finances — avantages fiscaux
 | `epargne_pension.reduction_haut` | 25 pourcent | Épargne-pension — taux de réduction d'impôt au plafond haut |
 | `epargne_pension.taxe_anticipative` | 8 pourcent | Épargne-pension — taxe anticipative prélevée à 60 ans |
 
-### epargne_reglementee
-
-Source à consulter : SPF Finances — comptes d’épargne réglementés
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `epargne_reglementee.exoneration_interets` | 1050 eur | Compte d'épargne réglementé — plafond annuel d'intérêts exonérés |
-| `epargne_reglementee.taux_precompte_reduit` | 15 pourcent | Compte d'épargne réglementé — précompte réduit au-delà du plafond exonéré |
-
 ### hypothese
 
 Source à consulter : Hypothèse de simulation, pas un paramètre légal
@@ -135,14 +126,6 @@ Source à consulter : Barème légal des honoraires notariaux (notaire.be)
 | `notaire.achat.tranche_7.taux` | 0.057 pourcent | Honoraires notaire — taux au-delà de la tranche 6 |
 | `notaire.frais_debours` | 1100 eur | Frais et débours administratifs forfaitaires (recherches, transcription) |
 
-### precompte_mobilier
-
-Source à consulter : SPF Finances — revenus mobiliers
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `precompte_mobilier.exoneration_dividendes` | 859 eur | Dividendes — première tranche exonérée par personne et par an (via déclaration) |
-
 ### rc
 
 Source à consulter : Statbel — coefficient d’indexation du revenu cadastral
@@ -158,16 +141,6 @@ Source à consulter : SPF Finances — plus-values de fonds obligataires
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
 | `reynders.taux` | 30 pourcent | Taxe Reynders — taux sur la composante intérêts à la vente |
-
-### tob
-
-Source à consulter : SPF Finances — taxe sur les opérations de bourse
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `tob.plafond.actions_etrangeres` | 1300 eur | TOB — plafond par opération, actions et ETF hors registre belge |
-| `tob.plafond.distribuant_belge` | 1600 eur | TOB — plafond par opération, distribuants inscrits en Belgique |
-| `tob.plafond.capitalisant_belge` | 4000 eur | TOB — plafond par opération, fonds capitalisants inscrits en Belgique |
 
 ## Rappel
 
