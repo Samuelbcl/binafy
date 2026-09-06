@@ -1,19 +1,28 @@
 # Direction visuelle
 
-Quatre partis pris pour le tableau de bord, à trancher avant d'écrire la moindre
-ligne de CSS dans `src/`. Chaque fichier `.dc.html` est une maquette statique :
-on juge le look, pas l'interaction.
+**Direction retenue : épurée.** Fond clair, un seul accent saturé, gros titres
+gras, cartes très arrondies, boutons noirs en pilule, peu d'éléments par écran.
+Choisie sur références le 06/09/2026.
 
-| Fichier               | Direction              | En une phrase                                              |
-| --------------------- | ---------------------- | ---------------------------------------------------------- |
-| `Main.dc.html`        | A — Nuit et laiton     | Le look actuel de `docs/05` : charbon, laiton, éditorial.   |
-| `DirectionB.dc.html`  | B — Papier documentaire| Un relevé de compte : crème, serif de presse, filets.       |
-| `DirectionC.dc.html`  | C — Contraste franc    | Noir et blanc, chiffres énormes, un bleu électrique.        |
-| `DirectionD.dc.html`  | D — Chaleur belge      | Brique et ocre, formes rondes, typo humaniste.              |
-| `MobileA.dc.html`     | A en 390 × 844         | La direction A déclinée sur téléphone.                      |
+Chaque `.dc.html` est une maquette statique : on juge le look, pas l'interaction.
 
-`canvas.json` place les planches sur le canevas et porte les notes qui expliquent,
-pour chaque direction, ce qu'elle défend **et ce qu'elle coûte**.
+## Le parcours
+
+| Fichier                | Écran                | Ce qu'il démontre                                          |
+| ---------------------- | -------------------- | ---------------------------------------------------------- |
+| `Bienvenue.dc.html`    | Bienvenue            | Aplat de couleur, pile de cartes, promesse en trois mots.   |
+| `Connexion.dc.html`    | Connexion            | Lien magique seul — ni Google ni Facebook, écartés du projet.|
+| `Main.dc.html`         | Accueil              | Patrimoine net, variation, répartition, ce qui a bougé.     |
+| `Patrimoine.dc.html`   | Patrimoine           | Les lignes réelles, groupées par nature.                    |
+| `Fiscalite.dc.html`    | Détail d'un calcul   | Un chiffre, sa décomposition, l'hypothèse, les sources.     |
+| `Bureau.dc.html`       | Bureau 1200 px       | Le même langage sur grand écran.                            |
+| `Fondations.dc.html`   | Fondations           | Couleurs, typo, composants, rayons — les valeurs exactes.   |
+
+`Direction{A,B,C,D}.dc.html` et `MobileA.dc.html` sont les quatre explorations
+antérieures, gardées pour mémoire.
+
+`canvas.json` place les planches et porte les notes qui expliquent chaque choix
+**et son coût**.
 
 ## Régénérer le canevas
 
@@ -25,15 +34,23 @@ cd design
 node "<dossier de la skill design>/seed-canvas.mjs" \
   --template "<dossier de la skill design>/payload.template.html" \
   --out nestor-directions-visuelles.html \
-  --title "Nestor — directions visuelles" \
-  --artboard Main.dc.html --artboard DirectionB.dc.html \
+  --title "Nestor — direction épurée" \
+  --artboard Main.dc.html --artboard Bienvenue.dc.html \
+  --artboard Connexion.dc.html --artboard Patrimoine.dc.html \
+  --artboard Fiscalite.dc.html --artboard Bureau.dc.html \
+  --artboard Fondations.dc.html \
+  --artboard DirectionA.dc.html --artboard DirectionB.dc.html \
   --artboard DirectionC.dc.html --artboard DirectionD.dc.html \
   --artboard MobileA.dc.html \
   --canvas canvas.json
 ```
 
-## Une fois la direction choisie
+## Passage au code
 
-Les valeurs retenues remontent dans `src/app/globals.css` (`@theme inline`) et
-dans `docs/05-design-system.md`. Aucune couleur ni taille ne vit en dur dans un
-composant : les maquettes sont une étape, pas une référence permanente.
+Les valeurs de `Fondations.dc.html` remontent dans `src/app/globals.css`
+(`@theme inline`) et dans `docs/05-design-system.md`. Aucune couleur ni taille
+ne vit en dur dans un composant : les maquettes sont une étape, pas une
+référence permanente.
+
+Point encore ouvert : l'accent `#4F3FF0` est une proposition, pas une décision.
+Il se change en une valeur.
