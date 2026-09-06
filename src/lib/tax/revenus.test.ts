@@ -161,9 +161,9 @@ describe('revenus immobiliers — la mécanique belge', () => {
       { revenuCadastralCents: euros(1_000), usage: 'locatif_prive', loyerAnnuelCents: euros(9_600) },
       P,
     );
-    // 1 000 × 2,1763 = 2 176,30 puis × 1,40 = 3 046,82
-    expect(r.result.rcIndexeCents).toBe(euros(2_176.3));
-    expect(r.result.baseImposableCents).toBe(euros(3_046.82));
+    // 1 000 × 2,30 = 2 300 puis × 1,40 = 3 220
+    expect(r.result.rcIndexeCents).toBe(euros(2_300));
+    expect(r.result.baseImposableCents).toBe(euros(3_220));
     expect(r.result.regime).toBe('rc_majore');
   });
 
@@ -182,7 +182,7 @@ describe('revenus immobiliers — la mécanique belge', () => {
       { revenuCadastralCents: euros(1_000), usage: 'locatif_pro', loyerAnnuelCents: euros(1_000) },
       P,
     );
-    expect(r.result.baseImposableCents).toBe(euros(3_046.82));
+    expect(r.result.baseImposableCents).toBe(euros(3_220));
   });
 
   it('applique la quote-part de détention', () => {
@@ -194,7 +194,7 @@ describe('revenus immobiliers — la mécanique belge', () => {
       },
       P,
     );
-    expect(moitie.result.baseImposableCents).toBe(euros(1_523.41));
+    expect(moitie.result.baseImposableCents).toBe(euros(1_610));
   });
 
   it('montre que le taux effectif sur le loyer est bien plus bas que le taux marginal', () => {
@@ -207,9 +207,9 @@ describe('revenus immobiliers — la mécanique belge', () => {
       },
       P,
     );
-    // 3 046,82 × 50 % = 1 523,41 d'impôt sur 9 600 € de loyer, soit ~15,9 %.
-    expect(r.result.impotAnnuelCents).toBe(euros(1_523.41));
-    expect(r.result.tauxEffectifSurLoyer).toBeCloseTo(0.1587, 3);
+    // 3 220 × 50 % = 1 610 d'impôt sur 9 600 € de loyer, soit ~16,8 %.
+    expect(r.result.impotAnnuelCents).toBe(euros(1_610));
+    expect(r.result.tauxEffectifSurLoyer).toBeCloseTo(0.1677, 3);
     expect(r.result.tauxEffectifSurLoyer).toBeLessThan(0.5);
   });
 
@@ -218,7 +218,7 @@ describe('revenus immobiliers — la mécanique belge', () => {
       { revenuCadastralCents: euros(1_000), tauxGlobalPourcent: 40 },
       P,
     );
-    expect(r.result.precompteAnnuelCents).toBe(euros(870.52));
+    expect(r.result.precompteAnnuelCents).toBe(euros(920));
     expect(r.hypotheses.join(' ')).toContain('avertissement-extrait de rôle');
   });
 });

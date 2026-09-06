@@ -87,7 +87,7 @@ Connexion PSD2 et parseur CODA, module immobilier, objectifs libres persistés,
 
 Deux points bloquants, aucun n'est technique.
 
-**1. Les paramètres fiscaux.** 38 des 76 valeurs chargées sont des ordres de grandeur
+**1. Les paramètres fiscaux.** 19 des 76 valeurs chargées sont des ordres de grandeur
 qui attendent confirmation à leur source officielle. Elles portent `verifie: false`,
 l'interface avertit sur tout calcul qui en dépend, et elles sont toutes listées dans
 `docs/11-parametres-a-verifier.md` avec la source à consulter et la procédure.

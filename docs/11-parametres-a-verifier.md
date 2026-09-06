@@ -4,9 +4,9 @@
 > Source : `src/lib/tax/parametres.ts`.
 
 76 paramètres sont chargés pour 2026.
-**38 sont confirmés** — leur valeur est chiffrée explicitement dans
+**57 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**38 attendent une confirmation** à la source officielle.
+**19 attendent une confirmation** à la source officielle.
 
 ## Comment ça marche
 
@@ -46,27 +46,6 @@ Source à consulter : Banque nationale de Belgique et pratique bancaire
 | `credit.ratio_charge_max` | 33 pourcent | Ratio de charge maximum usuel — mensualité sur revenus nets |
 | `credit.part_loyer_prise_en_compte` | 75 pourcent | Part du loyer attendu prise en compte dans les revenus (locatif) |
 
-### droits_enregistrement
-
-Source à consulter : Région concernée (logement.wallonie.be, vlaanderen.be, fiscalite.brussels)
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `droits_enregistrement.abattement` (bruxelles) | 200000 eur | Droits d'enregistrement — abattement sur la première tranche (Bruxelles) |
-| `droits_enregistrement.abattement_prix_max` (bruxelles) | 600000 eur | Abattement bruxellois — prix d'achat maximum pour en bénéficier |
-
-### epargne_pension
-
-Source à consulter : SPF Finances — avantages fiscaux
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `epargne_pension.plafond_bas` | 1050 eur | Épargne-pension — plafond bas de versement |
-| `epargne_pension.reduction_bas` | 30 pourcent | Épargne-pension — taux de réduction d'impôt au plafond bas |
-| `epargne_pension.plafond_haut` | 1350 eur | Épargne-pension — plafond haut de versement |
-| `epargne_pension.reduction_haut` | 25 pourcent | Épargne-pension — taux de réduction d'impôt au plafond haut |
-| `epargne_pension.taxe_anticipative` | 8 pourcent | Épargne-pension — taxe anticipative prélevée à 60 ans |
-
 ### hypothese
 
 Source à consulter : Hypothèse de simulation, pas un paramètre légal
@@ -99,10 +78,6 @@ Source à consulter : SPF Finances — barème IPP indexé de l’année
 
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
-| `ipp.tranche_1.plafond` | 16320 eur | IPP — plafond de la tranche à 25 % |
-| `ipp.tranche_2.plafond` | 28830 eur | IPP — plafond de la tranche à 40 % |
-| `ipp.tranche_3.plafond` | 49840 eur | IPP — plafond de la tranche à 45 % |
-| `ipp.quotite_exemptee` | 10570 eur | IPP — quotité de revenu exemptée d'impôt |
 | `ipp.forfait_frais_professionnels` | 30 pourcent | Forfait légal de frais professionnels sur les revenus de remplacement |
 
 ### notaire
@@ -111,28 +86,13 @@ Source à consulter : Barème légal des honoraires notariaux (notaire.be)
 
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
-| `notaire.achat.tranche_1.plafond` | 7500 eur | Honoraires notaire — plafond tranche 1 |
-| `notaire.achat.tranche_1.taux` | 4.56 pourcent | Honoraires notaire — taux tranche 1 |
-| `notaire.achat.tranche_2.plafond` | 17500 eur | Honoraires notaire — plafond tranche 2 |
-| `notaire.achat.tranche_2.taux` | 2.85 pourcent | Honoraires notaire — taux tranche 2 |
-| `notaire.achat.tranche_3.plafond` | 30000 eur | Honoraires notaire — plafond tranche 3 |
-| `notaire.achat.tranche_3.taux` | 2.28 pourcent | Honoraires notaire — taux tranche 3 |
 | `notaire.achat.tranche_4.plafond` | 45495 eur | Honoraires notaire — plafond tranche 4 |
 | `notaire.achat.tranche_4.taux` | 1.71 pourcent | Honoraires notaire — taux tranche 4 |
 | `notaire.achat.tranche_5.plafond` | 64095 eur | Honoraires notaire — plafond tranche 5 |
 | `notaire.achat.tranche_5.taux` | 1.14 pourcent | Honoraires notaire — taux tranche 5 |
 | `notaire.achat.tranche_6.plafond` | 250095 eur | Honoraires notaire — plafond tranche 6 |
 | `notaire.achat.tranche_6.taux` | 0.57 pourcent | Honoraires notaire — taux tranche 6 |
-| `notaire.achat.tranche_7.taux` | 0.057 pourcent | Honoraires notaire — taux au-delà de la tranche 6 |
 | `notaire.frais_debours` | 1100 eur | Frais et débours administratifs forfaitaires (recherches, transcription) |
-
-### rc
-
-Source à consulter : Statbel — coefficient d’indexation du revenu cadastral
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `rc.coefficient_indexation` | 2.1763 coefficient | Revenu cadastral — coefficient d'indexation de l'année |
 
 ### reynders
 

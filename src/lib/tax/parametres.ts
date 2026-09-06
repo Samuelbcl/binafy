@@ -26,9 +26,10 @@ import type { RegionFiscale, TaxParameter, TaxParamSet, UniteParametre } from '.
  * exonérations mobilières de 833 € et 1 020 € valent pour les revenus 2025
  * **et** 2026.
  *
- * Les valeurs IPP et le coefficient d'indexation du RC restent non vérifiées
- * tant que cette convention n'est pas confirmée : celles qui circulent le plus
- * sont celles de l'exercice 2026, donc des revenus 2025.
+ * Le barème IPP ci-dessous est donc celui des **revenus 2026** (exercice 2027),
+ * et non celui de l'exercice 2026 que la plupart des sources mettent en avant.
+ * Les deux figurent sur la même page du SPF ; les confondre décale toutes les
+ * tranches d'environ 2,5 %.
  */
 
 const SPF = 'https://finances.belgium.be';
@@ -208,10 +209,15 @@ const DEFS_2026: Def[] = [
   // ───────────────────────────────────────────────────────────
   {
     cle: 'rc.coefficient_indexation',
-    valeur: 2.1763,
+    valeur: 2.3,
     unite: 'coefficient',
     libelle: "Revenu cadastral — coefficient d'indexation de l'année",
-    sourceUrl: `${STATBEL}/fr/themes/prix-la-consommation/indice-des-prix-la-consommation`,
+    // Confirmé par deux publications Securex de janvier 2026 : le coefficient
+    // passe de 2,2446 à 2,30. Plusieurs sources secondaires citent encore
+    // 2,1763, qui correspond à une année antérieure.
+    sourceUrl: 'https://www.securex.be/fr/lex4you/employeur/actualites/les-nouveaux-montants-fiscaux-indexes-pour-2026-c381d184ee6ae843ae2af770a61faa5e',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'rc.majoration_locatif',
@@ -289,17 +295,18 @@ const DEFS_2026: Def[] = [
     valeur: 200000,
     unite: 'eur',
     libelle: "Droits d'enregistrement — abattement sur la première tranche (Bruxelles)",
-    sourceUrl: 'https://fiscalite.brussels',
+    sourceUrl: 'https://www.notaire.be/immobilier/acheter-et-vendre-un-bien-immobilier/les-frais-lies-lachat/droits-denregistrement-reduction-et-abattement-bruxelles',
     region: 'bruxelles',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'droits_enregistrement.abattement_prix_max',
     valeur: 600000,
     unite: 'eur',
     libelle: "Abattement bruxellois — prix d'achat maximum pour en bénéficier",
-    sourceUrl: 'https://fiscalite.brussels',
-    region: 'bruxelles',
-  },
+    sourceUrl: 'https://www.notaire.be/immobilier/acheter-et-vendre-un-bien-immobilier/les-frais-lies-lachat/droits-denregistrement-reduction-et-abattement-bruxelles',
+    region: 'bruxelles', verifie: true, verifieLe: '2026-09-06' },
   {
     cle: 'droits_enregistrement.abattement',
     valeur: 0,
@@ -337,19 +344,37 @@ const DEFS_2026: Def[] = [
   },
 
   // Frais d'acte — barème notarial dégressif sur le prix d'achat
-  { cle: 'notaire.achat.tranche_1.plafond', valeur: 7500, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 1', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_1.taux', valeur: 4.56, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 1', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_2.plafond', valeur: 17500, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 2', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_2.taux', valeur: 2.85, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 2', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_3.plafond', valeur: 30000, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 3', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_3.taux', valeur: 2.28, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 3', sourceUrl: NOTAIRE },
+  // ⚠️ **Un seul barème est modélisé, il en existe deux.**
+  //
+  // Depuis la réforme du 01/01/2023, l'AR du 16/12/1950 distingue le barème J
+  // (cas général) du barème **Jbis**, réduit, qui s'applique à l'acquisition en
+  // pleine propriété par des personnes physiques d'un immeuble qu'elles
+  // occuperont comme habitation propre et unique — c'est-à-dire le cas central
+  // de la cible de Nestor.
+  //
+  // Les taux du Jbis ne sont pas publiés en clair : seul le calculateur de
+  // notaire.be les applique. Les honoraires calculés ici suivent donc le barème
+  // J et sont **surestimés** pour une première acquisition. Tant que le Jbis
+  // n'est pas obtenu, l'écart joue en faveur de la prudence — l'utilisateur
+  // prévoit plus de cash qu'il n'en faudra — mais il doit être comblé.
+  //
+  // Conditions du Jbis, telles que le tarif les énonce : pleine propriété,
+  // immeuble affecté uniquement à l'habitation, aucun autre droit réel
+  // immobilier détenu, et domicile légal fixé dans l'année sous peine de devoir
+  // verser la différence au notaire.
+  { cle: 'notaire.achat.tranche_1.plafond', valeur: 7500, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 1', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
+  { cle: 'notaire.achat.tranche_1.taux', valeur: 4.56, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 1', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
+  { cle: 'notaire.achat.tranche_2.plafond', valeur: 17500, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 2', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
+  { cle: 'notaire.achat.tranche_2.taux', valeur: 2.85, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 2', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
+  { cle: 'notaire.achat.tranche_3.plafond', valeur: 30000, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 3', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
+  { cle: 'notaire.achat.tranche_3.taux', valeur: 2.28, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 3', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
   { cle: 'notaire.achat.tranche_4.plafond', valeur: 45495, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 4', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_4.taux', valeur: 1.71, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 4', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_5.plafond', valeur: 64095, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 5', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_5.taux', valeur: 1.14, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 5', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_6.plafond', valeur: 250095, unite: 'eur', libelle: 'Honoraires notaire — plafond tranche 6', sourceUrl: NOTAIRE },
   { cle: 'notaire.achat.tranche_6.taux', valeur: 0.57, unite: 'pourcent', libelle: 'Honoraires notaire — taux tranche 6', sourceUrl: NOTAIRE },
-  { cle: 'notaire.achat.tranche_7.taux', valeur: 0.057, unite: 'pourcent', libelle: 'Honoraires notaire — taux au-delà de la tranche 6', sourceUrl: NOTAIRE },
+  { cle: 'notaire.achat.tranche_7.taux', valeur: 0.057, unite: 'pourcent', libelle: 'Honoraires notaire — taux au-delà de la tranche 6', sourceUrl: NOTAIRE, verifie: true, verifieLe: '2026-09-06' },
   {
     cle: 'notaire.frais_debours',
     valeur: 1100,
@@ -422,19 +447,78 @@ const DEFS_2026: Def[] = [
   // ───────────────────────────────────────────────────────────
   // 3. Impôt des personnes physiques
   // ───────────────────────────────────────────────────────────
-  { cle: 'ipp.tranche_1.plafond', valeur: 16320, unite: 'eur', libelle: 'IPP — plafond de la tranche à 25 %', sourceUrl: `${SPF}/fr/particuliers/declaration_impot` },
-  { cle: 'ipp.tranche_1.taux', valeur: 25, unite: 'pourcent', libelle: 'IPP — taux de la tranche 1', sourceUrl: `${SPF}/fr/particuliers/declaration_impot`, verifie: true },
-  { cle: 'ipp.tranche_2.plafond', valeur: 28830, unite: 'eur', libelle: 'IPP — plafond de la tranche à 40 %', sourceUrl: `${SPF}/fr/particuliers/declaration_impot` },
-  { cle: 'ipp.tranche_2.taux', valeur: 40, unite: 'pourcent', libelle: 'IPP — taux de la tranche 2', sourceUrl: `${SPF}/fr/particuliers/declaration_impot`, verifie: true },
-  { cle: 'ipp.tranche_3.plafond', valeur: 49840, unite: 'eur', libelle: 'IPP — plafond de la tranche à 45 %', sourceUrl: `${SPF}/fr/particuliers/declaration_impot` },
-  { cle: 'ipp.tranche_3.taux', valeur: 45, unite: 'pourcent', libelle: 'IPP — taux de la tranche 3', sourceUrl: `${SPF}/fr/particuliers/declaration_impot`, verifie: true },
-  { cle: 'ipp.tranche_4.taux', valeur: 50, unite: 'pourcent', libelle: 'IPP — taux marginal supérieur', sourceUrl: `${SPF}/fr/particuliers/declaration_impot`, verifie: true },
+  // Barème des revenus 2026 (exercice d'imposition 2027), publié par le SPF.
+  {
+    cle: 'ipp.tranche_1.plafond',
+    valeur: 16720,
+    unite: 'eur',
+    libelle: 'IPP — plafond de la tranche à 25 %',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'ipp.tranche_1.taux',
+    valeur: 25,
+    unite: 'pourcent',
+    libelle: 'IPP — taux de la tranche 1',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'ipp.tranche_2.plafond',
+    valeur: 29510,
+    unite: 'eur',
+    libelle: 'IPP — plafond de la tranche à 40 %',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'ipp.tranche_2.taux',
+    valeur: 40,
+    unite: 'pourcent',
+    libelle: 'IPP — taux de la tranche 2',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'ipp.tranche_3.plafond',
+    valeur: 51070,
+    unite: 'eur',
+    libelle: 'IPP — plafond de la tranche à 45 %',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'ipp.tranche_3.taux',
+    valeur: 45,
+    unite: 'pourcent',
+    libelle: 'IPP — taux de la tranche 3',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'ipp.tranche_4.taux',
+    valeur: 50,
+    unite: 'pourcent',
+    libelle: 'IPP — taux marginal supérieur',
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
   {
     cle: 'ipp.quotite_exemptee',
-    valeur: 10570,
+    valeur: 11180,
     unite: 'eur',
     libelle: "IPP — quotité de revenu exemptée d'impôt",
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot`,
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/taux-imposition',
+    verifieLe: '2026-09-06',
+    verifie: true,
   },
   {
     cle: 'ipp.additionnels_communaux_moyen',
@@ -514,35 +598,33 @@ const DEFS_2026: Def[] = [
     valeur: 1050,
     unite: 'eur',
     libelle: 'Épargne-pension — plafond bas de versement',
-    sourceUrl: `${SPF}/fr/particuliers/avantages_fiscaux/epargne-pension`,
-  },
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension', verifie: true, verifieLe: '2026-09-06' },
   {
     cle: 'epargne_pension.reduction_bas',
     valeur: 30,
     unite: 'pourcent',
     libelle: "Épargne-pension — taux de réduction d'impôt au plafond bas",
-    sourceUrl: `${SPF}/fr/particuliers/avantages_fiscaux/epargne-pension`,
-  },
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension', verifie: true, verifieLe: '2026-09-06' },
   {
     cle: 'epargne_pension.plafond_haut',
     valeur: 1350,
     unite: 'eur',
     libelle: 'Épargne-pension — plafond haut de versement',
-    sourceUrl: `${SPF}/fr/particuliers/avantages_fiscaux/epargne-pension`,
-  },
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension', verifie: true, verifieLe: '2026-09-06' },
   {
     cle: 'epargne_pension.reduction_haut',
     valeur: 25,
     unite: 'pourcent',
     libelle: "Épargne-pension — taux de réduction d'impôt au plafond haut",
-    sourceUrl: `${SPF}/fr/particuliers/avantages_fiscaux/epargne-pension`,
-  },
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension', verifie: true, verifieLe: '2026-09-06' },
   {
     cle: 'epargne_pension.taxe_anticipative',
     valeur: 8,
     unite: 'pourcent',
     libelle: 'Épargne-pension — taxe anticipative prélevée à 60 ans',
-    sourceUrl: `${SPF}/fr/particuliers/avantages_fiscaux/epargne-pension`,
+    sourceUrl: 'https://www.wikifin.be/fr/pension-et-preparation-de-la-retraite/epargne-pension/comment-votre-epargne-pension-est-elle-taxee',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'assurance.taxe_prime',
