@@ -3,10 +3,12 @@
 > **Fichier généré.** Régénérer avec `node scripts/generer-seed-fiscal.mjs`.
 > Source : `src/lib/tax/parametres.ts`.
 
-76 paramètres sont chargés pour 2026.
-**57 sont confirmés** — leur valeur est chiffrée explicitement dans
+84 paramètres sont chargés pour 2026.
+**69 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**19 attendent une confirmation** à la source officielle.
+**11 règles légales attendent une confirmation** à la source officielle.
+7 autres valeurs sont des pratiques de marché ou des hypothèses de
+simulation : elles ne relèvent d'aucun texte et ne figurent pas dans cette liste.
 
 ## Comment ça marche
 
@@ -42,25 +44,6 @@ Source à consulter : Banque nationale de Belgique et pratique bancaire
 |---|---|---|
 | `credit.droit_hypotheque` | 1 pourcent | Droit d'hypothèque sur le montant emprunté |
 | `credit.frais_acte_forfait` | 2200 eur | Acte de crédit — honoraires, inscription hypothécaire et débours |
-| `credit.frais_dossier` | 500 eur | Frais de dossier bancaire |
-| `credit.ratio_charge_max` | 33 pourcent | Ratio de charge maximum usuel — mensualité sur revenus nets |
-| `credit.part_loyer_prise_en_compte` | 75 pourcent | Part du loyer attendu prise en compte dans les revenus (locatif) |
-
-### hypothese
-
-Source à consulter : Hypothèse de simulation, pas un paramètre légal
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `hypothese.taux_retrait_defaut` | 4 pourcent | Taux de retrait annuel retenu par défaut |
-
-### immobilier
-
-Source à consulter : SPF Finances — revenus immobiliers
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `immobilier.forfait_charges_professionnel` | 40 pourcent | Location à usage professionnel — forfait légal de charges déductible |
 
 ### independant
 
@@ -68,17 +51,8 @@ Source à consulter : INASTI et caisses d’assurances sociales
 
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
-| `independant.frais_gestion_caisse` | 4 pourcent | Frais de gestion de la caisse d'assurances sociales |
 | `independant.cout_bce` | 105.5 eur | Inscription à la BCE via un guichet d'entreprises |
 | `independant.cout_activation_tva` | 78 eur | Activation du numéro de TVA (TVAC) |
-
-### ipp
-
-Source à consulter : SPF Finances — barème IPP indexé de l’année
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `ipp.forfait_frais_professionnels` | 30 pourcent | Forfait légal de frais professionnels sur les revenus de remplacement |
 
 ### notaire
 
@@ -93,14 +67,6 @@ Source à consulter : Barème légal des honoraires notariaux (notaire.be)
 | `notaire.achat.tranche_6.plafond` | 250095 eur | Honoraires notaire — plafond tranche 6 |
 | `notaire.achat.tranche_6.taux` | 0.57 pourcent | Honoraires notaire — taux tranche 6 |
 | `notaire.frais_debours` | 1100 eur | Frais et débours administratifs forfaitaires (recherches, transcription) |
-
-### reynders
-
-Source à consulter : SPF Finances — plus-values de fonds obligataires
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `reynders.taux` | 30 pourcent | Taxe Reynders — taux sur la composante intérêts à la vente |
 
 ## Rappel
 

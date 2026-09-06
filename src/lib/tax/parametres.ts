@@ -52,6 +52,8 @@ type Def = {
   /** Défaut `false` : on ne considère vérifié que ce qui est explicitement sourcé. */
   verifie?: boolean;
   verifieLe?: string;
+  /** Pratique de marché ou hypothèse de simulation, pas une règle légale. */
+  hypothese?: boolean;
 };
 
 function def(annee: number, d: Def): TaxParameter {
@@ -65,6 +67,7 @@ function def(annee: number, d: Def): TaxParameter {
     sourceUrl: d.sourceUrl,
     verifieLe: d.verifieLe ?? DOC_06,
     verifie: d.verifie ?? false,
+    hypothese: d.hypothese ?? false,
   };
 }
 
@@ -107,7 +110,6 @@ const DEFS_2026: Def[] = [
     verifie: true,
     verifieLe: '2026-09-06',
   },
-
   // Taxe sur les opérations de bourse — taux et plafonds par opération.
   //
   // ⚠️ Les trois plafonds sont confirmés par la circulaire 2026/C/42, mais la
@@ -168,7 +170,6 @@ const DEFS_2026: Def[] = [
     verifie: true,
     verifieLe: '2026-09-06',
   },
-
   // Taxe sur les plus-values sur actifs financiers (depuis 2026)
   {
     cle: 'plus_values.taux',
@@ -186,7 +187,6 @@ const DEFS_2026: Def[] = [
     sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
     verifie: true,
   },
-
   // Taxe Reynders — plus-values des fonds obligataires
   {
     cle: 'reynders.seuil_part_obligataire',
@@ -201,7 +201,9 @@ const DEFS_2026: Def[] = [
     valeur: 30,
     unite: 'pourcent',
     libelle: 'Taxe Reynders — taux sur la composante intérêts à la vente',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
+    sourceUrl: 'https://curvo.eu/fr/article/taxe-reynders',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
 
   // ───────────────────────────────────────────────────────────
@@ -228,11 +230,25 @@ const DEFS_2026: Def[] = [
     verifie: true,
   },
   {
+    cle: 'immobilier.coefficient_revalorisation',
+    valeur: 5.75,
+    unite: 'coefficient',
+    libelle: 'Coefficient de revalorisation du RC — plafonne le forfait de charges',
+    // À ne pas confondre avec le coefficient d'indexation (2,30) : celui-ci ne
+    // sert qu'au plafond du forfait de charges d'une location professionnelle.
+    // 5,63 pour les revenus 2025, 5,75 pour les revenus 2026.
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/habitation/louer-donner-location/revenus-locatifs/professionnel',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
     cle: 'immobilier.forfait_charges_professionnel',
     valeur: 40,
     unite: 'pourcent',
     libelle: 'Location à usage professionnel — forfait légal de charges déductible',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-immobiliers`,
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/habitation/louer-donner-location/revenus-locatifs/professionnel',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
 
   // Droits d'enregistrement — habitation propre et unique
@@ -342,7 +358,6 @@ const DEFS_2026: Def[] = [
     sourceUrl: `${SPF}/fr/particuliers/habitation/tva`,
     verifie: true,
   },
-
   // Frais d'acte — barème notarial dégressif sur le prix d'achat
   // ⚠️ **Un seul barème est modélisé, il en existe deux.**
   //
@@ -410,8 +425,8 @@ const DEFS_2026: Def[] = [
     unite: 'eur',
     libelle: 'Frais de dossier bancaire',
     sourceUrl: BNB,
+    hypothese: true,
   },
-
   // Quotités de financement recommandées par la BNB
   {
     cle: 'credit.quotite.propre',
@@ -420,6 +435,7 @@ const DEFS_2026: Def[] = [
     libelle: 'Quotité de financement usuelle — habitation propre',
     sourceUrl: `${BNB}/fr/supervision-financiere/controle-prudentiel/domaines-de-controle/credits-hypothecaires`,
     verifie: true,
+    hypothese: true,
   },
   {
     cle: 'credit.quotite.locatif',
@@ -428,6 +444,7 @@ const DEFS_2026: Def[] = [
     libelle: 'Quotité de financement usuelle — investissement locatif',
     sourceUrl: `${BNB}/fr/supervision-financiere/controle-prudentiel/domaines-de-controle/credits-hypothecaires`,
     verifie: true,
+    hypothese: true,
   },
   {
     cle: 'credit.ratio_charge_max',
@@ -435,6 +452,7 @@ const DEFS_2026: Def[] = [
     unite: 'pourcent',
     libelle: 'Ratio de charge maximum usuel — mensualité sur revenus nets',
     sourceUrl: BNB,
+    hypothese: true,
   },
   {
     cle: 'credit.part_loyer_prise_en_compte',
@@ -442,8 +460,8 @@ const DEFS_2026: Def[] = [
     unite: 'pourcent',
     libelle: 'Part du loyer attendu prise en compte dans les revenus (locatif)',
     sourceUrl: BNB,
+    hypothese: true,
   },
-
   // ───────────────────────────────────────────────────────────
   // 3. Impôt des personnes physiques
   // ───────────────────────────────────────────────────────────
@@ -528,14 +546,6 @@ const DEFS_2026: Def[] = [
     sourceUrl: `${SPF}/fr/particuliers/declaration_impot`,
     verifie: true,
   },
-  {
-    cle: 'ipp.forfait_frais_professionnels',
-    valeur: 30,
-    unite: 'pourcent',
-    libelle: 'Forfait légal de frais professionnels sur les revenus de remplacement',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot`,
-  },
-
   // ───────────────────────────────────────────────────────────
   // 4. Statut d'indépendant
   // ───────────────────────────────────────────────────────────
@@ -560,12 +570,91 @@ const DEFS_2026: Def[] = [
     sourceUrl: INASTI,
     verifie: true,
   },
+
+  // Frais de gestion par caisse d'assurances sociales. Ce sont des tarifs
+  // commerciaux, pas des taux légaux : ils varient du simple au tiers en plus
+  // d'une caisse à l'autre, et l'utilisateur choisit la sienne.
+  {
+    cle: 'independant.frais_gestion.acerta',
+    valeur: 3.05,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Acerta",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.xerius',
+    valeur: 3.05,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Xerius",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.liantis',
+    valeur: 3.4,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Liantis",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.securex',
+    valeur: 3.65,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Securex",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.group_s',
+    valeur: 3.8,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Group S",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.partena',
+    valeur: 4.25,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Partena Professional",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.ucm',
+    valeur: 4.25,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — UCM",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
+  {
+    cle: 'independant.frais_gestion.cnasti',
+    valeur: 4.25,
+    unite: 'pourcent',
+    libelle: "Frais de gestion — Caisse nationale auxiliaire (CNASTI)",
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
+  },
   {
     cle: 'independant.frais_gestion_caisse',
-    valeur: 4,
+    valeur: 3.65,
     unite: 'pourcent',
-    libelle: "Frais de gestion de la caisse d'assurances sociales",
-    sourceUrl: INASTI,
+    libelle: "Frais de gestion — valeur retenue à défaut de caisse choisie",
+    // Médiane des huit caisses, qui s'échelonnent de 3,05 % à 4,25 %.
+    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    verifie: true,
+    verifieLe: '2026-09-06',
   },
   {
     cle: 'independant.cout_bce',
@@ -589,7 +678,6 @@ const DEFS_2026: Def[] = [
     sourceUrl: `${SPF}/fr/entreprises/tva/assujettissement/franchise`,
     verifie: true,
   },
-
   // ───────────────────────────────────────────────────────────
   // 5. Enveloppes d'épargne
   // ───────────────────────────────────────────────────────────
@@ -642,7 +730,6 @@ const DEFS_2026: Def[] = [
     sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
     verifie: true,
   },
-
   // ───────────────────────────────────────────────────────────
   // 6. Hypothèses macro par défaut des simulateurs (doc 07)
   // ───────────────────────────────────────────────────────────
@@ -653,6 +740,7 @@ const DEFS_2026: Def[] = [
     libelle: 'Inflation annuelle retenue par défaut dans les projections',
     sourceUrl: `${STATBEL}/fr/themes/prix-la-consommation`,
     verifie: true,
+    hypothese: true,
   },
   {
     cle: 'hypothese.taux_retrait_defaut',
@@ -660,6 +748,7 @@ const DEFS_2026: Def[] = [
     unite: 'pourcent',
     libelle: 'Taux de retrait annuel retenu par défaut',
     sourceUrl: STATBEL,
+    hypothese: true,
   },
 ];
 
@@ -689,6 +778,18 @@ export function getTaxParams(annee: number = ANNEE_COURANTE): TaxParamSet {
 }
 
 /** Les paramètres qui attendent encore une confirmation à la source officielle. */
+/**
+ * Les règles légales encore à confirmer à leur source.
+ *
+ * Les pratiques de marché et hypothèses de simulation en sont exclues : les
+ * compter reviendrait à promettre une vérification qui n'existe pas — aucun
+ * texte ne publie « le » ratio de charge d'un tiers.
+ */
 export function parametresNonVerifies(set: TaxParamSet = TAX_PARAMS_2026): TaxParameter[] {
-  return set.parametres.filter((p) => !p.verifie);
+  return set.parametres.filter((p) => !p.verifie && !p.hypothese);
+}
+
+/** Les valeurs qui relèvent du choix ou de l'usage, non de la loi. */
+export function parametresHypothese(set: TaxParamSet = TAX_PARAMS_2026): TaxParameter[] {
+  return set.parametres.filter((p) => p.hypothese);
 }

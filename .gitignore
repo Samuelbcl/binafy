@@ -43,3 +43,7 @@ next-env.d.ts
 
 # fichier SQL derive, regenere par scripts/generer-sql-complet.mjs
 supabase/schema-complet.generated.sql
+
+# pages sources deposees manuellement, non versionnees
+sources-fiscales/
+!sources-fiscales/LISEZ-MOI.md

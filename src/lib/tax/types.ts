@@ -38,6 +38,14 @@ export type TaxParameter = {
    * à la source. L'interface doit alors afficher un avertissement sur le calcul.
    */
   verifie: boolean;
+  /**
+   * `true` pour une valeur qui n'est pas une règle légale : pratique bancaire,
+   * tarif commercial, hypothèse de simulation. Ces valeurs ne seront jamais
+   * « vérifiées » au sens d'un taux publié, et ne doivent donc pas gonfler le
+   * compteur des paramètres à confirmer — mais elles restent discutables, ce
+   * qui est une autre affaire.
+   */
+  hypothese?: boolean;
 };
 
 /** Un jeu de paramètres pour une année donnée. */

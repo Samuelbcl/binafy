@@ -914,6 +914,7 @@ export type Database = {
           annee: number
           cle: string
           created_at: string
+          hypothese: boolean
           id: string
           libelle: string
           region: Database["public"]["Enums"]["region_fiscale"] | null
@@ -928,6 +929,7 @@ export type Database = {
           annee: number
           cle: string
           created_at?: string
+          hypothese?: boolean
           id?: string
           libelle: string
           region?: Database["public"]["Enums"]["region_fiscale"] | null
@@ -942,6 +944,7 @@ export type Database = {
           annee?: number
           cle?: string
           created_at?: string
+          hypothese?: boolean
           id?: string
           libelle?: string
           region?: Database["public"]["Enums"]["region_fiscale"] | null

@@ -20,10 +20,15 @@ const echapper = (s) => String(s).replaceAll("'", "''");
 
 const lignes = PARAMETRES_2026.map((p) => {
   const region = p.region ? `'${p.region}'` : 'null';
-  return `  ('${echapper(p.cle)}', ${p.annee}, ${region}, ${p.valeur}, '${p.unite}', '${echapper(p.libelle)}', '${echapper(p.sourceUrl)}', '${p.verifieLe}', ${p.verifie})`;
+  return `  ('${echapper(p.cle)}', ${p.annee}, ${region}, ${p.valeur}, '${p.unite}', '${echapper(p.libelle)}', '${echapper(p.sourceUrl)}', '${p.verifieLe}', ${p.verifie}, ${Boolean(p.hypothese)})`;
 });
 
 const verifies = PARAMETRES_2026.filter((p) => p.verifie).length;
+// Les pratiques de marché et hypothèses de simulation ne sont pas des règles
+// légales : les compter comme « à confirmer » promettrait une vérification qui
+// n'existe pas.
+const hypotheses = PARAMETRES_2026.filter((p) => p.hypothese).length;
+const aConfirmer = PARAMETRES_2026.filter((p) => !p.verifie && !p.hypothese);
 
 const sql = `-- ─────────────────────────────────────────────────────────────
 -- Nestor — paramètres fiscaux belges ${PARAMETRES_2026[0].annee}
@@ -32,8 +37,9 @@ const sql = `-- ─────────────────────�
 -- Source : src/lib/tax/parametres.ts
 -- Régénérer : node scripts/generer-seed-fiscal.mjs
 --
--- ${PARAMETRES_2026.length} paramètres, dont ${verifies} confirmés à la source
--- et ${PARAMETRES_2026.length - verifies} en attente de vérification
+-- ${PARAMETRES_2026.length} paramètres : ${verifies} confirmés à la source,
+-- ${aConfirmer.length} règles légales en attente de vérification,
+-- ${hypotheses} pratiques de marché ou hypothèses de simulation
 -- (voir docs/11-parametres-a-verifier.md).
 --
 -- Mettre à jour un taux pour une nouvelle année = insérer des lignes ici,
@@ -41,7 +47,7 @@ const sql = `-- ─────────────────────�
 -- ─────────────────────────────────────────────────────────────
 
 insert into tax_parameters
-  (cle, annee, region, valeur, unite, libelle, source_url, verifie_le, verifie)
+  (cle, annee, region, valeur, unite, libelle, source_url, verifie_le, verifie, hypothese)
 values
 ${lignes.join(',\n')}
 on conflict (cle, annee, region) do update set
@@ -51,16 +57,26 @@ on conflict (cle, annee, region) do update set
   source_url = excluded.source_url,
   verifie_le = excluded.verifie_le,
   verifie = excluded.verifie,
+  hypothese = excluded.hypothese,
   updated_at = now();
+
+-- Le catalogue fait autorité : un paramètre retiré du code doit disparaître de
+-- la base, sinon il continuerait d'être lu sans que rien ne le signale.
+delete from tax_parameters
+where annee = ${PARAMETRES_2026[0].annee}
+  and cle not in (${PARAMETRES_2026.map((p) => `'${echapper(p.cle)}'`).filter((v, i, a) => a.indexOf(v) === i).join(', ')});
 `;
 
 mkdirSync(resolve(ici, '../supabase/seed'), { recursive: true });
 writeFileSync(resolve(ici, '../supabase/seed/tax_parameters_2026.sql'), sql, 'utf8');
-console.log(`${PARAMETRES_2026.length} paramètres écrits (${verifies} vérifiés, ${PARAMETRES_2026.length - verifies} à confirmer)`);
+console.log(
+  `${PARAMETRES_2026.length} paramètres écrits — ${verifies} vérifiés, ` +
+    `${aConfirmer.length} règles à confirmer, ${hypotheses} hypothèses`,
+);
 
 // ── Checklist de vérification (docs/11) ──────────────────────
 const parGroupe = new Map();
-for (const p of PARAMETRES_2026.filter((x) => !x.verifie)) {
+for (const p of aConfirmer) {
   const groupe = p.cle.split('.')[0];
   if (!parGroupe.has(groupe)) parGroupe.set(groupe, []);
   parGroupe.get(groupe).push(p);
@@ -106,7 +122,9 @@ const doc = `# 11 — Paramètres fiscaux à vérifier
 ${PARAMETRES_2026.length} paramètres sont chargés pour ${PARAMETRES_2026[0].annee}.
 **${verifies} sont confirmés** — leur valeur est chiffrée explicitement dans
 \`docs/06-fiscalite-belge.md\`.
-**${PARAMETRES_2026.length - verifies} attendent une confirmation** à la source officielle.
+**${aConfirmer.length} règles légales attendent une confirmation** à la source officielle.
+${hypotheses} autres valeurs sont des pratiques de marché ou des hypothèses de
+simulation : elles ne relèvent d'aucun texte et ne figurent pas dans cette liste.
 
 ## Comment ça marche
 
@@ -144,4 +162,4 @@ janvier, une session dédiée met à jour \`tax_parameters\` pour la nouvelle an
 `;
 
 writeFileSync(resolve(ici, '../docs/11-parametres-a-verifier.md'), doc, 'utf8');
-console.log(`docs/11-parametres-a-verifier.md : ${PARAMETRES_2026.length - verifies} paramètres listés`);
+console.log(`docs/11-parametres-a-verifier.md : ${aConfirmer.length} règles listées`);

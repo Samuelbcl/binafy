@@ -172,9 +172,23 @@ describe('revenus immobiliers — la mécanique belge', () => {
       { revenuCadastralCents: euros(1_000), usage: 'locatif_pro', loyerAnnuelCents: euros(20_000) },
       P,
     );
-    // 20 000 − 40 % de forfait = 12 000, bien au-dessus du plancher du RC majoré.
-    expect(r.result.baseImposableCents).toBe(euros(12_000));
+    // Le forfait de 40 % vaudrait 8 000 €, mais il est plafonné aux deux tiers
+    // du RC revalorisé : 2/3 × 1 000 × 5,75 = 3 833,33 €.
+    // Base = 20 000 − 3 833,33 = 16 166,67 €, et non 12 000 € comme le donnait
+    // le calcul sans plafond — soit un tiers d'impôt en moins.
+    expect(r.result.baseImposableCents).toBe(euros(16_166.67));
     expect(r.result.regime).toBe('loyer_reel');
+  });
+
+  it('n’applique pas le plafond quand le forfait reste en dessous', () => {
+    // RC élevé, loyer modeste : 40 % de 6 000 = 2 400, sous le plafond de
+    // 2/3 × 3 000 × 5,75 = 11 500. Le forfait joue donc en entier.
+    const r = calculerBaseImposableImmobiliere(
+      { revenuCadastralCents: euros(3_000), usage: 'locatif_pro', loyerAnnuelCents: euros(6_000) },
+      P,
+    );
+    // 6 000 − 2 400 = 3 600, mais le plancher du RC majoré vaut 9 660.
+    expect(r.result.baseImposableCents).toBe(euros(9_660));
   });
 
   it('en usage professionnel, ne descend jamais sous le RC indexé majoré', () => {
@@ -241,7 +255,8 @@ describe('indépendant complémentaire', () => {
     );
     expect(r.result.sousLeSeuil).toBe(false);
     expect(r.result.cotisationsCents).toBe(euros(410)); // 2 000 × 20,5 %
-    expect(r.result.fraisGestionCents).toBe(euros(16.4)); // 410 × 4 %
+    // Sans caisse choisie, on retient la médiane du marché : 3,65 %.
+    expect(r.result.fraisGestionCents).toBe(euros(14.97)); // 410 × 3,65 %
   });
 
   it('prévient que le seuil frappe la totalité, pas le dépassement', () => {
@@ -250,6 +265,29 @@ describe('indépendant complémentaire', () => {
       P,
     );
     expect(r.breakdown.map((l) => l.precision).join(' ')).toContain('sur la totalité du revenu');
+  });
+
+  it('applique les frais de la caisse choisie', () => {
+    const acerta = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(20_000), statut: 'principal', caisse: 'acerta' },
+      P,
+    );
+    const partena = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(20_000), statut: 'principal', caisse: 'partena' },
+      P,
+    );
+    // 4 100 € de cotisations : 3,05 % chez Acerta contre 4,25 % chez Partena.
+    expect(acerta.result.fraisGestionCents).toBe(euros(125.05));
+    expect(partena.result.fraisGestionCents).toBe(euros(174.25));
+    expect(partena.result.totalCents).toBeGreaterThan(acerta.result.totalCents);
+  });
+
+  it('nomme la caisse dans le détail du calcul', () => {
+    const r = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(20_000), statut: 'principal', caisse: 'xerius' },
+      P,
+    );
+    expect(r.breakdown.some((l) => l.libelle.includes('Xerius'))).toBe(true);
   });
 
   it('ne connaît pas de seuil en statut principal', () => {

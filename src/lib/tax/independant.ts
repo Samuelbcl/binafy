@@ -21,10 +21,51 @@ import {
 
 export type StatutIndependant = 'complementaire' | 'principal';
 
+/**
+ * Caisses d'assurances sociales agréées.
+ *
+ * Le choix n'est pas neutre : les frais de gestion vont de 3,05 % à 4,25 %,
+ * soit un tiers d'écart sur cette ligne. Les taux vivent dans `tax_parameters`
+ * comme le reste, sous la clé `independant.frais_gestion.<caisse>`.
+ */
+export type Caisse =
+  | 'acerta'
+  | 'xerius'
+  | 'liantis'
+  | 'securex'
+  | 'group_s'
+  | 'partena'
+  | 'ucm'
+  | 'cnasti';
+
+export const CAISSES: readonly Caisse[] = [
+  'acerta',
+  'xerius',
+  'liantis',
+  'securex',
+  'group_s',
+  'partena',
+  'ucm',
+  'cnasti',
+];
+
+export const LIBELLE_CAISSE: Record<Caisse, string> = {
+  acerta: 'Acerta',
+  xerius: 'Xerius',
+  liantis: 'Liantis',
+  securex: 'Securex',
+  group_s: 'Group S',
+  partena: 'Partena Professional',
+  ucm: 'UCM',
+  cnasti: 'Caisse nationale auxiliaire',
+};
+
 export type CotisationsInput = {
   /** Revenu net imposable de l'activité (CA moins charges), en centimes. */
   revenuNetImposableCents: number;
   statut: StatutIndependant;
+  /** Caisse d'affiliation. À défaut, la médiane du marché est retenue. */
+  caisse?: Caisse;
 };
 
 export type CotisationsResult = {
@@ -53,11 +94,15 @@ export function calculerCotisationsSociales(
 
   const pTaux = getParam(params, 'independant.cotisations_taux');
   const pSeuil = getParam(params, 'independant.seuil_cotisations_complementaire');
-  const pFrais = getParam(params, 'independant.frais_gestion_caisse');
+  // Le taux dépend de la caisse choisie ; sans choix, on prend la médiane.
+  const cleFrais = input.caisse
+    ? `independant.frais_gestion.${input.caisse}`
+    : 'independant.frais_gestion_caisse';
+  const pFrais = getParam(params, cleFrais);
 
   const taux = getRate(params, 'independant.cotisations_taux');
   const seuilCents = getCents(params, 'independant.seuil_cotisations_complementaire');
-  const tauxFrais = getRate(params, 'independant.frais_gestion_caisse');
+  const tauxFrais = getRate(params, cleFrais);
 
   const sousLeSeuil = input.statut === 'complementaire' && revenu < seuilCents;
 
@@ -89,10 +134,14 @@ export function calculerCotisationsSociales(
         precision: `${formatEUR(revenu)} × ${formatTaux(pTaux.valeur, 1)}`,
       },
       {
-        libelle: 'Frais de gestion de la caisse',
+        libelle: input.caisse
+          ? `Frais de gestion — ${LIBELLE_CAISSE[input.caisse]}`
+          : 'Frais de gestion de la caisse',
         valeur: fraisGestionCents,
         unite: 'eur' as const,
-        precision: `${formatTaux(pFrais.valeur, 1)} des cotisations`,
+        precision: input.caisse
+          ? `${formatTaux(pFrais.valeur, 2)} des cotisations`
+          : `${formatTaux(pFrais.valeur, 2)} des cotisations — médiane du marché, les caisses vont de 3,05 % à 4,25 %`,
       },
     );
   }
@@ -117,7 +166,7 @@ export function calculerCotisationsSociales(
     sources: mergeSources([toSource(pTaux), toSource(pSeuil), toSource(pFrais)]),
     hypotheses: [
       'Les cotisations sont provisoires la première année puis régularisées sur le revenu réel, avec deux à trois ans de décalage.',
-      'Le taux et le seuil sont ceux du régime général : une caisse peut appliquer des frais de gestion différents.',
+      'Le taux de cotisation et le seuil sont légaux ; les frais de gestion, eux, sont un tarif commercial propre à chaque caisse.',
       "L'affiliation à une caisse d'assurances sociales est obligatoire avant le début de l'activité.",
     ],
   };
@@ -132,6 +181,7 @@ export type SimulationIndependantInput = {
   /** Revenu imposable du salariat, pour déterminer le taux marginal. */
   revenuSalarieCents: number;
   additionnelsCommunauxPourcent?: number;
+  caisse?: Caisse;
 };
 
 export type SimulationIndependantResult = {
@@ -172,7 +222,7 @@ export function simulerIndependant(
   const revenuNetImposableCents = Math.max(0, ca - charges);
 
   const cotisations = calculerCotisationsSociales(
-    { revenuNetImposableCents, statut: input.statut },
+    { revenuNetImposableCents, statut: input.statut, caisse: input.caisse },
     params,
   );
 

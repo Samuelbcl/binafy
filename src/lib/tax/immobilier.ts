@@ -91,7 +91,20 @@ export function calculerBaseImposableImmobiliere(
     const loyer = Math.max(0, input.loyerAnnuelCents ?? 0);
     const pForfait = getParam(params, 'immobilier.forfait_charges_professionnel');
     const forfait = getRate(params, 'immobilier.forfait_charges_professionnel');
-    const forfaitCents = Math.round(loyer * forfait);
+
+    // Le forfait de 40 % est **plafonné** : il ne peut dépasser les deux tiers
+    // du revenu cadastral non indexé, revalorisé par un coefficient annuel.
+    // Sans ce plafond, un loyer élevé sur un bien à faible RC produisait une
+    // déduction bien supérieure à ce que la loi permet, donc une base imposable
+    // trop basse — l'erreur allait dans le sens qui rassure à tort.
+    const pRevalorisation = getParam(params, 'immobilier.coefficient_revalorisation');
+    const revalorisation = getValue(params, 'immobilier.coefficient_revalorisation');
+    const plafondForfaitCents = Math.round((2 / 3) * rc * revalorisation);
+
+    const forfaitBrutCents = Math.round(loyer * forfait);
+    const forfaitCents = Math.min(forfaitBrutCents, plafondForfaitCents);
+    const forfaitPlafonne = forfaitBrutCents > plafondForfaitCents;
+
     // La base ne peut pas descendre sous le RC indexé majoré.
     const planchierCents = Math.round(rcIndexeCents * majoration);
     const netCents = Math.max(loyer - forfaitCents, planchierCents);
@@ -105,7 +118,9 @@ export function calculerBaseImposableImmobiliere(
           libelle: 'Forfait légal de charges',
           valeur: -forfaitCents,
           unite: 'eur',
-          precision: `${formatTaux(pForfait.valeur, 0)} du loyer brut`,
+          precision: forfaitPlafonne
+            ? `${formatTaux(pForfait.valeur, 0)} du loyer brut, ramenés au plafond légal de ${formatEUR(plafondForfaitCents)} (deux tiers du RC revalorisé)`
+            : `${formatTaux(pForfait.valeur, 0)} du loyer brut`,
         },
         {
           libelle: 'Plancher : RC indexé majoré',
@@ -115,9 +130,15 @@ export function calculerBaseImposableImmobiliere(
         },
         { libelle: 'Base imposable', valeur: baseImposableCents, unite: 'eur', total: true },
       ],
-      sources: mergeSources([toSource(pCoeff), toSource(pMajoration), toSource(pForfait)]),
+      sources: mergeSources([
+        toSource(pCoeff),
+        toSource(pMajoration),
+        toSource(pForfait),
+        toSource(pRevalorisation),
+      ]),
       hypotheses: [
         'Location à usage professionnel : la base est le loyer réel diminué du forfait légal de charges.',
+        'Ce forfait est plafonné aux deux tiers du revenu cadastral revalorisé : au-delà, le surplus de loyer reste imposable.',
         'Ce régime est nettement plus lourd que la location à un particulier — c’est la contrepartie d’un bail professionnel.',
       ],
     };
