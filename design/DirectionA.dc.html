@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; font-family: Manrope, system-ui, sans-serif; }
+    a { color: #C6A15B; } a:hover { color: #D9B673; }
+    .num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    .disp { font-family: 'Bricolage Grotesque', system-ui, sans-serif; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; height: 820px; background: #0B0D10; color: #ECEFF3; display: flex;">
+
+  <!-- Barre latérale -->
+  <div style="width: 232px; flex-shrink: 0; border-right: 1px solid #2A323C; padding: 22px 16px; display: flex; flex-direction: column; gap: 28px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="disp" style="width: 32px; height: 32px; border-radius: 10px; background: #C6A15B; color: #0B0D10; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px;">N</div>
+      <div class="disp" style="font-size: 17px; font-weight: 600; letter-spacing: -0.02em;">Nestor</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; background: #C6A15B1A; color: #C6A15B; font-size: 14px; font-weight: 600;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Vue d'ensemble
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; color: #8A94A0; font-size: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18v12H3z"/><path d="M16 12h3"/></svg>
+        Patrimoine
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; color: #8A94A0; font-size: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M9 9h6M9 13h4"/></svg>
+        Budget
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; color: #8A94A0; font-size: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18l5-6 4 4 7-9"/></svg>
+        Projections
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; color: #8A94A0; font-size: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/></svg>
+        Fiscalité
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonne principale -->
+  <div style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0;">
+
+    <div style="height: 60px; border-bottom: 1px solid #2A323C; display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding: 0 24px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A94A0" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      <div style="width: 14px;"></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A94A0" stroke-width="1.8"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+    </div>
+
+    <div style="padding: 26px 24px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;">
+
+      <!-- Chiffre héros -->
+      <div>
+        <div style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: #8A94A0;">Bonsoir Samuel</div>
+        <div class="disp num" style="margin-top: 10px; font-size: 56px; font-weight: 700; letter-spacing: -0.03em; line-height: 1;">13&nbsp;656,48&nbsp;€</div>
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #F2725C; display: inline-block;"></span>
+          <span class="num" style="font-size: 14px; color: #F2725C;">&minus;47,65&nbsp;€</span>
+          <span style="font-size: 13px; color: #5C6570;">sur la journée</span>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;">
+        <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 18px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #8A94A0;">Net d'impôt latent</div>
+          <div class="disp num" style="margin-top: 8px; font-size: 24px; font-weight: 600; color: #C6A15B;">13&nbsp;572&nbsp;€</div>
+          <div style="margin-top: 6px; font-size: 11px; line-height: 1.4; color: #5C6570;">Après 0,6&nbsp;% d'impôt si tu liquidais tout</div>
+        </div>
+        <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 18px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #8A94A0;">Taux d'épargne</div>
+          <div class="disp num" style="margin-top: 8px; font-size: 24px; font-weight: 600;">24,6&nbsp;%</div>
+          <div style="margin-top: 6px; font-size: 11px; line-height: 1.4; color: #5C6570;">Lissé sur 12 mois</div>
+        </div>
+        <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 18px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #8A94A0;">Revenus passifs</div>
+          <div class="disp num" style="margin-top: 8px; font-size: 24px; font-weight: 600;">85&nbsp;€</div>
+          <div style="margin-top: 6px; font-size: 11px; line-height: 1.4; color: #5C6570;">Projetés sur 12 mois</div>
+        </div>
+        <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 18px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #8A94A0;">Impôt latent</div>
+          <div class="disp num" style="margin-top: 8px; font-size: 24px; font-weight: 600;">84&nbsp;€</div>
+          <div style="margin-top: 6px; font-size: 11px; line-height: 1.4; color: #5C6570;">Plus-values et TOB de sortie</div>
+        </div>
+      </div>
+
+      <!-- Courbe -->
+      <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 20px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div class="disp" style="font-size: 16px; font-weight: 600;">Évolution du patrimoine net</div>
+          <div style="display: flex; gap: 2px; background: #1C2128; border-radius: 10px; padding: 3px;">
+            <div style="padding: 5px 10px; border-radius: 7px; font-size: 12px; color: #8A94A0;">3M</div>
+            <div style="padding: 5px 10px; border-radius: 7px; font-size: 12px; color: #8A94A0;">6M</div>
+            <div style="padding: 5px 10px; border-radius: 7px; font-size: 12px; background: #14181D; color: #ECEFF3; font-weight: 500;">1A</div>
+            <div style="padding: 5px 10px; border-radius: 7px; font-size: 12px; color: #8A94A0;">Tout</div>
+          </div>
+        </div>
+        <svg viewBox="0 0 900 190" style="width: 100%; height: 190px; margin-top: 14px; display: block;">
+          <defs>
+            <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C6A15B" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#C6A15B" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="40" x2="900" y2="40" stroke="#2A323C" stroke-dasharray="3 3"/>
+          <line x1="0" y1="95" x2="900" y2="95" stroke="#2A323C" stroke-dasharray="3 3"/>
+          <line x1="0" y1="150" x2="900" y2="150" stroke="#2A323C" stroke-dasharray="3 3"/>
+          <path d="M0 165 L82 156 L164 148 L246 133 L328 138 L410 112 L492 96 L574 104 L656 78 L738 62 L820 48 L900 34 L900 190 L0 190 Z" fill="url(#ga)"/>
+          <path d="M0 165 L82 156 L164 148 L246 133 L328 138 L410 112 L492 96 L574 104 L656 78 L738 62 L820 48 L900 34" fill="none" stroke="#C6A15B" stroke-width="2"/>
+          <circle cx="900" cy="34" r="4" fill="#C6A15B" stroke="#0B0D10" stroke-width="3"/>
+        </svg>
+      </div>
+
+      <!-- Allocation + mouvements -->
+      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px;">
+        <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 20px; display: flex; gap: 20px; align-items: center;">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="flex-shrink: 0;">
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#6E9DF7" stroke-width="17" stroke-dasharray="141 289" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#C6A15B" stroke-width="17" stroke-dasharray="87 343" transform="rotate(9 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#7C8794" stroke-width="17" stroke-dasharray="48 382" transform="rotate(90 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#B07FE0" stroke-width="17" stroke-dasharray="17 413" transform="rotate(135 60 60)"/>
+            <text x="60" y="57" text-anchor="middle" class="disp num" style="font-size: 15px; font-weight: 600; fill: #ECEFF3;">14&nbsp;156&nbsp;€</text>
+            <text x="60" y="72" text-anchor="middle" style="font-size: 9px; fill: #8A94A0; letter-spacing: 0.06em;">TOTAL</text>
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 11px; flex-grow: 1;">
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+              <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 3px; background: #6E9DF7;"></span>Épargne</span>
+              <span class="num" style="color: #8A94A0;">48,0&nbsp;%</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+              <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 3px; background: #C6A15B;"></span>Actions et ETF</span>
+              <span class="num" style="color: #8A94A0;">29,7&nbsp;%</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+              <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 3px; background: #7C8794;"></span>Liquidités</span>
+              <span class="num" style="color: #8A94A0;">16,5&nbsp;%</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+              <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 3px; background: #B07FE0;"></span>Crypto</span>
+              <span class="num" style="color: #8A94A0;">5,7&nbsp;%</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #14181D; border: 1px solid #2A323C; border-radius: 16px; padding: 20px;">
+          <div class="disp" style="font-size: 16px; font-weight: 600;">Ce qui a bougé</div>
+          <div style="margin-top: 12px; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #2A323C80;">
+              <div><div style="font-size: 13px;">iShares Core MSCI World</div><div style="font-size: 11px; color: #5C6570;">Cours du jour</div></div>
+              <span class="num" style="font-size: 13px; color: #4ADE9B;">+18,44&nbsp;€</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #2A323C80;">
+              <div><div style="font-size: 13px;">Bitcoin</div><div style="font-size: 11px; color: #5C6570;">Cours du jour</div></div>
+              <span class="num" style="font-size: 13px; color: #F2725C;">&minus;23,90&nbsp;€</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0;">
+              <div><div style="font-size: 13px;">Colruyt</div><div style="font-size: 11px; color: #5C6570;">Courses</div></div>
+              <span class="num" style="font-size: 13px; color: #F2725C;">&minus;87,32&nbsp;€</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

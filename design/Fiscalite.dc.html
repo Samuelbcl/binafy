@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    a { color: #4F3FF0; } a:hover { color: #3B2ED4; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #F6F6F8; color: #0E0E12; display: flex; flex-direction: column; box-sizing: border-box;">
+
+  <div style="padding: 22px 20px 0; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;">
+    <div style="width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E8E8EC; display: flex; align-items: center; justify-content: center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E0E12" stroke-width="2" stroke-linecap="round"><path d="M15 19 8 12l7-7"/></svg>
+    </div>
+    <div style="font-size: 16px; font-weight: 700;">Dividendes 2026</div>
+    <div style="width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E8E8EC; display: flex; align-items: center; justify-content: center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E0E12" stroke-width="2" stroke-linecap="round"><path d="M12 17v-5"/><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/></svg>
+    </div>
+  </div>
+
+  <div style="padding: 18px 20px 0; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px;">
+
+    <!-- Le résultat -->
+    <div style="background: #4F3FF0; color: #FFFFFF; border-radius: 24px; padding: 20px; flex-shrink: 0;">
+      <div style="font-size: 13px; color: #D9D4FF;">Tu peux récupérer</div>
+      <div class="num" style="margin-top: 6px; font-size: 38px; font-weight: 800; letter-spacing: -0.035em; line-height: 1;">249,90&nbsp;€</div>
+      <div style="margin-top: 10px; font-size: 13.5px; line-height: 1.45; color: #D9D4FF;">Du précompte retenu à la source que l'État te doit, si tu le réclames dans ta déclaration.</div>
+    </div>
+
+    <!-- Le détail -->
+    <div style="background: #FFFFFF; border-radius: 24px; padding: 18px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em;">Le détail du calcul</div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.2" stroke-linecap="round"><path d="m6 15 6-6 6 6"/></svg>
+      </div>
+
+      <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 11px; font-size: 13.5px;">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="flex-grow: 1; color: #52525B;">Dividendes bruts encaissés</span>
+          <span class="num" style="font-weight: 700;">1&nbsp;240,00&nbsp;€</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="flex-grow: 1; color: #52525B;">Précompte retenu à la source<br><span style="font-size: 12px; color: #A1A1AA;">30&nbsp;% prélevés par ton courtier</span></span>
+          <span class="num" style="font-weight: 700; color: #E5484D;">&minus;372,00&nbsp;€</span>
+        </div>
+        <div style="height: 1px; background: #F1F1F4;"></div>
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="flex-grow: 1; color: #52525B;">Reçu sur ton compte</span>
+          <span class="num" style="font-weight: 700;">868,00&nbsp;€</span>
+        </div>
+        <div style="height: 1px; background: #F1F1F4;"></div>
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="flex-grow: 1; color: #52525B;">Tranche exonérée<br><span style="font-size: 12px; color: #A1A1AA;">Plafond individuel, revenus 2026</span></span>
+          <span class="num" style="font-weight: 700;">833,00&nbsp;€</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 10px; background: #EEEBFF; border-radius: 14px; padding: 12px 14px; margin: 3px -4px 0;">
+          <span style="flex-grow: 1; font-weight: 700;">Récupérable<br><span style="font-size: 12px; font-weight: 500; color: #6B5BF5;">833,00&nbsp;€ × 30&nbsp;%</span></span>
+          <span class="num" style="font-weight: 800; font-size: 16px; color: #4F3FF0;">249,90&nbsp;€</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hypothèse -->
+    <div style="background: #FFFFFF; border-radius: 20px; padding: 15px 16px; display: flex; gap: 12px; align-items: flex-start; flex-shrink: 0;">
+      <div style="width: 32px; height: 32px; border-radius: 10px; background: #FDF3E4; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B4740A" stroke-width="2.2" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.9 18a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      </div>
+      <div style="min-width: 0; font-size: 12.5px; line-height: 1.5; color: #52525B;">
+        <span style="font-weight: 700; color: #0E0E12;">On a supposé que tu déclares seul.</span> Le plafond est individuel : un couple qui déclare ensemble peut le réclamer deux fois.
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div style="background: #FFFFFF; border-radius: 20px; padding: 16px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="font-size: 13px; font-weight: 700; flex-grow: 1;">D'où vient ce chiffre</div>
+        <span style="font-size: 11px; font-weight: 700; color: #0FA968; background: #E4F7EE; border-radius: 999px; padding: 4px 9px;">Vérifié le 06/09/2026</span>
+      </div>
+      <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 9px; font-size: 12.5px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4F3FF0" stroke-width="2" stroke-linecap="round" style="flex-shrink: 0;"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+          <span style="color: #52525B;">SPF Finances — précompte mobilier</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4F3FF0" stroke-width="2" stroke-linecap="round" style="flex-shrink: 0;"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+          <span style="color: #52525B;">CIR 92, article 21 — revenus exonérés</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 14px 20px 26px; flex-shrink: 0;">
+    <div style="background: #101014; color: #FFFFFF; border-radius: 999px; padding: 16px; text-align: center; font-size: 15px; font-weight: 700;">Mettre de côté pour ma déclaration</div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

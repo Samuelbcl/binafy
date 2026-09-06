@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    a { color: #4F3FF0; } a:hover { color: #3B2ED4; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #FFFFFF; color: #0E0E12; display: flex; flex-direction: column; padding: 26px 24px 30px; box-sizing: border-box;">
+
+  <div style="width: 40px; height: 40px; border-radius: 999px; border: 1px solid #E8E8EC; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E0E12" stroke-width="2" stroke-linecap="round"><path d="M15 19 8 12l7-7"/></svg>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <div style="font-size: 30px; font-weight: 800; line-height: 1.15; letter-spacing: -0.03em;">Content de te<br>revoir.</div>
+    <div style="margin-top: 12px; font-size: 14.5px; line-height: 1.5; color: #71717A;">Entre ton adresse, on t'envoie un lien de connexion. Pas de mot de passe à retenir, pas de mot de passe à se faire voler.</div>
+  </div>
+
+  <div style="margin-top: 28px;">
+    <div style="font-size: 13px; font-weight: 600; color: #52525B;">Adresse e-mail</div>
+    <div style="margin-top: 8px; border: 1.5px solid #4F3FF0; border-radius: 16px; padding: 15px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 0 4px #EEEBFF;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F3FF0" stroke-width="1.9"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3.5 7.5 8.5 6 8.5-6"/></svg>
+      <div style="font-size: 15px; font-weight: 500;">samuel@biancola.be</div>
+      <div style="width: 1.5px; height: 18px; background: #4F3FF0;"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 16px; background: #101014; color: #FFFFFF; border-radius: 999px; padding: 17px; text-align: center; font-size: 15.5px; font-weight: 700;">Recevoir mon lien</div>
+
+  <div style="margin-top: 26px; background: #F6F6F8; border-radius: 20px; padding: 18px;">
+    <div style="display: flex; align-items: flex-start; gap: 12px;">
+      <div style="width: 34px; height: 34px; border-radius: 11px; background: #EEEBFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4F3FF0" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      </div>
+      <div style="min-width: 0;">
+        <div style="font-size: 14px; font-weight: 700;">Le lien vaut 15 minutes</div>
+        <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #71717A;">Il ne fonctionne qu'une fois, et seulement sur l'appareil qui l'a demandé.</div>
+      </div>
+    </div>
+    <div style="margin-top: 14px; height: 1px; background: #E8E8EC;"></div>
+    <div style="margin-top: 14px; display: flex; align-items: flex-start; gap: 12px;">
+      <div style="width: 34px; height: 34px; border-radius: 11px; background: #E4F7EE; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0FA968" stroke-width="2"><path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <div style="min-width: 0;">
+        <div style="font-size: 14px; font-weight: 700;">Tes données restent en Europe</div>
+        <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #71717A;">Hébergement à Francfort, accès bancaire en lecture seule.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: auto; text-align: center; font-size: 12.5px; line-height: 1.6; color: #A1A1AA;">
+    En continuant, tu acceptes les <span style="color: #52525B; font-weight: 600;">conditions</span> et la <span style="color: #52525B; font-weight: 600;">politique de confidentialité</span>.
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

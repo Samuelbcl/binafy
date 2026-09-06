@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    a { color: #4F3FF0; } a:hover { color: #3B2ED4; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #F6F6F8; color: #0E0E12; display: flex; flex-direction: column; box-sizing: border-box;">
+
+  <div style="padding: 22px 20px 0; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E8E8EC; display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E0E12" stroke-width="2" stroke-linecap="round"><path d="M15 19 8 12l7-7"/></svg>
+      </div>
+      <div style="font-size: 16px; font-weight: 700;">Patrimoine</div>
+      <div style="width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E8E8EC; display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E0E12" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <div class="num" style="font-size: 34px; font-weight: 800; letter-spacing: -0.035em; line-height: 1;">13&nbsp;656,48&nbsp;€</div>
+      <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+        <span class="num" style="font-size: 12.5px; font-weight: 700; color: #E5484D; background: #FDECEC; border-radius: 999px; padding: 4px 10px;">&minus;47,65&nbsp;€</span>
+        <span style="font-size: 12.5px; color: #71717A;">sur 7 lignes, 4 établissements</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 18px; display: flex; gap: 8px;">
+      <span style="font-size: 12.5px; font-weight: 700; background: #101014; color: #FFFFFF; border-radius: 999px; padding: 8px 14px;">Tout</span>
+      <span style="font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #52525B; border: 1px solid #E8E8EC; border-radius: 999px; padding: 8px 14px;">Liquide</span>
+      <span style="font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #52525B; border: 1px solid #E8E8EC; border-radius: 999px; padding: 8px 14px;">Investi</span>
+      <span style="font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #52525B; border: 1px solid #E8E8EC; border-radius: 999px; padding: 8px 14px;">Immo</span>
+    </div>
+  </div>
+
+  <div style="padding: 18px 20px 0; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 16px;">
+
+    <div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 0 4px 8px;">
+        <div style="font-size: 13px; font-weight: 700; color: #71717A; text-transform: uppercase; letter-spacing: 0.05em;">Liquidités</div>
+        <div class="num" style="font-size: 13px; font-weight: 700; color: #71717A;">9&nbsp;140&nbsp;€</div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 22px; padding: 6px 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: #EEEBFF; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #4F3FF0; flex-shrink: 0;">B</div>
+          <div style="flex-grow: 1; min-width: 0;">
+            <div style="font-size: 14.5px; font-weight: 600;">Compte d'épargne</div>
+            <div style="font-size: 12px; color: #71717A;">Belfius · 0,90&nbsp;% + prime</div>
+          </div>
+          <div class="num" style="font-size: 14.5px; font-weight: 700;">6&nbsp;800&nbsp;€</div>
+        </div>
+        <div style="height: 1px; background: #F1F1F4;"></div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: #E8F1FD; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #2563EB; flex-shrink: 0;">K</div>
+          <div style="flex-grow: 1; min-width: 0;">
+            <div style="font-size: 14.5px; font-weight: 600;">Compte à vue</div>
+            <div style="font-size: 12px; color: #71717A;">KBC</div>
+          </div>
+          <div class="num" style="font-size: 14.5px; font-weight: 700;">2&nbsp;340&nbsp;€</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 0 4px 8px;">
+        <div style="font-size: 13px; font-weight: 700; color: #71717A; text-transform: uppercase; letter-spacing: 0.05em;">Investissements</div>
+        <div class="num" style="font-size: 13px; font-weight: 700; color: #71717A;">4&nbsp;210&nbsp;€</div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 22px; padding: 6px 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: #E4F7EE; display: flex; align-items: center; justify-content: center; color: #0FA968; flex-shrink: 0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M9 10h6"/></svg>
+          </div>
+          <div style="flex-grow: 1; min-width: 0;">
+            <div style="font-size: 14.5px; font-weight: 600;">iShares MSCI World</div>
+            <div style="font-size: 12px; color: #71717A;">Bolero · 32 parts · TOB 0,12&nbsp;%</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="num" style="font-size: 14.5px; font-weight: 700;">3&nbsp;404&nbsp;€</div>
+            <div class="num" style="font-size: 12px; font-weight: 700; color: #0FA968;">+18,2&nbsp;%</div>
+          </div>
+        </div>
+        <div style="height: 1px; background: #F1F1F4;"></div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: #FDF3E4; display: flex; align-items: center; justify-content: center; color: #B4740A; flex-shrink: 0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg>
+          </div>
+          <div style="flex-grow: 1; min-width: 0;">
+            <div style="font-size: 14.5px; font-weight: 600;">Colruyt</div>
+            <div style="font-size: 12px; color: #71717A;">Bolero · 18 actions</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="num" style="font-size: 14.5px; font-weight: 700;">806&nbsp;€</div>
+            <div class="num" style="font-size: 12px; font-weight: 700; color: #E5484D;">&minus;9,8&nbsp;%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #101014; color: #FFFFFF; border-radius: 22px; padding: 16px 18px; display: flex; align-items: center; gap: 14px;">
+      <div style="flex-grow: 1; min-width: 0;">
+        <div style="font-size: 14.5px; font-weight: 700;">Impôt latent : 84&nbsp;€</div>
+        <div style="margin-top: 3px; font-size: 12.5px; color: #A1A1AA; line-height: 1.4;">Ce qu'il resterait après taxe si tu vendais tout aujourd'hui.</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" style="flex-shrink: 0;"><path d="m9 5 7 7-7 7"/></svg>
+    </div>
+
+  </div>
+
+  <div style="flex-shrink: 0; background: #FFFFFF; border-top: 1px solid #ECECEF; padding: 10px 18px 22px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A1A1AA; width: 62px;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+      <span style="font-size: 10px; font-weight: 600;">Accueil</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #4F3FF0; width: 62px;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18"/><rect x="4" y="11" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="14" width="4" height="6" rx="1"/></svg>
+      <span style="font-size: 10px; font-weight: 700;">Patrimoine</span>
+    </div>
+    <div style="width: 52px; height: 52px; border-radius: 999px; background: #101014; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A1A1AA; width: 62px;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 11h18"/><path d="M7 3v3"/><path d="M17 3v3"/></svg>
+      <span style="font-size: 10px; font-weight: 600;">Budget</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A1A1AA; width: 62px;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6"/><path d="M9 14h6"/></svg>
+      <span style="font-size: 10px; font-weight: 600;">Fiscalité</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    a { color: #4F3FF0; } a:hover { color: #3B2ED4; }
+    .num { font-variant-numeric: tabular-nums; }
+    .code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11px; }
+    .sect { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; color: #A1A1AA; }
+  </style>
+</helmet>
+
+<div style="width: 900px; height: 820px; background: #FFFFFF; color: #0E0E12; padding: 30px 34px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px;">
+
+  <div>
+    <div style="font-size: 24px; font-weight: 800; letter-spacing: -0.03em;">Fondations — direction épurée</div>
+    <div style="margin-top: 4px; font-size: 13.5px; color: #71717A;">Les valeurs à reporter dans <span class="code" style="background: #F4F4F6; border-radius: 5px; padding: 2px 6px;">globals.css</span> sous <span class="code" style="background: #F4F4F6; border-radius: 5px; padding: 2px 6px;">@theme inline</span>. Rien ne vit en dur dans un composant.</div>
+  </div>
+
+  <div>
+    <div class="sect">Couleurs</div>
+    <div style="margin-top: 12px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+      <div>
+        <div style="height: 56px; border-radius: 14px; background: #4F3FF0;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Accent</div>
+        <div class="code" style="color: #71717A;">#4F3FF0</div>
+      </div>
+      <div>
+        <div style="height: 56px; border-radius: 14px; background: #EEEBFF;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Accent doux</div>
+        <div class="code" style="color: #71717A;">#EEEBFF</div>
+      </div>
+      <div>
+        <div style="height: 56px; border-radius: 14px; background: #101014;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Action</div>
+        <div class="code" style="color: #71717A;">#101014</div>
+      </div>
+      <div>
+        <div style="height: 56px; border-radius: 14px; background: #0FA968;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Positif</div>
+        <div class="code" style="color: #71717A;">#0FA968</div>
+      </div>
+      <div>
+        <div style="height: 56px; border-radius: 14px; background: #E5484D;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Négatif</div>
+        <div class="code" style="color: #71717A;">#E5484D</div>
+      </div>
+      <div>
+        <div style="height: 56px; border-radius: 14px; background: #F5A524;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Attention</div>
+        <div class="code" style="color: #71717A;">#F5A524</div>
+      </div>
+    </div>
+    <div style="margin-top: 12px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+      <div>
+        <div style="height: 40px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8E8EC;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Surface</div>
+        <div class="code" style="color: #71717A;">#FFFFFF</div>
+      </div>
+      <div>
+        <div style="height: 40px; border-radius: 14px; background: #F6F6F8;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Fond</div>
+        <div class="code" style="color: #71717A;">#F6F6F8</div>
+      </div>
+      <div>
+        <div style="height: 40px; border-radius: 14px; background: #E8E8EC;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Bordure</div>
+        <div class="code" style="color: #71717A;">#E8E8EC</div>
+      </div>
+      <div>
+        <div style="height: 40px; border-radius: 14px; background: #0E0E12;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Texte</div>
+        <div class="code" style="color: #71717A;">#0E0E12</div>
+      </div>
+      <div>
+        <div style="height: 40px; border-radius: 14px; background: #71717A;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Secondaire</div>
+        <div class="code" style="color: #71717A;">#71717A</div>
+      </div>
+      <div>
+        <div style="height: 40px; border-radius: 14px; background: #A1A1AA;"></div>
+        <div style="margin-top: 7px; font-size: 12px; font-weight: 700;">Discret</div>
+        <div class="code" style="color: #71717A;">#A1A1AA</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 26px; flex-grow: 1; min-height: 0;">
+
+    <div>
+      <div class="sect">Typographie — Plus Jakarta Sans</div>
+      <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 11px;">
+        <div style="display: flex; align-items: baseline; gap: 14px;">
+          <span class="num" style="font-size: 36px; font-weight: 800; letter-spacing: -0.035em; line-height: 1;">13&nbsp;656,48&nbsp;€</span>
+          <span class="code" style="color: #A1A1AA;">36 / 800 / −3,5&nbsp;%</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 14px;">
+          <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.025em;">Titre de page</span>
+          <span class="code" style="color: #A1A1AA;">22 / 800</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 14px;">
+          <span style="font-size: 16px; font-weight: 700;">Titre de carte</span>
+          <span class="code" style="color: #A1A1AA;">16 / 700</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 14px;">
+          <span style="font-size: 14px; font-weight: 500;">Corps de texte courant</span>
+          <span class="code" style="color: #A1A1AA;">14 / 500 / 1,5</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 14px;">
+          <span style="font-size: 12.5px; color: #71717A;">Légende, unité, mention de source</span>
+          <span class="code" style="color: #A1A1AA;">12,5 / 400</span>
+        </div>
+        <div style="margin-top: 4px; background: #F6F6F8; border-radius: 14px; padding: 12px 14px; font-size: 12.5px; color: #52525B; line-height: 1.5;">
+          Tout montant porte <span class="code" style="background: #FFFFFF; border-radius: 5px; padding: 2px 6px;">font-variant-numeric: tabular-nums</span> — sans ça les colonnes de chiffres dansent d'une ligne à l'autre.
+        </div>
+      </div>
+
+      <div class="sect" style="margin-top: 22px;">Rayons</div>
+      <div style="margin-top: 12px; display: flex; gap: 12px; align-items: flex-end;">
+        <div style="text-align: center;"><div style="width: 58px; height: 42px; background: #F6F6F8; border: 1px solid #E8E8EC; border-radius: 999px;"></div><div class="code" style="margin-top: 6px; color: #71717A;">999 bouton</div></div>
+        <div style="text-align: center;"><div style="width: 58px; height: 42px; background: #F6F6F8; border: 1px solid #E8E8EC; border-radius: 26px;"></div><div class="code" style="margin-top: 6px; color: #71717A;">26 carte L</div></div>
+        <div style="text-align: center;"><div style="width: 58px; height: 42px; background: #F6F6F8; border: 1px solid #E8E8EC; border-radius: 22px;"></div><div class="code" style="margin-top: 6px; color: #71717A;">22 carte</div></div>
+        <div style="text-align: center;"><div style="width: 58px; height: 42px; background: #F6F6F8; border: 1px solid #E8E8EC; border-radius: 14px;"></div><div class="code" style="margin-top: 6px; color: #71717A;">14 champ</div></div>
+        <div style="text-align: center;"><div style="width: 58px; height: 42px; background: #F6F6F8; border: 1px solid #E8E8EC; border-radius: 11px;"></div><div class="code" style="margin-top: 6px; color: #71717A;">11 icône</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sect">Composants</div>
+      <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="background: #101014; color: #FFFFFF; border-radius: 999px; padding: 14px; text-align: center; font-size: 14.5px; font-weight: 700;">Action principale</div>
+        <div style="background: #4F3FF0; color: #FFFFFF; border-radius: 999px; padding: 14px; text-align: center; font-size: 14.5px; font-weight: 700;">Action de marque</div>
+        <div style="background: #FFFFFF; color: #0E0E12; border: 1.5px solid #E8E8EC; border-radius: 999px; padding: 13px; text-align: center; font-size: 14.5px; font-weight: 600;">Action secondaire</div>
+        <div style="display: flex; gap: 8px;">
+          <span style="font-size: 12.5px; font-weight: 700; background: #101014; color: #FFFFFF; border-radius: 999px; padding: 7px 13px;">Actif</span>
+          <span style="font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #52525B; border: 1px solid #E8E8EC; border-radius: 999px; padding: 7px 13px;">Inactif</span>
+          <span style="font-size: 12.5px; font-weight: 700; background: #E4F7EE; color: #0FA968; border-radius: 999px; padding: 7px 13px;">Vérifié</span>
+          <span style="font-size: 12.5px; font-weight: 700; background: #FDF3E4; color: #B4740A; border-radius: 999px; padding: 7px 13px;">Hypothèse</span>
+        </div>
+        <div style="border: 1.5px solid #4F3FF0; border-radius: 14px; padding: 13px 14px; font-size: 14px; font-weight: 500; box-shadow: 0 0 0 4px #EEEBFF;">Champ actif</div>
+        <div style="border: 1.5px solid #E8E8EC; border-radius: 14px; padding: 13px 14px; font-size: 14px; color: #A1A1AA;">Champ au repos</div>
+        <div style="background: #F6F6F8; border-radius: 20px; padding: 15px 16px;">
+          <div style="font-size: 12.5px; color: #71717A;">Chiffre clé</div>
+          <div class="num" style="font-size: 21px; font-weight: 800; margin-top: 4px; letter-spacing: -0.02em;">13&nbsp;572&nbsp;€</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
