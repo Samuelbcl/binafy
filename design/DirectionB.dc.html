@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+    a { color: #1F4E4A; } a:hover { color: #14332F; }
+    .num { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    .serif { font-family: 'Source Serif 4', Georgia, serif; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; height: 820px; background: #FAF8F3; color: #1A1815; display: flex;">
+
+  <div style="width: 210px; flex-shrink: 0; border-right: 1px solid #DDD8CE; padding: 26px 18px; display: flex; flex-direction: column; gap: 30px;">
+    <div class="serif" style="font-size: 20px; font-weight: 700; letter-spacing: -0.01em;">Nestor</div>
+    <div style="display: flex; flex-direction: column; gap: 1px;">
+      <div style="padding: 9px 10px; font-size: 14px; font-weight: 600; border-left: 2px solid #1F4E4A; color: #1F4E4A;">Vue d'ensemble</div>
+      <div style="padding: 9px 10px; font-size: 14px; color: #6B6459; border-left: 2px solid transparent;">Patrimoine</div>
+      <div style="padding: 9px 10px; font-size: 14px; color: #6B6459; border-left: 2px solid transparent;">Budget</div>
+      <div style="padding: 9px 10px; font-size: 14px; color: #6B6459; border-left: 2px solid transparent;">Projections</div>
+      <div style="padding: 9px 10px; font-size: 14px; color: #6B6459; border-left: 2px solid transparent;">Fiscalité</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; padding: 34px 40px; display: flex; flex-direction: column; gap: 26px; min-width: 0;">
+
+    <!-- En-tête façon relevé -->
+    <div style="border-bottom: 2px solid #1A1815; padding-bottom: 18px; display: flex; align-items: flex-end; justify-content: space-between;">
+      <div>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #6B6459;">Patrimoine net au 6 septembre 2026</div>
+        <div class="serif num" style="margin-top: 8px; font-size: 52px; font-weight: 600; letter-spacing: -0.02em; line-height: 1;">13&nbsp;656,48&nbsp;€</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="num" style="font-size: 15px; color: #A63D2F;">&minus;47,65&nbsp;€</div>
+        <div style="font-size: 12px; color: #6B6459; margin-top: 2px;">sur la journée</div>
+      </div>
+    </div>
+
+    <!-- Chiffres clés en tableau -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid #DDD8CE; border-bottom: 1px solid #DDD8CE;">
+      <div style="padding: 16px 18px 16px 0; border-right: 1px solid #DDD8CE;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6B6459;">Net d'impôt latent</div>
+        <div class="serif num" style="margin-top: 6px; font-size: 22px; font-weight: 600; color: #1F4E4A;">13&nbsp;572&nbsp;€</div>
+      </div>
+      <div style="padding: 16px 18px; border-right: 1px solid #DDD8CE;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6B6459;">Taux d'épargne</div>
+        <div class="serif num" style="margin-top: 6px; font-size: 22px; font-weight: 600;">24,6&nbsp;%</div>
+      </div>
+      <div style="padding: 16px 18px; border-right: 1px solid #DDD8CE;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6B6459;">Revenus passifs</div>
+        <div class="serif num" style="margin-top: 6px; font-size: 22px; font-weight: 600;">85&nbsp;€</div>
+      </div>
+      <div style="padding: 16px 0 16px 18px;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6B6459;">Impôt latent</div>
+        <div class="serif num" style="margin-top: 6px; font-size: 22px; font-weight: 600;">84&nbsp;€</div>
+      </div>
+    </div>
+
+    <!-- Courbe -->
+    <div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+        <div class="serif" style="font-size: 18px; font-weight: 600;">Évolution sur douze mois</div>
+        <div style="display: flex; gap: 16px; font-size: 12px; color: #6B6459;">
+          <span>3M</span><span>6M</span><span style="color: #1A1815; font-weight: 600; border-bottom: 1.5px solid #1A1815; padding-bottom: 2px;">1A</span><span>Tout</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 900 180" style="width: 100%; height: 180px; margin-top: 14px; display: block;">
+        <line x1="0" y1="45" x2="900" y2="45" stroke="#DDD8CE"/>
+        <line x1="0" y1="90" x2="900" y2="90" stroke="#DDD8CE"/>
+        <line x1="0" y1="135" x2="900" y2="135" stroke="#DDD8CE"/>
+        <path d="M0 158 L82 150 L164 142 L246 128 L328 132 L410 108 L492 92 L574 100 L656 75 L738 60 L820 46 L900 32 L900 180 L0 180 Z" fill="#1F4E4A" fill-opacity="0.08"/>
+        <path d="M0 158 L82 150 L164 142 L246 128 L328 132 L410 108 L492 92 L574 100 L656 75 L738 60 L820 46 L900 32" fill="none" stroke="#1F4E4A" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <!-- Répartition en barres horizontales -->
+    <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 36px;">
+      <div>
+        <div class="serif" style="font-size: 18px; font-weight: 600;">Répartition</div>
+        <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 13px;">
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>Épargne</span><span class="num">6&nbsp;800&nbsp;€</span></div>
+            <div style="margin-top: 5px; height: 7px; background: #EDE9E0;"><div style="width: 48%; height: 100%; background: #1F4E4A;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>Actions et ETF</span><span class="num">4&nbsp;210&nbsp;€</span></div>
+            <div style="margin-top: 5px; height: 7px; background: #EDE9E0;"><div style="width: 29.7%; height: 100%; background: #3E7C74;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>Liquidités</span><span class="num">2&nbsp;340&nbsp;€</span></div>
+            <div style="margin-top: 5px; height: 7px; background: #EDE9E0;"><div style="width: 16.5%; height: 100%; background: #8FA9A4;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>Crypto</span><span class="num">806&nbsp;€</span></div>
+            <div style="margin-top: 5px; height: 7px; background: #EDE9E0;"><div style="width: 5.7%; height: 100%; background: #B8895C;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="serif" style="font-size: 18px; font-weight: 600;">Ce qui a bougé</div>
+        <div style="margin-top: 14px;">
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #DDD8CE; font-size: 13px;">
+            <span>iShares Core MSCI World</span><span class="num" style="color: #2E6B4F;">+18,44&nbsp;€</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #DDD8CE; font-size: 13px;">
+            <span>Bitcoin</span><span class="num" style="color: #A63D2F;">&minus;23,90&nbsp;€</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 9px 0; font-size: 13px;">
+            <span>Colruyt</span><span class="num" style="color: #A63D2F;">&minus;87,32&nbsp;€</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

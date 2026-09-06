@@ -1,0 +1,47 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1200, "h": 820, "title": "A — Nuit et laiton" },
+    { "file": "DirectionB.dc.html", "x": 1320, "y": 0, "w": 1200, "h": 820, "title": "B — Papier documentaire" },
+    { "file": "DirectionC.dc.html", "x": 2640, "y": 0, "w": 1200, "h": 820, "title": "C — Contraste franc" },
+    { "file": "DirectionD.dc.html", "x": 0, "y": 1060, "w": 1200, "h": 820, "title": "D — Chaleur belge" },
+    { "file": "MobileA.dc.html", "x": 1320, "y": 1060, "w": 390, "h": 844, "title": "A sur mobile — 390 × 844" }
+  ],
+  "annotations": [
+    {
+      "id": "note-a",
+      "x": 0,
+      "y": -250,
+      "w": 380,
+      "text": "A — NUIT ET LAITON\n\nCe que dit la direction : un outil sérieux, tenu, qu'on ouvre le soir. Le laiton apporte la valeur sans virer au doré tape-à-l'œil, le fond charbon fait ressortir les chiffres seuls.\n\nCe qu'elle coûte : c'est aussi le terrain de Finary et de la moitié des néobanques. On est crédible, mais pas reconnaissable. Illisible en plein soleil sur un téléphone."
+    },
+    {
+      "id": "note-b",
+      "x": 1320,
+      "y": -250,
+      "w": 380,
+      "text": "B — PAPIER DOCUMENTAIRE\n\nCe que dit la direction : un relevé, pas un tableau de bord. Filets au lieu de cartes, serif de presse, tout est aligné comme un extrait de compte. C'est la direction qui colle le mieux au parti pris du projet : chaque chiffre s'explique, sources à l'appui.\n\nCe qu'elle coûte : austère. Une densité pareille demande une typo irréprochable, et le mobile devra sérieusement respirer sous peine d'être illisible."
+    },
+    {
+      "id": "note-c",
+      "x": 2640,
+      "y": -250,
+      "w": 380,
+      "text": "C — CONTRASTE FRANC\n\nCe que dit la direction : le chiffre d'abord, à 88 px. Noir et blanc, filets de 2 px, un seul bleu électrique. Zéro vocabulaire de banque privée — ça s'adresse à quelqu'un de 28 ans qui veut comprendre, pas se sentir riche.\n\nCe qu'elle coûte : dur, presque brutal. Le contraste permanent fatigue sur un écran qu'on regarde longtemps, et il reste peu de marge quand il faudra ajouter des états, des alertes, du secondaire."
+    },
+    {
+      "id": "note-d",
+      "x": 0,
+      "y": 880,
+      "w": 380,
+      "text": "D — CHALEUR BELGE\n\nCe que dit la direction : brique, ocre, terre cuite, formes arrondies, typo humaniste. Le patrimoine comme quelque chose de domestique. C'est la seule direction où l'app peut te parler (« il reste 730 € à verser avant le 31 décembre ») sans sonner faux.\n\nCe qu'elle coûte : le risque de paraître moins rigoureuse. Sur un sujet fiscal, la chaleur peut se lire comme de la légèreté — il faudra la compenser par une exigence extrême sur les sources affichées."
+    },
+    {
+      "id": "note-mobile",
+      "x": 1320,
+      "y": 880,
+      "w": 380,
+      "text": "MOBILE — LA DIRECTION A EN 390 × 844\n\nMême grammaire, remise à l'échelle : hero à 38 px au lieu de 56, cartes empilées, barre d'onglets à cinq entrées, œil barré pour masquer les montants en public.\n\nJe n'ai décliné que A pour l'instant. Dis-moi laquelle des quatre tu retiens et je fais le mobile de celle-là, plus les écrans qui manquent (patrimoine, budget, un calculateur avec son détail)."
+    }
+  ],
+  "launch": { "view": "canvas" }
+}
