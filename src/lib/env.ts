@@ -17,7 +17,25 @@ import { z } from 'zod';
  * au build, un accès dynamique (`process.env[cle]`) ne fonctionnerait pas.
  */
 
-const urlOptionnelle = z.string().url().or(z.literal('')).optional();
+/**
+ * URL tolérante au protocole manquant.
+ *
+ * Coller « binafy.vercel.app » plutôt que « https://binafy.vercel.app » est
+ * l'erreur la plus courante, et elle empêchait l'application de démarrer avec
+ * un message qui ne disait pas quoi faire. On complète en `https://` plutôt
+ * que de refuser : le domaine seul n'est jamais ambigu.
+ */
+const urlOptionnelle = z
+  .string()
+  .transform((v) => {
+    const t = v.trim();
+    if (t === '' || /^https?:\/\//i.test(t)) return t;
+    return `https://${t}`;
+  })
+  .refine((v) => v === '' || z.string().url().safeParse(v).success, {
+    message: 'URL invalide — attendu par exemple https://nestor.be',
+  })
+  .optional();
 const texteOptionnel = z.string().min(1).or(z.literal('')).optional();
 
 // ── Client ───────────────────────────────────────────────────
@@ -47,8 +65,16 @@ if (!resultatClient.success) {
 
 export const envClient = resultatClient.data;
 
-/** URL publique du site, avec un repli sur le développement local. */
-export const siteUrl = envClient.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+/**
+ * URL publique du site, sans barre oblique finale.
+ *
+ * Elle sert de base aux images de partage, au sitemap et aux liens des emails :
+ * une barre en trop y produirait des `//` visibles dans les URL partagées.
+ */
+export const siteUrl = (envClient.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(
+  /\/+$/,
+  '',
+);
 
 /** Vrai quand Supabase est configuré et utilisable côté client. */
 export const supabaseConfigure =
