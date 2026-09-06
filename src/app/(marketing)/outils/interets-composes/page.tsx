@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { OutilInteretsComposes } from '@/components/outils/interets-composes';
+import { booleenDepuisUrl, nombreDepuisUrl } from '@/lib/etat-url';
 
 export const metadata: Metadata = {
   title: 'Calculateur d’intérêts composés — version belge',
@@ -9,7 +9,20 @@ export const metadata: Metadata = {
   alternates: { canonical: '/outils/interets-composes' },
 };
 
-export default function InteretsComposesPage() {
+export default async function InteretsComposesPage({
+  searchParams,
+}: PageProps<'/outils/interets-composes'>) {
+  const p = await searchParams;
+
+  const initiales = {
+    capital_initial: nombreDepuisUrl(p, 'capital_initial', 10_000),
+    epargne_mensuelle: nombreDepuisUrl(p, 'epargne_mensuelle', 100),
+    horizon: nombreDepuisUrl(p, 'horizon', 20),
+    taux: nombreDepuisUrl(p, 'taux', 5),
+    inflation: nombreDepuisUrl(p, 'inflation', 2),
+    net: booleenDepuisUrl(p, 'net', true),
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
       <header className="mb-8">
@@ -24,9 +37,7 @@ export default function InteretsComposesPage() {
         </p>
       </header>
 
-      <Suspense fallback={<div className="carte h-64 animate-pulse" aria-label="Chargement" />}>
-        <OutilInteretsComposes />
-      </Suspense>
+      <OutilInteretsComposes initiales={initiales} />
     </div>
   );
 }

@@ -1,7 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   Area,
   AreaChart,
@@ -18,6 +17,7 @@ import {
   MentionInformative,
   PanneauExplication,
 } from '@/components/ui/panneau-explication';
+import { useEtatUrl } from '@/lib/use-etat-url';
 import { euros, formatEUR, formatEURCompact } from '@/lib/money';
 import { calculerInteretsComposesNets } from '@/lib/finance/interets-composes';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
@@ -29,58 +29,33 @@ import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
  * `?capital_initial=10000&epargne_mensuelle=100&horizon=20&taux=5`
  */
 
-const DEFAUTS = {
-  capital_initial: 10_000,
-  epargne_mensuelle: 100,
-  horizon: 20,
-  taux: 5,
-  inflation: 2,
+export type ValeursInterets = {
+  capital_initial: number;
+  epargne_mensuelle: number;
+  horizon: number;
+  taux: number;
+  inflation: number;
+  net: boolean;
 };
 
-export function OutilInteretsComposes() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const lire = (cle: keyof typeof DEFAUTS) => {
-    const brut = searchParams.get(cle);
-    if (brut === null) return DEFAUTS[cle];
-    const v = Number(brut);
-    return Number.isFinite(v) ? v : DEFAUTS[cle];
-  };
-
-  const capitalInitial = lire('capital_initial');
-  const epargneMensuelle = lire('epargne_mensuelle');
-  const horizon = lire('horizon');
-  const taux = lire('taux');
-  const inflation = lire('inflation');
-  const netImpot = searchParams.get('net') !== '0';
-
-  const majParam = useCallback(
-    (cles: Record<string, string | null>) => {
-      const params = new URLSearchParams(searchParams.toString());
-      for (const [cle, valeur] of Object.entries(cles)) {
-        if (valeur === null) params.delete(cle);
-        else params.set(cle, valeur);
-      }
-      router.replace(`?${params.toString()}`, { scroll: false });
-    },
-    [router, searchParams],
-  );
+export function OutilInteretsComposes({ initiales }: { initiales: ValeursInterets }) {
+  const [v, definir] = useEtatUrl(initiales);
+  const netImpot = v.net;
 
   const calcul = useMemo(
     () =>
       calculerInteretsComposesNets(
         {
-          capitalInitialCents: euros(capitalInitial),
-          versementCents: euros(epargneMensuelle),
-          horizonAnnees: horizon,
-          tauxAnnuelPourcent: taux,
-          inflationPourcent: inflation,
+          capitalInitialCents: euros(v.capital_initial),
+          versementCents: euros(v.epargne_mensuelle),
+          horizonAnnees: v.horizon,
+          tauxAnnuelPourcent: v.taux,
+          inflationPourcent: v.inflation,
           periodicite: 'mensuelle',
         },
         TAX_PARAMS_2026,
       ),
-    [capitalInitial, epargneMensuelle, horizon, taux, inflation],
+    [v.capital_initial, v.epargne_mensuelle, v.horizon, v.taux, v.inflation],
   );
 
   const { result } = calcul;
@@ -92,37 +67,37 @@ export function OutilInteretsComposes() {
         <div className="grid gap-5 sm:grid-cols-2">
           <ChampNombre
             label="Capital initial"
-            valeur={capitalInitial}
-            onChange={(v) => majParam({ capital_initial: String(v) })}
+            valeur={v.capital_initial}
+            onChange={(x) => definir('capital_initial', x)}
             suffixe="€"
             pas={1_000}
           />
           <ChampNombre
             label="Épargne mensuelle"
-            valeur={epargneMensuelle}
-            onChange={(v) => majParam({ epargne_mensuelle: String(v) })}
+            valeur={v.epargne_mensuelle}
+            onChange={(x) => definir('epargne_mensuelle', x)}
             suffixe="€"
             pas={50}
           />
           <ChampNombre
             label="Horizon"
-            valeur={horizon}
-            onChange={(v) => majParam({ horizon: String(v) })}
+            valeur={v.horizon}
+            onChange={(x) => definir('horizon', x)}
             suffixe="ans"
             min={1}
             max={60}
           />
           <ChampNombre
             label="Rendement annuel"
-            valeur={taux}
-            onChange={(v) => majParam({ taux: String(v) })}
+            valeur={v.taux}
+            onChange={(x) => definir('taux', x)}
             suffixe="%"
             pas={0.5}
           />
           <ChampNombre
             label="Inflation"
-            valeur={inflation}
-            onChange={(v) => majParam({ inflation: String(v) })}
+            valeur={v.inflation}
+            onChange={(x) => definir('inflation', x)}
             suffixe="%"
             pas={0.5}
             aide="Pour afficher le résultat en euros d’aujourd’hui."
@@ -130,7 +105,7 @@ export function OutilInteretsComposes() {
           <ChampBascule
             label="Net de fiscalité belge"
             valeur={netImpot}
-            onChange={(v) => majParam({ net: v ? null : '0' })}
+            onChange={(x) => definir('net', x)}
             aide="Taxe de 10 % sur les plus-values, exonération annuelle de 10 000 € déduite."
           />
         </div>

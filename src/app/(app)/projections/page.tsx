@@ -31,7 +31,7 @@ const SIMULATEURS = [
     description:
       'Projection nominale et réelle, rente soutenable, année d’indépendance financière.',
     icone: LineChart,
-    disponible: false,
+    disponible: true,
   },
   {
     href: '/outils/rendement-locatif',
@@ -39,7 +39,7 @@ const SIMULATEURS = [
     description:
       'Rendement brut, net de charges, net d’impôt, et cash-flow mensuel réel avec crédit.',
     icone: PiggyBank,
-    disponible: false,
+    disponible: true,
   },
 ];
 
@@ -92,9 +92,8 @@ export default function ProjectionsPage() {
       </div>
 
       <p className="text-[12px] leading-relaxed text-text-subtle">
-        Les quatre moteurs de calcul sont écrits et testés dans{' '}
-        <code className="text-text-muted">src/lib/finance</code>. Les deux écrans restants
-        n’attendent que leur interface.
+        Chaque simulateur encode son état dans l’URL : copie le lien de ta barre d’adresse
+        pour retrouver exactement la même simulation, ou la partager.
       </p>
     </div>
   );

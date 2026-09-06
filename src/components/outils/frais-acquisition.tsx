@@ -1,13 +1,13 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { ChampBascule, ChampChoix, ChampNombre } from '@/components/ui/champs';
 import { Montant } from '@/components/ui/montant';
 import {
   MentionInformative,
   PanneauExplication,
 } from '@/components/ui/panneau-explication';
+import { useEtatUrl } from '@/lib/use-etat-url';
 import { euros, formatEUR } from '@/lib/money';
 import {
   calculerCashNecessaire,
@@ -26,43 +26,19 @@ import { LIBELLE_REGION, REGIONS, type RegionFiscale } from '@/lib/tax/types';
  * Facebook belges, et c'est excellent pour le SEO.
  */
 
-const DEFAUTS = {
-  prix: 280_000,
-  region: 'wallonie' as RegionFiscale,
-  type: 'propre_unique' as TypeAchat,
-  neuf: false,
-  prixRP: 280_000,
+export type ValeursAcquisition = {
+  prix: number;
+  rp: number;
+  region: RegionFiscale;
+  type: TypeAchat;
+  neuf: boolean;
 };
 
-export function OutilFraisAcquisition() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const prix = Number(searchParams.get('prix')) || DEFAUTS.prix;
-  const regionParam = searchParams.get('region');
-  const region: RegionFiscale = REGIONS.includes(regionParam as RegionFiscale)
-    ? (regionParam as RegionFiscale)
-    : DEFAUTS.region;
-  const typeParam = searchParams.get('type');
-  const typeAchat: TypeAchat = (['propre_unique', 'autre', 'locatif'] as const).includes(
-    typeParam as TypeAchat,
-  )
-    ? (typeParam as TypeAchat)
-    : DEFAUTS.type;
-  const neuf = searchParams.get('neuf') === '1';
-  const prixRP = Number(searchParams.get('rp')) || DEFAUTS.prixRP;
-
-  const majParam = useCallback(
-    (cles: Record<string, string | null>) => {
-      const params = new URLSearchParams(searchParams.toString());
-      for (const [cle, valeur] of Object.entries(cles)) {
-        if (valeur === null) params.delete(cle);
-        else params.set(cle, valeur);
-      }
-      router.replace(`?${params.toString()}`, { scroll: false });
-    },
-    [router, searchParams],
-  );
+export function OutilFraisAcquisition({ initiales }: { initiales: ValeursAcquisition }) {
+  const [v, definir] = useEtatUrl(initiales);
+  const { prix, region, neuf } = v;
+  const typeAchat = v.type;
+  const prixRP = v.rp;
 
   const cash = useMemo(
     () =>
@@ -102,7 +78,7 @@ export function OutilFraisAcquisition() {
           <ChampNombre
             label="Prix d’achat"
             valeur={prix}
-            onChange={(v) => majParam({ prix: String(v) })}
+            onChange={(x) => definir('prix', x)}
             suffixe="€"
             pas={5_000}
             min={0}
@@ -111,7 +87,7 @@ export function OutilFraisAcquisition() {
             label="Région"
             valeur={region}
             options={REGIONS.map((r) => ({ valeur: r, libelle: LIBELLE_REGION[r] }))}
-            onChange={(v) => majParam({ region: v })}
+            onChange={(x) => definir('region', x)}
           />
           <ChampChoix
             label="Type d’achat"
@@ -120,14 +96,14 @@ export function OutilFraisAcquisition() {
               valeur: t,
               libelle: LIBELLE_TYPE_ACHAT[t],
             }))}
-            onChange={(v) => majParam({ type: v })}
+            onChange={(x) => definir('type', x)}
             className="sm:col-span-2"
             aide="Le taux réduit ne vaut que pour une habitation propre et unique, avec des conditions de résidence."
           />
           <ChampBascule
             label="Bien neuf (vendu sous régime TVA)"
             valeur={neuf}
-            onChange={(v) => majParam({ neuf: v ? '1' : null })}
+            onChange={(x) => definir('neuf', x)}
             aide="La TVA de 21 % remplace alors les droits d’enregistrement."
           />
         </div>
@@ -187,7 +163,7 @@ export function OutilFraisAcquisition() {
             <ChampNombre
               label="Prix de ta future résidence principale"
               valeur={prixRP}
-              onChange={(v) => majParam({ rp: String(v) })}
+              onChange={(x) => definir('rp', x)}
               suffixe="€"
               pas={5_000}
             />

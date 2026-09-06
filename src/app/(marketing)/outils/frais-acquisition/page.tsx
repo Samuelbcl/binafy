@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { OutilFraisAcquisition } from '@/components/outils/frais-acquisition';
+import { booleenDepuisUrl, choixDepuisUrl, nombreDepuisUrl } from '@/lib/etat-url';
+import type { TypeAchat } from '@/lib/tax/enregistrement';
+import { REGIONS } from '@/lib/tax/types';
 
 export const metadata: Metadata = {
   title: 'Frais d’acquisition immobilière en Belgique',
@@ -9,7 +11,21 @@ export const metadata: Metadata = {
   alternates: { canonical: '/outils/frais-acquisition' },
 };
 
-export default function FraisAcquisitionPage() {
+const TYPES: readonly TypeAchat[] = ['propre_unique', 'autre', 'locatif'];
+
+export default async function FraisAcquisitionPage({
+  searchParams,
+}: PageProps<'/outils/frais-acquisition'>) {
+  const p = await searchParams;
+
+  const initiales = {
+    prix: nombreDepuisUrl(p, 'prix', 280_000),
+    rp: nombreDepuisUrl(p, 'rp', 280_000),
+    region: choixDepuisUrl(p, 'region', REGIONS, 'wallonie'),
+    type: choixDepuisUrl(p, 'type', TYPES, 'propre_unique'),
+    neuf: booleenDepuisUrl(p, 'neuf', false),
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
       <header className="mb-8">
@@ -24,13 +40,7 @@ export default function FraisAcquisitionPage() {
         </p>
       </header>
 
-      <Suspense
-        fallback={
-          <div className="carte h-64 animate-pulse" aria-label="Chargement du calculateur" />
-        }
-      >
-        <OutilFraisAcquisition />
-      </Suspense>
+      <OutilFraisAcquisition initiales={initiales} />
     </div>
   );
 }

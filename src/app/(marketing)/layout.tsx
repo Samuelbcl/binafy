@@ -31,6 +31,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             {[
               { href: '/outils/frais-acquisition', libelle: 'Frais d’acquisition' },
               { href: '/outils/interets-composes', libelle: 'Intérêts composés' },
+              { href: '/outils/simulateur-patrimoine', libelle: 'Simulateur de patrimoine' },
+              { href: '/outils/rendement-locatif', libelle: 'Rendement locatif' },
               { href: '/confidentialite', libelle: 'Confidentialité' },
               { href: '/conditions', libelle: 'Conditions' },
               { href: '/mentions-legales', libelle: 'Mentions légales' },

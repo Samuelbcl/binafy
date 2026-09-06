@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { chemin: '', priorite: 1, frequence: 'weekly' },
     { chemin: '/outils/frais-acquisition', priorite: 0.9, frequence: 'monthly' },
     { chemin: '/outils/interets-composes', priorite: 0.9, frequence: 'monthly' },
+    { chemin: '/outils/simulateur-patrimoine', priorite: 0.9, frequence: 'monthly' },
+    { chemin: '/outils/rendement-locatif', priorite: 0.9, frequence: 'monthly' },
     { chemin: '/confidentialite', priorite: 0.3, frequence: 'yearly' },
     { chemin: '/conditions', priorite: 0.3, frequence: 'yearly' },
     { chemin: '/mentions-legales', priorite: 0.3, frequence: 'yearly' },
