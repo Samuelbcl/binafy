@@ -35,7 +35,7 @@ export function CarteKPI({
           cents={valeurCents}
           decimals={decimals}
           className={cn(
-            'font-display text-[20px] font-extrabold tracking-[-0.02em] sm:text-[26px]',
+            'text-[20px] font-extrabold tabular-nums tracking-[-0.02em] sm:text-[26px]',
             accent && 'text-primary',
           )}
         />
@@ -71,7 +71,7 @@ export function CarteKPITexte({
       <p className="label-kpi">{label}</p>
       <p
         className={cn(
-          'mt-2 font-display text-[20px] font-extrabold tabular-nums tracking-[-0.02em] sm:text-[26px]',
+          'mt-2 text-[20px] font-extrabold tabular-nums tracking-[-0.02em] sm:text-[26px]',
           accent && 'text-primary',
         )}
       >

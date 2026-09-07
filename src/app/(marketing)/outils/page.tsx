@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { OUTILS } from '@/lib/outils';
 
 const TITRE = 'Outils gratuits — fiscalité et patrimoine belges';
@@ -30,15 +31,10 @@ export default function OutilsPage() {
       </header>
 
       <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-        {OUTILS.map(({ href, titre, description, icone: Icone }) => (
+        {OUTILS.map(({ href, titre, description, icone, teinte }) => (
           <li key={href}>
             <Link href={href} className="carte carte-interactive group flex h-full flex-col p-5">
-              <span
-                aria-hidden
-                className="grid size-10 place-items-center rounded-[var(--radius-sm)] bg-primary-soft text-primary"
-              >
-                <Icone className="size-5" />
-              </span>
+              <PastilleIcone icone={icone} teinte={teinte} />
               <h2 className="mt-4 text-[16px] font-bold">{titre}</h2>
               <p className="mt-2 flex-1 text-[13.5px] leading-relaxed text-text-muted">
                 {description}

@@ -180,7 +180,7 @@ export function OutilFraisAcquisition({ initiales }: { initiales: ValeursAcquisi
             />
           </div>
 
-          <p className="mt-5 font-display text-[32px] font-semibold text-warning tabular-nums">
+          <p className="mt-5 text-[32px] font-extrabold text-warning tabular-nums">
             {formatEUR(arbitrage.result.surcoutDroitsCents, { decimals: 0 })}
           </p>
           <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-text-muted">

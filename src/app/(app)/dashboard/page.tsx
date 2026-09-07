@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight, Gauge, Landmark, LineChart, Plus, Wallet } from 'lucide-react';
 import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
 import { DonutAllocation } from '@/components/charts/donut-allocation';
 import { CarteHero } from '@/components/ui/carte-hero';
@@ -114,6 +114,8 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Où j’en suis"
+        icone={Gauge}
+        teinte="menthe"
         sousTitre="Les trois chiffres qui résument ta situation, au-delà du montant total."
         className="mt-8"
       >
@@ -135,6 +137,8 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Comment ça évolue"
+        icone={LineChart}
+        teinte="azur"
         sousTitre="Ce qui a changé depuis hier, et la trajectoire des derniers mois."
       >
       {historique.length > 1 ? (
@@ -191,6 +195,8 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Ce que je possède"
+        icone={Wallet}
+        teinte="violet"
         sousTitre="La répartition de tes actifs, et le détail de ce qui compose le total."
       >
       <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
@@ -225,6 +231,8 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Ce que ça me coûterait"
+        icone={Landmark}
+        teinte="ambre"
         sousTitre="L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà."
       >
         <div className="grid gap-4 sm:grid-cols-[minmax(0,14rem)_1fr]">

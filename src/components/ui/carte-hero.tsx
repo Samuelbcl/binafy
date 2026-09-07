@@ -10,10 +10,13 @@ import { Montant } from './montant';
 /**
  * Carte du chiffre principal d'un écran (docs/05 § composants clés).
  *
- * Un aplat d'accent, un seul chiffre dessus. C'est le seul endroit de
+ * Une surface d'accent, un seul chiffre dessus. C'est le seul endroit de
  * l'interface où la couleur occupe une surface : ailleurs elle ne sert qu'à
  * désigner. Si deux cartes d'accent apparaissent sur un même écran, l'une des
  * deux n'est pas le chiffre principal.
+ *
+ * Le dégradé et la lueur vivent dans `.carte-accent` : la carte n'a pas à
+ * connaître la recette, elle a à être la carte principale.
  *
  * La variation n'est pas colorée en vert ou en rouge ici : sur un aplat saturé
  * ces couleurs deviennent illisibles, et le signe suffit à lire le sens.
@@ -80,7 +83,7 @@ export function CarteHero({
   return (
     <section
       className={cn(
-        'rounded-[var(--radius-xl)] bg-primary p-6 text-on-primary sm:p-8',
+        'carte-accent p-6 sm:p-8',
         className,
       )}
     >

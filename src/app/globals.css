@@ -35,6 +35,19 @@
   --on-primary: #ffffff;
 
   /*
+   * Second accent — la chaleur.
+   *
+   * Un accent unique produit une interface juste et froide : tout ce qui n'est
+   * pas violet devient gris, et l'écran se lit comme un tableur. L'ambre
+   * réchauffe ce que le violet ne peut pas porter — un état, une pastille, la
+   * fin d'un dégradé. Elle ne désigne pas une donnée : c'est la respiration.
+   */
+  --ambre: #e8963c;
+  --ambre-hover: #d4842c;
+  --ambre-soft: #fdf1de;
+  --on-ambre: #2a1a05;
+
+  /*
    * Action principale. Distincte de la marque : le bouton qui engage est noir,
    * l'accent reste réservé à ce qui doit être lu. Sans cette séparation, tout
    * ce qui est violet devient du bouton et l'accent perd son sens.
@@ -42,6 +55,20 @@
   --action: #101014;
   --action-hover: #26262e;
   --on-action: #ffffff;
+
+  /*
+   * Dégradés.
+   *
+   * Un aplat de couleur unie est plat, au sens propre : il n'a ni profondeur ni
+   * direction. Le dégradé donne à la carte principale un volume que l'œil lit
+   * avant de lire le chiffre, et il signe l'écran — c'est ce qui distingue une
+   * application d'un rapport imprimé.
+   */
+  --degrade-hero: linear-gradient(146deg, #6d5bff 0%, #4f3ff0 48%, #3a2bc4 100%);
+  --degrade-titre: linear-gradient(96deg, var(--text) 10%, var(--primary) 88%);
+  --degrade-chaud: linear-gradient(120deg, var(--ambre) 0%, #e2703f 100%);
+  /* La lueur du haut de page : elle colore le fond sans qu'on la remarque. */
+  --lueur-page: radial-gradient(125% 62% at 50% -12%, rgb(79 63 240 / 0.10), transparent 64%);
 
   /* Sémantique */
   --positive: #0fa968;
@@ -76,11 +103,16 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #0e0e12;
-  --surface: #17171c;
-  --surface-2: #1f1f26;
-  --surface-hover: #26262e;
-  --border: #26262e;
+  /*
+   * Le fond n'est pas un gris neutre : il tire vers le violet de la marque, et
+   * une lueur le teinte en haut d'écran. Un noir parfaitement neutre paraît
+   * éteint — c'est la première chose qu'on perd en passant au sombre.
+   */
+  --bg: #0b0a12;
+  --surface: #16151f;
+  --surface-2: #1e1c2a;
+  --surface-hover: #262336;
+  --border: #272438;
 
   --text: #f4f4f5;
   --text-muted: #a1a1aa;
@@ -109,6 +141,17 @@
   --data-7: #fb923c;
   --data-8: #71717a;
 
+  --ambre: #f0ad57;
+  --ambre-hover: #ffc37a;
+  --ambre-soft: #f0ad571f;
+  --on-ambre: #1a1205;
+
+  /* Sur fond sombre, le dégradé de titre va du pervenche à l'ambre. */
+  --degrade-hero: linear-gradient(146deg, #7565ff 0%, #5442e8 46%, #2f2496 100%);
+  --degrade-titre: linear-gradient(96deg, #cfc7ff 4%, var(--ambre) 96%);
+  --degrade-chaud: linear-gradient(120deg, var(--ambre) 0%, #e8724c 100%);
+  --lueur-page: radial-gradient(125% 58% at 50% -10%, rgb(124 108 255 / 0.26), transparent 62%);
+
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
   --glow-primary: 0 0 48px rgb(139 124 255 / 0.14);
 }
@@ -133,6 +176,11 @@
   --color-action-hover: var(--action-hover);
   --color-on-action: var(--on-action);
 
+  --color-ambre: var(--ambre);
+  --color-ambre-hover: var(--ambre-hover);
+  --color-ambre-soft: var(--ambre-soft);
+  --color-on-ambre: var(--on-ambre);
+
   --color-positive: var(--positive);
   --color-negative: var(--negative);
   --color-warning: var(--warning);
@@ -148,13 +196,13 @@
   --color-data-8: var(--data-8);
 
   /*
-   * Une seule famille. Plus Jakarta Sans tient le titre gras et le corps de
-   * texte, et ses chiffres tabulaires alignent les colonnes sans passer par une
-   * monospace — d'où `--font-mono` pointé sur la même famille : les appels
-   * `font-mono` existants continuent de rendre des chiffres alignés (règle
-   * `.font-mono` plus bas), sans charger une seconde police pour ça.
+   * Fraunces pour ce qui doit avoir une voix, Plus Jakarta pour ce qui doit se
+   * lire vite. `--font-mono` pointe sur Jakarta : ses chiffres tabulaires
+   * alignent les colonnes, donc les appels `font-mono` existants continuent de
+   * rendre des chiffres alignés (règle `.font-mono` plus bas) sans qu'on
+   * charge une troisième police pour ça.
    */
-  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
@@ -178,7 +226,15 @@
 
   body {
     min-height: 100%;
-    background: var(--bg);
+    /*
+     * Fond en deux couches : la couleur unie, puis une lueur radiale fixée en
+     * haut d'écran. Fixée, donc elle ne défile pas avec le contenu — l'écran
+     * garde sa profondeur du haut jusqu'en bas.
+     */
+    background-color: var(--bg);
+    background-image: var(--lueur-page);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--text);
     font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: 'kern' 1;
@@ -197,12 +253,34 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /*
+   * Deux familles qui se répondent.
+   *
+   * Une seule police pour tout produit des écrans où « les polices se
+   * ressemblent » — littéralement vrai, et c'est ce qui rend une page illisible
+   * d'un coup d'œil : rien ne distingue un titre d'un libellé. Fraunces tient
+   * les titres, avec ses formes taillées et son axe optique ; Plus Jakarta
+   * garde l'interface et les chiffres, où la neutralité est une qualité.
+   */
   h1,
   h2,
+  .font-display {
+    font-family: var(--font-fraunces), Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    /*
+     * SOFT arrondit les angles, WONK libère les formes singulières — le g à
+     * double étage, la queue du y. C'est là que la police cesse d'être neutre.
+     * Sans ces deux axes, Fraunces rend un serif de journal ; avec eux, elle
+     * signe.
+     */
+    font-variation-settings: 'SOFT' 12, 'WONK' 1;
+  }
+
   h3 {
     font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
   }
 
   /* Focus visible partout, jamais d'outline supprimé sans remplacement. */
@@ -240,10 +318,42 @@
    * la hiérarchie vient de la taille et de la couleur, pas de la casse.
    */
   .label-kpi {
+    /* Un libellé reste en Jakarta même porté par un h2 : à 13 px, les
+       empattements de Fraunces se brouillent au lieu de caractériser. */
+    font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0;
     font-size: 13px;
     font-weight: 500;
     letter-spacing: 0;
     color: var(--text-muted);
+  }
+
+  /*
+   * Carte d'accent — le chiffre principal d'un écran.
+   *
+   * Un dégradé plutôt qu'un aplat : la lumière tombe d'un coin, et la carte
+   * cesse d'être un rectangle de couleur pour devenir une surface. La lueur
+   * portée la décolle du fond au lieu de l'y poser.
+   */
+  .carte-accent {
+    /*
+     * Le dégradé est un violet saturé dans les deux thèmes : ce qui se pose
+     * dessus s'écrit donc en blanc dans les deux, et le violet reste le violet
+     * clair. On redéfinit les deux variables ici plutôt que de coder les
+     * couleurs dans le composant — ainsi `text-on-primary`, `bg-on-primary/15`
+     * et `text-primary` continuent de fonctionner à l'intérieur de la carte,
+     * et donnent le bon résultat en sombre comme en clair.
+     *
+     * Sans ça, le thème sombre écrivait du gris presque noir sur du violet :
+     * la phrase sous le chiffre devenait illisible.
+     */
+    --on-primary: #ffffff;
+    --primary: #4f3ff0;
+    background-image: var(--degrade-hero);
+    color: var(--on-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glow-primary);
   }
 
   .carte {
@@ -335,6 +445,81 @@
 
   .bouton-secondaire:hover {
     background: var(--surface-hover);
+  }
+
+  /*
+   * Titre en dégradé. Réservé aux titres décoratifs : le texte devient
+   * transparent, donc jamais sur un contenu qu'il faut pouvoir sélectionner ou
+   * lire au lecteur d'écran sans son parent.
+   */
+  .titre-degrade {
+    background-image: var(--degrade-titre);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /*
+   * Pastille d'icône.
+   *
+   * Une icône au trait posée sur un fond blanc disparaît : elle occupe la place
+   * d'un repère sans en être un. Dans un carré teinté, elle devient
+   * reconnaissable de loin, et surtout chaque sujet garde sa couleur d'un écran
+   * à l'autre — l'immobilier est toujours ambre, la bourse toujours violette.
+   * C'est ce qui remplace ici les émoticônes : même fonction de repère, sans le
+   * registre enfantin ni la loterie du rendu selon le système.
+   *
+   * Le fond se déduit de la teinte par `color-mix` plutôt que d'être écrit
+   * douze fois : mélangée à la surface, une couleur claire donne un fond pâle
+   * sur thème clair et un fond profond sur thème sombre, sans second jeu de
+   * variables à maintenir.
+   */
+  .pastille-icone {
+    --teinte: var(--primary);
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: color-mix(in oklab, var(--teinte) 14%, var(--surface));
+    color: var(--teinte);
+  }
+
+  .pastille-violet { --teinte: var(--data-1); }
+  .pastille-menthe { --teinte: var(--data-2); }
+  .pastille-ambre { --teinte: var(--ambre); }
+  .pastille-rose { --teinte: var(--data-4); }
+  .pastille-azur { --teinte: var(--data-5); }
+  .pastille-lagune { --teinte: var(--data-6); }
+  .pastille-terre { --teinte: var(--data-7); }
+
+  /* Grande pastille : en tête d'une page, pas dans une liste. */
+  .pastille-icone-lg {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius);
+  }
+
+  /* Bouton chaud : l'action qu'on veut donner envie de toucher. */
+  .bouton-chaud {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 9999px;
+    background: var(--degrade-chaud);
+    color: var(--on-ambre);
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: filter 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .bouton-chaud:hover {
+    filter: brightness(1.06);
   }
 
   /* Pastille d'état : vérifié, hypothèse, période active. */

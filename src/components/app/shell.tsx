@@ -83,7 +83,11 @@ function BoutonTheme() {
   // serveur et le client rendraient deux icônes différentes.
   const monte = useEstMonte();
 
-  const sombre = resolvedTheme === 'dark';
+  // Avant l'hydratation, on ignore le theme : `sombre` reste faux, et tout ce
+  // qui en depend — l'icone comme l'infobulle — doit passer par `monte`. Sans
+  // ca, l'infobulle differe entre serveur et client et React signale une
+  // divergence a chaque chargement en sombre.
+  const sombre = monte && resolvedTheme === 'dark';
 
   return (
     <button
@@ -92,7 +96,7 @@ function BoutonTheme() {
       title={sombre ? 'Passer en thème clair' : 'Passer en thème sombre'}
       className="inline-flex size-11 items-center justify-center rounded-[var(--radius)] text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
     >
-      {monte && sombre ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
+      {sombre ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
       <span className="sr-only">Changer de thème</span>
     </button>
   );

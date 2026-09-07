@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { OUTILS } from '@/lib/outils';
 import { MarqueNestor } from '@/components/ui/marque';
 
@@ -47,10 +48,17 @@ export default function AccueilPage() {
           <MarqueNestor />
         </div>
 
+        {/*
+          Le dégradé ne tombe que sur la seconde ligne : c'est elle qui porte la
+          promesse, et un dégradé qui couvre tout le titre ne met plus rien en
+          avant. Le fond du dégradé reste dans la couleur du texte pour que la
+          ligne se lise même si le navigateur ne sait pas découper un fond sur
+          du texte.
+        */}
         <h1 className="mt-10 font-display text-[clamp(2.25rem,6vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em]">
           Le patrimoine,
           <br />
-          version belge.
+          <span className="titre-degrade">version belge.</span>
         </h1>
 
         <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-text-muted">
@@ -60,7 +68,13 @@ export default function AccueilPage() {
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-3">
-          <Link href="/connexion" className="bouton-principal">
+          {/*
+            Seule action chaude du site. Sur la page d'accueil, l'engagement
+            qu'on demande est de créer un compte : lui donner la couleur qui
+            attire est honnête. Dans l'application, l'action principale reste
+            noire — là, ce qui doit attirer l'œil, ce sont les chiffres.
+          */}
+          <Link href="/connexion" className="bouton-chaud">
             Créer mon compte
             <ArrowRight className="size-4" />
           </Link>
@@ -73,13 +87,13 @@ export default function AccueilPage() {
       <section className="mt-20">
         <h2 className="label-kpi">Outils gratuits, sans compte</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-3">
-          {OUTILS.map(({ href, titre, description, icone: Icone }) => (
+          {OUTILS.map(({ href, titre, description, icone, teinte }) => (
             <Link
               key={href}
               href={href}
               className="carte carte-interactive group flex flex-col p-5"
             >
-              <Icone className="size-5 text-primary" />
+              <PastilleIcone icone={icone} teinte={teinte} />
               <h3 className="mt-4 font-display text-[16px] font-semibold">{titre}</h3>
               <p className="mt-2 flex-1 text-[13px] leading-relaxed text-text-muted">
                 {description}

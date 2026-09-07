@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { PastilleIcone, type Teinte } from './pastille-icone';
 
 /**
  * Zone nommée d'un écran (docs/05 § composants clés).
@@ -16,10 +18,17 @@ import { cn } from '@/lib/cn';
  * carte blanche, et sur le fond gris de l'écran elle disparaît — dix points
  * d'écart entre les deux. Il faut un trait plus franc pour que la séparation
  * se voie.
+ *
+ * La pastille donne à chaque zone sa couleur, et cette couleur ne change pas
+ * d'un écran à l'autre : *ce que je possède* est violet partout, *ce que ça me
+ * coûterait* est ambre partout. On finit par reconnaître la zone avant de lire
+ * son titre — c'est ce qui fait qu'un écran se parcourt au lieu de se lire.
  */
 export function SectionEcran({
   titre,
   sousTitre,
+  icone,
+  teinte,
   action,
   premiere = false,
   children,
@@ -28,6 +37,9 @@ export function SectionEcran({
   titre: string;
   /** À quoi répond cette zone, en une phrase. */
   sousTitre?: string;
+  /** Icône de la zone. Décorative : elle double le titre, elle ne le remplace pas. */
+  icone?: LucideIcon;
+  teinte?: Teinte;
   /** Lien secondaire aligné à droite du titre. */
   action?: ReactNode;
   /** La première zone d'un écran n'a pas de filet au-dessus d'elle. */
@@ -42,12 +54,15 @@ export function SectionEcran({
         className,
       )}
     >
-      <div className="mb-4 flex items-baseline justify-between gap-4">
-        <div className="min-w-0">
-          <h2 className="text-[17px] font-bold tracking-[-0.01em]">{titre}</h2>
-          {sousTitre && (
-            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">{sousTitre}</p>
-          )}
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div className="flex min-w-0 gap-3">
+          {icone && <PastilleIcone icone={icone} teinte={teinte} className="mt-0.5" />}
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">{titre}</h2>
+            {sousTitre && (
+              <p className="mt-1 text-[13px] leading-relaxed text-text-muted">{sousTitre}</p>
+            )}
+          </div>
         </div>
         {action}
       </div>

@@ -64,7 +64,7 @@ export function DonutAllocation({
           </ResponsiveContainer>
 
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-display text-[20px] font-semibold tabular-nums">
+            <span className="text-[20px] font-bold tabular-nums">
               {discret ? `${MASK}${NBSP}€` : formatEUR(totalCents, { decimals: 0 })}
             </span>
             <span className="label-kpi mt-0.5">Total</span>
