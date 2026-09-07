@@ -60,7 +60,7 @@ export default async function ConnexionPage({ searchParams }: PageProps<'/connex
               </p>
               <Link
                 href="/dashboard"
-                className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+                className="bouton-principal"
               >
                 Ouvrir la démo
               </Link>

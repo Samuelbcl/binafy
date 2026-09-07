@@ -24,7 +24,7 @@ export function CarteKPI({
   precision?: string;
   decimals?: number;
   className?: string;
-  /** Met la valeur en couleur laiton — réservé au chiffre signature de l'écran. */
+  /** Met la valeur en couleur d’accent — réservé au chiffre signature de l'écran. */
   accent?: boolean;
 }) {
   return (

@@ -20,8 +20,8 @@ export default function ErreurGlobale({
           minHeight: '100vh',
           display: 'grid',
           placeItems: 'center',
-          background: '#0B0D10',
-          color: '#ECEFF3',
+          background: '#F6F6F8',
+          color: '#0E0E12',
           fontFamily: 'system-ui, sans-serif',
           padding: '2rem',
           textAlign: 'center',
@@ -31,7 +31,7 @@ export default function ErreurGlobale({
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, margin: 0 }}>
             Nestor est momentanément indisponible
           </h1>
-          <p style={{ marginTop: '0.75rem', color: '#8A94A0', fontSize: '0.875rem' }}>
+          <p style={{ marginTop: '0.75rem', color: '#71717A', fontSize: '0.875rem' }}>
             Tes données n’ont pas été affectées.
           </p>
           <button
@@ -41,19 +41,19 @@ export default function ErreurGlobale({
               marginTop: '1.75rem',
               minHeight: '2.75rem',
               padding: '0 1.25rem',
-              borderRadius: '12px',
+              borderRadius: '9999px',
               border: 'none',
-              background: '#C6A15B',
-              color: '#0B0D10',
+              background: '#101014',
+              color: '#FFFFFF',
               fontSize: '0.875rem',
-              fontWeight: 600,
+              fontWeight: 700,
               cursor: 'pointer',
             }}
           >
             Réessayer
           </button>
           {error.digest && (
-            <p style={{ marginTop: '2rem', fontSize: '0.6875rem', color: '#5C6570' }}>
+            <p style={{ marginTop: '2rem', fontSize: '0.6875rem', color: '#A1A1AA' }}>
               Référence : {error.digest}
             </p>
           )}

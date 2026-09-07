@@ -36,7 +36,7 @@ export default function Erreur({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+          className="bouton-principal"
         >
           Réessayer
         </button>

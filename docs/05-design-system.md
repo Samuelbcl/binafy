@@ -1,78 +1,119 @@
 # 05 — Design system
 
-Objectif : la qualité perçue d'une app fintech premium, avec une identité qui n'est
-copiée sur personne. On reprend les **patterns** qui marchent (dashboard sombre dense,
+Objectif : la qualité perçue d'une app grand public soignée, avec une identité qui n'est
+copiée sur personne. On reprend les **patterns** qui marchent (carte du chiffre principal,
 donut d'allocation, Sankey budgétaire, cartes bento), pas la charte d'un concurrent.
+
+> **Révision du 07/09/2026 — passage au registre épuré.** La direction précédente
+> (« dark editorial fintech », fond charbon et accent laiton) a été abandonnée après
+> une comparaison de cinq partis pris. Les maquettes des deux directions sont dans
+> `design/` ; les quatre explorations écartées y restent en archive. Ce qui a motivé
+> le changement : le sombre dense est le terrain de Finary et de la moitié des
+> néobanques — crédible, mais pas reconnaissable, et illisible en plein soleil sur un
+> téléphone.
 
 ## Direction artistique
 
-**Registre : « Dark editorial fintech ».** Sombre, dense en information, mais avec une
-typographie de magazine plutôt que de terminal. Accent laiton chaud plutôt que néon,
-pour évoquer la banque privée sans la froideur du SaaS générique.
+**Registre : « épuré ».** Fond clair, un seul accent saturé, gros titres gras, cartes
+très arrondies, action principale en noir, peu d'éléments par écran.
 
-Trois mots directeurs : **précis, calme, sérieux**. On manipule l'argent de gens qui
-n'en ont pas beaucoup ; l'interface ne doit ni gamifier ni dramatiser.
+Trois mots directeurs : **clair, direct, honnête**. On manipule l'argent de gens qui n'en
+ont pas beaucoup ; l'interface ne doit ni gamifier ni dramatiser — mais elle n'a pas à
+être austère pour être sérieuse.
+
+Le clair est le mode **par défaut** : on consulte ses comptes en plein jour, dans le
+train, sur un téléphone. Le sombre reste disponible et complet, avec la même grammaire.
+
+Une règle porte l'essentiel du registre : **l'accent ne décore jamais, il désigne.** La
+seule surface colorée d'un écran est la carte du chiffre principal. Partout ailleurs, le
+violet signale ce qu'il faut lire — un lien, un onglet actif, un segment de graphique.
+C'est pour cela que l'action principale est noire et non violette : sans cette
+séparation, tout ce qui est coloré devient du bouton et l'accent perd son sens.
 
 ## Tokens
 
+Valeurs de référence : `src/app/globals.css`. Aucune couleur ni taille ne vit en dur
+dans un composant.
+
 ```css
 :root {
+  color-scheme: light;
+
   /* Fonds */
-  --bg:            #0B0D10;
-  --surface:       #14181D;
-  --surface-2:     #1C2128;
-  --surface-hover: #232A33;
-  --border:        #2A323C;
+  --bg:            #F6F6F8;
+  --surface:       #FFFFFF;
+  --surface-2:     #F1F1F4;
+  --surface-hover: #EFEFF2;
+  --border:        #ECECEF;
 
   /* Texte */
-  --text:          #ECEFF3;
-  --text-muted:    #8A94A0;
-  --text-subtle:   #5C6570;
+  --text:          #0E0E12;
+  --text-muted:    #71717A;
+  --text-subtle:   #A1A1AA;
 
-  /* Marque */
-  --primary:       #C6A15B;   /* laiton */
-  --primary-hover: #D9B673;
-  --primary-soft:  #C6A15B1A;
+  /* Marque — l'accent porte l'information */
+  --primary:       #4F3FF0;
+  --primary-hover: #3B2ED4;
+  --primary-soft:  #EEEBFF;
+  --on-primary:    #FFFFFF;
+
+  /* Action principale — distincte de la marque */
+  --action:        #101014;
+  --action-hover:  #26262E;
+  --on-action:     #FFFFFF;
 
   /* Sémantique */
-  --positive:      #4ADE9B;
-  --negative:      #F2725C;
-  --warning:       #F5B841;
-  --info:          #6E9DF7;
+  --positive:      #0FA968;
+  --negative:      #E5484D;
+  --warning:       #F5A524;
+  --info:          #2563EB;
 
   /* Palette de données (donut, Sankey, séries) */
-  --data-1: #C6A15B;  --data-2: #6E9DF7;  --data-3: #4ADE9B;
-  --data-4: #B07FE0;  --data-5: #F2725C;  --data-6: #45C4D6;
-  --data-7: #F5B841;  --data-8: #7C8794;
+  --data-1: #4F3FF0;  --data-2: #0FA968;  --data-3: #F5A524;
+  --data-4: #EC4899;  --data-5: #2563EB;  --data-6: #14B8A6;
+  --data-7: #F97316;  --data-8: #A1A1AA;
 
-  /* Rayons et ombres */
-  --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
-  --shadow-card: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.18);
-  --glow-primary: 0 0 48px rgba(198,161,91,.12);
+  /* Rayons — la pilule pour l'action, l'arrondi généreux pour la carte */
+  --radius-sm: 11px; --radius: 14px; --radius-lg: 22px; --radius-xl: 26px;
+  --shadow-card: 0 1px 2px rgba(14,14,18,.04);
 }
 
-/* Thème clair — obligatoire, beaucoup de Belges consultent leurs comptes en plein jour */
-[data-theme="light"] {
-  --bg: #FAFAF8; --surface: #FFFFFF; --surface-2: #F4F4F1;
-  --border: #E4E4DF; --text: #14181D; --text-muted: #5C6570;
-  --primary: #8A6D2F;
+/* Thème sombre — la même grammaire, pas un autre design */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E0E12; --surface: #17171C; --surface-2: #1F1F26;
+  --border: #26262E; --text: #F4F4F5; --text-muted: #A1A1AA;
+  --primary: #8B7CFF;              /* éclairci pour tenir le contraste */
+  --action: #FFFFFF; --on-action: #0E0E12;   /* l'action s'inverse */
 }
 ```
 
 ## Typographie
 
-| Rôle | Police | Usage |
+**Une seule famille : Plus Jakarta Sans** (400/500/600/700/800).
+
+| Rôle | Graisse | Usage |
 |---|---|---|
-| Display | **Bricolage Grotesque** (600/700) | Titres, chiffres héros du dashboard |
-| Interface | **Manrope** (400/500/600) | Corps, navigation, formulaires |
-| Chiffres | **JetBrains Mono** (400/500) | Tous les montants en tableau |
+| Chiffre héros | 800, `-0.035em` | Le chiffre principal d'un écran |
+| Titre de page | 800, `-0.025em` | `h1` |
+| Titre de carte | 700 | `h2`, `h3` |
+| Corps | 400/500 | Texte courant, navigation, formulaires |
+| Légende | 400, `--text-muted` | Unités, mentions de source, précisions |
 
-Le mono sur les montants n'est pas un détail : en chiffres tabulaires, les colonnes
-s'alignent et les valeurs deviennent comparables d'un coup d'œil. Utiliser
-`font-variant-numeric: tabular-nums` partout où un montant apparaît.
+Ses chiffres tabulaires alignent les colonnes sans qu'on charge une monospace pour ça :
+trois polices en moins à télécharger sur une connexion mobile. `--font-mono` pointe donc
+sur la même famille, et une règle de base applique `tabular-nums` à `.font-mono` — les
+appels existants continuent de rendre des colonnes alignées.
 
-Échelle : `12 / 14 / 16 / 20 / 24 / 32 / 44 / 60`. Chiffre héros du dashboard :
-`clamp(2.5rem, 6vw, 3.75rem)`, `letter-spacing: -0.03em`.
+Ce n'est pas un détail : en chiffres tabulaires, les colonnes s'alignent et les valeurs
+deviennent comparables d'un coup d'œil. `font-variant-numeric: tabular-nums` partout où
+un montant apparaît.
+
+Échelle : `12 / 13 / 14 / 16 / 20 / 22 / 26 / 36 / 60`. Chiffre héros :
+`clamp(2.5rem, 6vw, 3.75rem)`.
+
+Les étiquettes ne sont **plus en capitales** : dans ce registre, la hiérarchie vient de
+la taille et de la couleur, pas de la casse.
 
 ## Règles de mise en forme des montants
 
@@ -82,23 +123,45 @@ s'alignent et les valeurs deviennent comparables d'un coup d'œil. Utiliser
 - Grands nombres dans les graphiques : `13,7 k€`, `1,2 M€`
 - Pourcentages à une décimale, jamais deux
 - **Mode discrétion** : un bouton œil remplace tous les montants par `••••`.
-  Indispensable dans un train ou un open space. À implémenter en V1, pas plus tard.
+  Indispensable dans un train ou un open space.
+- Sur un aplat d'accent, une variation n'est **pas** colorée en vert ou en rouge : ces
+  couleurs y deviennent illisibles, et le signe suffit à lire le sens.
 
 ## Composants clés
 
-### Carte KPI
+### Carte du chiffre principal (`CarteHero`)
+Aplat `--primary`, rayon `--radius-xl`, padding 24-32px. Label 13px à 75 % d'opacité,
+chiffre en `.chiffre-hero` sur `--on-primary`, variation en pastilles. Chiffre secondaire
+optionnel aligné à droite.
+
+**Une seule par écran.** Si deux cartes d'accent apparaissent au même endroit, l'une des
+deux n'est pas le chiffre principal.
+
+### Carte KPI (`CarteKPI`)
 Fond `--surface`, bordure 1px `--border`, rayon `--radius-lg`, padding 20-24px.
-Structure : label en 12px `--text-muted` uppercase `letter-spacing: .06em`, valeur en
-display, variation en dessous avec puce colorée. Hover : `--surface-hover` + translation
-de 1px vers le haut, transition 160 ms.
+Structure : label 13px `--text-muted`, valeur en 26px/800, variation en dessous avec puce
+colorée. Hover : `--surface-hover` + translation de 1px vers le haut, transition 160 ms.
+
+### Boutons
+Trois classes dans `globals.css`, hauteur 44px, rayon pilule :
+
+| Classe | Fond | Quand |
+|---|---|---|
+| `.bouton-principal` | `--action` (noir) | L'action qui engage — une seule par écran |
+| `.bouton-marque` | `--primary` | Action liée à l'identité (page d'accueil publique) |
+| `.bouton-secondaire` | `--surface` + bordure | Tout le reste |
+
+Le look vit dans la classe, la mise en page reste sur l'élément : `w-full`, `mt-4` ou une
+icône s'ajoutent sans toucher au style.
 
 ### Graphique d'évolution
 Aire avec dégradé vertical de `--primary` (opacité .25 → 0), ligne 2px, courbe
 `monotone`. Grille horizontale seule, `--border` en pointillés. Tooltip sur carte
-`--surface-2` avec date en muted et valeur en mono. Point actif avec halo.
+`--surface` avec date en muted et valeur en tabulaire. Point actif avec halo.
+Sur la carte héros, la courbe passe en blanc sur l'aplat.
 
 ### Donut d'allocation
-Épaisseur 28px, `cornerRadius: 4`, écart de 2px entre segments. Centre : total en display
+Épaisseur 28px, `cornerRadius: 4`, écart de 2px entre segments. Centre : total en 800
 + label « Total ». Légende à droite en liste avec barre de progression fine par ligne,
 survol qui met le segment en avant et grise les autres.
 
@@ -109,8 +172,12 @@ Clic sur un flux → filtre la liste des transactions. Sur mobile, remplacer par
 treemap ou une liste hiérarchique : un Sankey à 380px est illisible.
 
 ### Tableau d'actifs
-Lignes de 56px, séparateurs `--border` à 50 % d'opacité, en-têtes triables avec chevron.
+Lignes de 56px, séparateurs `--border`, en-têtes triables avec chevron.
 Colonne « Répartition » avec une micro-barre. Densité réglable (confortable / compact).
+
+### Pastille (`.puce`)
+Rayon pilule, 12px/600. Sert aux états : « Vérifié le 06/09/2026 » en `--positive` sur
+`--positive` à 12 %, « Hypothèse » en `--warning`, période active en `--action`.
 
 ## Motion
 
@@ -129,9 +196,11 @@ donne une impression d'instabilité. `prefers-reduced-motion` respecté partout.
 
 ## À proscrire
 
-- Le dégradé violet-bleu générique
+- **Le dégradé** violet-bleu générique. L'accent est un aplat, jamais un dégradé — la
+  seule exception est le remplissage sous une courbe, qui va de l'accent au transparent.
 - Inter comme unique police
 - Les emojis dans l'interface produit
 - Le rouge criard sur une baisse : `--negative` reste tempéré, on n'affole pas quelqu'un
   qui regarde son épargne
 - Les animations de compteur qui font défiler les chiffres : on veut lire un montant, pas assister à un spectacle
+- Deux surfaces d'accent sur un même écran

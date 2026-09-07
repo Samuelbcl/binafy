@@ -1,30 +1,20 @@
 import type { Metadata, Viewport } from 'next';
-import { Bricolage_Grotesque, JetBrains_Mono, Manrope } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import { AppProviders } from '@/components/providers';
 import { siteUrl } from '@/lib/env';
 import './globals.css';
 
-/** Display — titres et chiffres héros. */
-const bricolage = Bricolage_Grotesque({
-  variable: '--font-bricolage',
+/**
+ * Police unique — Plus Jakarta Sans (docs/05 § typographie).
+ *
+ * Une seule famille tient le titre gras, le corps de texte et les montants :
+ * ses chiffres tabulaires alignent les colonnes sans qu'on charge une monospace
+ * pour ça. Trois polices en moins à télécharger sur une connexion mobile.
+ */
+const jakarta = Plus_Jakarta_Sans({
+  variable: '--font-jakarta',
   subsets: ['latin'],
-  weight: ['600', '700'],
-  display: 'swap',
-});
-
-/** Interface — corps, navigation, formulaires. */
-const manrope = Manrope({
-  variable: '--font-manrope',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-/** Chiffres — tous les montants en tableau. */
-const jetbrains = JetBrains_Mono({
-  variable: '--font-jetbrains',
-  subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
@@ -50,8 +40,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0B0D10' },
-    { media: '(prefers-color-scheme: light)', color: '#FAFAF8' },
+    { media: '(prefers-color-scheme: dark)', color: '#0E0E12' },
+    { media: '(prefers-color-scheme: light)', color: '#F6F6F8' },
   ],
 };
 
@@ -60,7 +50,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang="fr-BE"
       suppressHydrationWarning
-      className={`${bricolage.variable} ${manrope.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${jakarta.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <AppProviders>{children}</AppProviders>

@@ -14,7 +14,7 @@ export default function PageIntrouvable() {
       <div className="mt-7 flex flex-wrap justify-center gap-3">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+          className="bouton-principal"
         >
           Retour à l’accueil
         </Link>

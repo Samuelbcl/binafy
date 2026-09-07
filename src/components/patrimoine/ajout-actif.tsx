@@ -44,7 +44,7 @@ export function AjoutActif() {
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius)] bg-primary px-4 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+        className="bouton-principal"
       >
         <Plus className="size-4" />
         Ajouter un actif
@@ -220,7 +220,7 @@ export function AjoutActif() {
             <button
               type="submit"
               disabled={enCours}
-              className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-60"
+              className="bouton-principal"
             >
               {enCours && <Loader2 className="size-4 animate-spin" />}
               Enregistrer

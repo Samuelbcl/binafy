@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { ArrowRight, Plus } from 'lucide-react';
 import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
 import { DonutAllocation } from '@/components/charts/donut-allocation';
+import { CarteHero } from '@/components/ui/carte-hero';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
-import { Montant, Variation } from '@/components/ui/montant';
+import { Montant } from '@/components/ui/montant';
 import { PanneauExplication } from '@/components/ui/panneau-explication';
 import { chargerPatrimoine } from '@/lib/db/patrimoine';
 import { budgetDemo, MOUVEMENTS_DEMO, PROFIL_DEMO } from '@/lib/demo/donnees';
@@ -72,28 +73,25 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <header>
-        <p className="label-kpi">{demo ? `Bonsoir ${PROFIL_DEMO.prenom}` : 'Patrimoine net'}</p>
-        <h1 className="mt-3 chiffre-hero">
-          <Montant cents={net} decimals={2} />
-        </h1>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <Variation cents={variation} ratio={ratioVariation} decimals={2} />
-          <span className="text-[13px] text-text-subtle">
-            {variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'}
-          </span>
-        </div>
-      </header>
+      {demo && (
+        <p className="text-[13px] text-text-muted">Bonsoir {PROFIL_DEMO.prenom}</p>
+      )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <CarteKPI
-          label="Patrimoine net d’impôt latent"
-          valeurCents={net - impotLatent.result.impotLatentCents}
-          precision={`Après ${formatPercent(
-            net > 0 ? impotLatent.result.impotLatentCents / net : 0,
-          )} d’impôt si tu liquidais tout aujourd’hui`}
-          accent
-        />
+      <CarteHero
+        label="Patrimoine net"
+        valeurCents={net}
+        variationCents={variation}
+        ratioVariation={variation === 0 ? undefined : ratioVariation}
+        mentionVariation={
+          variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'
+        }
+        aCote={{
+          label: 'Net d’impôt latent',
+          valeurCents: net - impotLatent.result.impotLatentCents,
+        }}
+      />
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <CarteKPITexte
           label="Taux d’épargne lissé"
           valeur={formatPercent(epargne.result.lisse12Mois.tauxEpargne)}
@@ -109,7 +107,11 @@ export default async function DashboardPage() {
         <CarteKPI
           label="Impôt latent"
           valeurCents={impotLatent.result.impotLatentCents}
-          precision={`Plus-values et TOB de sortie sur ${impotLatent.result.lignes.length} positions`}
+          precision={`${formatPercent(
+            net > 0 ? impotLatent.result.impotLatentCents / net : 0,
+          )} du patrimoine — plus-values et TOB de sortie sur ${
+            impotLatent.result.lignes.length
+          } positions`}
         />
       </div>
 
@@ -258,7 +260,7 @@ function EtatVide() {
             {etape.disponible ? (
               <Link
                 href={etape.href}
-                className="mt-4 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[var(--radius)] bg-primary px-4 text-[13px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+                className="bouton-principal mt-4"
               >
                 <Plus className="size-4" />
                 {etape.libelle}

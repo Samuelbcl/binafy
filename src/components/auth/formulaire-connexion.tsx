@@ -140,7 +140,7 @@ export function FormulaireConnexion({
       <button
         type="submit"
         disabled={enCours}
-        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-60"
+        className="bouton-principal w-full"
       >
         {enCours ? (
           <>

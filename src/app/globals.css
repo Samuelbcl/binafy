@@ -3,96 +3,114 @@
 /*
  * Nestor — design system (docs/05-design-system.md)
  *
- * Registre : « dark editorial fintech ». Sombre, dense, mais avec une typographie
- * de magazine plutôt que de terminal. Accent laiton chaud, jamais de néon.
- * Trois mots directeurs : précis, calme, sérieux. On manipule l'argent de gens qui
- * n'en ont pas beaucoup — l'interface ne doit ni gamifier ni dramatiser.
+ * Registre : « épuré ». Fond clair, un seul accent saturé, gros titres gras,
+ * cartes très arrondies, action principale en noir. Peu d'éléments par écran.
+ * Trois mots directeurs : clair, direct, honnête. On manipule l'argent de gens
+ * qui n'en ont pas beaucoup — l'interface ne doit ni gamifier ni dramatiser,
+ * mais elle n'a pas à être austère pour être sérieuse.
+ *
+ * Le clair est le mode par défaut : on consulte ses comptes en plein jour, dans
+ * le train, sur un téléphone. Le sombre reste disponible et complet.
  */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
   /* Fonds */
-  --bg: #0b0d10;
-  --surface: #14181d;
-  --surface-2: #1c2128;
-  --surface-hover: #232a33;
-  --border: #2a323c;
+  --bg: #f6f6f8;
+  --surface: #ffffff;
+  --surface-2: #f1f1f4;
+  --surface-hover: #efeff2;
+  --border: #ececef;
 
   /* Texte */
-  --text: #eceff3;
-  --text-muted: #8a94a0;
-  --text-subtle: #5c6570;
+  --text: #0e0e12;
+  --text-muted: #71717a;
+  --text-subtle: #a1a1aa;
 
-  /* Marque — laiton */
-  --primary: #c6a15b;
-  --primary-hover: #d9b673;
-  --primary-soft: #c6a15b1a;
-  --on-primary: #0b0d10;
+  /* Marque — l'accent porte l'information, jamais le décor */
+  --primary: #4f3ff0;
+  --primary-hover: #3b2ed4;
+  --primary-soft: #eeebff;
+  --on-primary: #ffffff;
+
+  /*
+   * Action principale. Distincte de la marque : le bouton qui engage est noir,
+   * l'accent reste réservé à ce qui doit être lu. Sans cette séparation, tout
+   * ce qui est violet devient du bouton et l'accent perd son sens.
+   */
+  --action: #101014;
+  --action-hover: #26262e;
+  --on-action: #ffffff;
 
   /* Sémantique */
-  --positive: #4ade9b;
-  --negative: #f2725c;
-  --warning: #f5b841;
-  --info: #6e9df7;
+  --positive: #0fa968;
+  --negative: #e5484d;
+  --warning: #f5a524;
+  --info: #2563eb;
 
   /* Palette de données — donut, Sankey, séries */
-  --data-1: #c6a15b;
-  --data-2: #6e9df7;
-  --data-3: #4ade9b;
-  --data-4: #b07fe0;
-  --data-5: #f2725c;
-  --data-6: #45c4d6;
-  --data-7: #f5b841;
-  --data-8: #7c8794;
+  --data-1: #4f3ff0;
+  --data-2: #0fa968;
+  --data-3: #f5a524;
+  --data-4: #ec4899;
+  --data-5: #2563eb;
+  --data-6: #14b8a6;
+  --data-7: #f97316;
+  --data-8: #a1a1aa;
 
-  /* Rayons et ombres */
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.18);
-  --glow-primary: 0 0 48px rgb(198 161 91 / 0.12);
+  /* Rayons — la pilule pour l'action, l'arrondi généreux pour la carte */
+  --radius-sm: 11px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 26px;
+  --shadow-card: 0 1px 2px rgb(14 14 18 / 0.04);
+  --glow-primary: 0 0 48px rgb(79 63 240 / 0.10);
 }
 
 /*
- * Thème clair — obligatoire, pas optionnel : beaucoup de Belges consultent
- * leurs comptes en plein jour.
+ * Thème sombre — la même grammaire, pas un autre design. L'accent s'éclaircit
+ * pour tenir le contraste, et l'action principale s'inverse : noire sur clair,
+ * blanche sur sombre.
  */
-[data-theme='light'] {
-  color-scheme: light;
+[data-theme='dark'] {
+  color-scheme: dark;
 
-  --bg: #fafaf8;
-  --surface: #ffffff;
-  --surface-2: #f4f4f1;
-  --surface-hover: #ececeA;
-  --border: #e4e4df;
+  --bg: #0e0e12;
+  --surface: #17171c;
+  --surface-2: #1f1f26;
+  --surface-hover: #26262e;
+  --border: #26262e;
 
-  --text: #14181d;
-  --text-muted: #5c6570;
-  --text-subtle: #8a94a0;
+  --text: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --text-subtle: #71717a;
 
-  --primary: #8a6d2f;
-  --primary-hover: #6f571f;
-  --primary-soft: #8a6d2f14;
-  --on-primary: #ffffff;
+  --primary: #8b7cff;
+  --primary-hover: #a396ff;
+  --primary-soft: #8b7cff24;
+  --on-primary: #0e0e12;
 
-  --positive: #128a5a;
-  --negative: #c4432c;
-  --warning: #a67908;
-  --info: #2f5fc4;
+  --action: #ffffff;
+  --action-hover: #e4e4e7;
+  --on-action: #0e0e12;
 
-  --data-1: #8a6d2f;
-  --data-2: #2f5fc4;
-  --data-3: #128a5a;
-  --data-4: #7b4bb0;
-  --data-5: #c4432c;
-  --data-6: #14808f;
-  --data-7: #a67908;
-  --data-8: #5c6570;
+  --positive: #2fd98a;
+  --negative: #ff6b6b;
+  --warning: #ffc44d;
+  --info: #6e9df7;
 
-  --shadow-card: 0 1px 2px rgb(20 24 29 / 0.06), 0 8px 24px rgb(20 24 29 / 0.05);
-  --glow-primary: 0 0 48px rgb(138 109 47 / 0.08);
+  --data-1: #8b7cff;
+  --data-2: #2fd98a;
+  --data-3: #ffc44d;
+  --data-4: #f472b6;
+  --data-5: #6e9df7;
+  --data-6: #2dd4bf;
+  --data-7: #fb923c;
+  --data-8: #71717a;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --glow-primary: 0 0 48px rgb(139 124 255 / 0.14);
 }
 
 @theme inline {
@@ -111,6 +129,10 @@
   --color-primary-soft: var(--primary-soft);
   --color-on-primary: var(--on-primary);
 
+  --color-action: var(--action);
+  --color-action-hover: var(--action-hover);
+  --color-on-action: var(--on-action);
+
   --color-positive: var(--positive);
   --color-negative: var(--negative);
   --color-warning: var(--warning);
@@ -125,9 +147,16 @@
   --color-data-7: var(--data-7);
   --color-data-8: var(--data-8);
 
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
+  /*
+   * Une seule famille. Plus Jakarta Sans tient le titre gras et le corps de
+   * texte, et ses chiffres tabulaires alignent les colonnes sans passer par une
+   * monospace — d'où `--font-mono` pointé sur la même famille : les appels
+   * `font-mono` existants continuent de rendre des chiffres alignés (règle
+   * `.font-mono` plus bas), sans charger une seconde police pour ça.
+   */
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius);
@@ -151,7 +180,7 @@
     min-height: 100%;
     background: var(--bg);
     color: var(--text);
-    font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: 'kern' 1;
     -webkit-font-smoothing: antialiased;
   }
@@ -162,6 +191,7 @@
    * comparables d'un coup d'œil.
    */
   .tabular,
+  .font-mono,
   table,
   [data-montant] {
     font-variant-numeric: tabular-nums;
@@ -170,16 +200,16 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
 
   /* Focus visible partout, jamais d'outline supprimé sans remplacement. */
   :focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   ::selection {
@@ -197,19 +227,22 @@
 @layer components {
   /* Chiffre héros du dashboard — doc 05 § typographie. */
   .chiffre-hero {
-    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
     font-size: clamp(2.5rem, 6vw, 3.75rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-weight: 800;
+    letter-spacing: -0.035em;
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
 
+  /*
+   * Étiquette de KPI et de champ. Plus de capitales : dans le registre épuré,
+   * la hiérarchie vient de la taille et de la couleur, pas de la casse.
+   */
   .label-kpi {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0;
     color: var(--text-muted);
   }
 
@@ -231,6 +264,86 @@
   .carte-interactive:hover {
     background: var(--surface-hover);
     transform: translateY(-1px);
+  }
+
+  /*
+   * Boutons. Le look vit ici, la mise en page reste sur l'élément : on y ajoute
+   * `w-full`, `gap-2` ou une icône sans toucher au style.
+   */
+  .bouton-principal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 9999px;
+    background: var(--action);
+    color: var(--on-action);
+    font-size: 14px;
+    font-weight: 700;
+    transition: background-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .bouton-principal:hover {
+    background: var(--action-hover);
+  }
+
+  .bouton-principal:disabled {
+    opacity: 0.6;
+  }
+
+  .bouton-marque {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 9999px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 14px;
+    font-weight: 700;
+    transition: background-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .bouton-marque:hover {
+    background: var(--primary-hover);
+  }
+
+  .bouton-secondaire {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 9999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+      background-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .bouton-secondaire:hover {
+    background: var(--surface-hover);
+  }
+
+  /* Pastille d'état : vérifié, hypothèse, période active. */
+  .puce {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    padding: 0.25rem 0.625rem;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
   }
 }
 

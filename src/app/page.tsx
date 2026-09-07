@@ -89,7 +89,7 @@ export default function AccueilPage() {
         <div className="mt-9 flex flex-wrap items-center gap-3">
           <Link
             href="/dashboard"
-            className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+            className="bouton-principal"
           >
             Voir la démo
             <ArrowRight className="size-4" />

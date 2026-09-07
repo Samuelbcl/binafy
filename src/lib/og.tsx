@@ -10,6 +10,10 @@ import { ImageResponse } from 'next/og';
  * Le chiffre est donc le sujet de l'image, pas un logo. Une carte qui montre
  * « 26 600 € » se partage ; une carte qui montre un nom de marque, non.
  *
+ * Le fond reprend l'accent de la carte principale du tableau de bord : sur un
+ * fil d'actualité, un aplat coloré se repère où une carte sombre se confond
+ * avec le reste.
+ *
  * Contrainte technique : `ImageResponse` ne comprend qu'un sous-ensemble de CSS
  * et aucune variable CSS. Les couleurs sont donc écrites en dur ici, et doivent
  * rester accordées aux tokens de `globals.css`.
@@ -19,13 +23,13 @@ export const TAILLE_OG = { width: 1200, height: 630 };
 export const TYPE_OG = 'image/png';
 
 const COULEURS = {
-  fond: '#0B0D10',
-  surface: '#14181D',
-  bordure: '#2A323C',
-  texte: '#ECEFF3',
-  attenue: '#8A94A0',
-  discret: '#5C6570',
-  laiton: '#C6A15B',
+  fond: '#4F3FF0',
+  surface: '#FFFFFF',
+  bordure: '#FFFFFF38',
+  texte: '#FFFFFF',
+  attenue: '#D9D4FF',
+  discret: '#C4BCFF',
+  accent: '#FFFFFF',
 };
 
 export function imageOG({
@@ -61,7 +65,7 @@ export function imageOG({
               width: 44,
               height: 44,
               borderRadius: 13,
-              background: COULEURS.laiton,
+              background: COULEURS.accent,
               color: COULEURS.fond,
               display: 'flex',
               alignItems: 'center',
@@ -89,7 +93,7 @@ export function imageOG({
           </div>
           <div
             style={{
-              color: COULEURS.laiton,
+              color: COULEURS.accent,
               fontSize: 116,
               fontWeight: 700,
               letterSpacing: -3,
@@ -159,7 +163,7 @@ export function imageOGSimple({ titre, sousTitre }: { titre: string; sousTitre: 
               width: 44,
               height: 44,
               borderRadius: 13,
-              background: COULEURS.laiton,
+              background: COULEURS.accent,
               color: COULEURS.fond,
               display: 'flex',
               alignItems: 'center',

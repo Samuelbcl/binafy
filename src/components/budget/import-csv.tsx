@@ -62,7 +62,7 @@ export function ImportCSV() {
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius)] bg-primary px-4 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+        className="bouton-principal"
       >
         <Upload className="size-4" />
         Importer un extrait
@@ -134,7 +134,7 @@ export function ImportCSV() {
               <button
                 type="submit"
                 disabled={analyseEnCours}
-                className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-60"
+                className="bouton-principal"
               >
                 {analyseEnCours && <Loader2 className="size-4 animate-spin" />}
                 Analyser
@@ -242,7 +242,7 @@ export function ImportCSV() {
               <button
                 type="submit"
                 disabled={importEnCours}
-                className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-60"
+                className="bouton-principal"
               >
                 {importEnCours && <Loader2 className="size-4 animate-spin" />}
                 Importer {etape.apercu.total} transactions
@@ -279,7 +279,7 @@ export function ImportCSV() {
               <button
                 type="button"
                 onClick={fermer}
-                className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-primary px-5 text-[14px] font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+                className="bouton-principal"
               >
                 Voir mon budget
               </button>

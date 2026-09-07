@@ -18,7 +18,7 @@ import type { PointHistorique } from '@/lib/patrimoine/types';
 /**
  * Courbe d'évolution du patrimoine net (doc 05 § graphique d'évolution).
  *
- * Aire avec dégradé vertical du laiton, ligne 2px, courbe monotone, grille
+ * Aire avec dégradé vertical de l’accent, ligne 2px, courbe monotone, grille
  * horizontale seule en pointillés. L'animation ne joue qu'au montage.
  */
 
