@@ -14,15 +14,36 @@ donut d'allocation, Sankey budgétaire, cartes bento), pas la charte d'un concur
 
 ## Direction artistique
 
-**Registre : « épuré ».** Fond clair, un seul accent saturé, gros titres gras, cartes
-très arrondies, action principale en noir, peu d'éléments par écran.
+> **Révision du 07/09/2026, le soir — le sombre devient le défaut, et l'identité
+> se renforce.** Après avoir vécu avec le registre épuré clair, le constat de Samuel
+> était précis : « tout est blanc, tout est noir, les polices se ressemblent ». Trois
+> reproches, trois corrections aux fondations : un second accent (l'ambre), des
+> dégradés et une lueur de page, et une seconde famille (Fraunces) pour les titres.
+> Puis la comparaison des deux thèmes, côte à côte, sur les mêmes écrans : le sombre
+> était sans discussion celui qui donne envie d'ouvrir l'application. Il devient la
+> racine. Le clair reste disponible et complet ; l'argument du plein soleil tient
+> toujours, il ne l'emporte plus.
+
+**Registre : « épuré, la nuit ».** Fond sombre teinté de violet, deux accents (le violet
+qui désigne, l'ambre qui réchauffe), titres en Fraunces, chiffres en Plus Jakarta,
+cartes très arrondies, peu d'éléments par écran.
 
 Trois mots directeurs : **clair, direct, honnête**. On manipule l'argent de gens qui n'en
 ont pas beaucoup ; l'interface ne doit ni gamifier ni dramatiser — mais elle n'a pas à
 être austère pour être sérieuse.
 
-Le clair est le mode **par défaut** : on consulte ses comptes en plein jour, dans le
-train, sur un téléphone. Le sombre reste disponible et complet, avec la même grammaire.
+Le sombre est le mode **par défaut**. Le clair reste disponible et complet, avec la
+même grammaire — on le garde pour qui lit ses comptes en plein soleil.
+
+**Deux polices.** Fraunces porte les `h1`, `h2` et tout ce qui demande `font-display`,
+avec ses axes SOFT et WONK activés : c'est là qu'elle cesse d'être un serif de journal.
+Plus Jakarta Sans garde l'interface, les libellés et **tous les montants** — Fraunces
+n'aligne pas les colonnes de chiffres, et la lisibilité d'un montant ne se négocie pas.
+
+**Les pastilles teintées.** Chaque outil et chaque zone d'écran porte une couleur qui ne
+change pas d'une page à l'autre (`PastilleIcone`, sept teintes). C'est la version honnête
+des émoticônes : même fonction de repère, sans le registre enfantin ni le rendu qui varie
+selon le système.
 
 Une règle porte l'essentiel du registre : **l'accent ne décore jamais, il désigne.** La
 seule surface colorée d'un écran est la carte du chiffre principal. Partout ailleurs, le

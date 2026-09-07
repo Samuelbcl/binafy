@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { AjoutActif } from '@/components/patrimoine/ajout-actif';
+import { ListeActifs } from '@/components/patrimoine/liste-actifs';
 import { CarteKPI } from '@/components/ui/carte-kpi';
-import { Montant, Pourcentage, Variation } from '@/components/ui/montant';
+import { Montant } from '@/components/ui/montant';
 import { chargerPatrimoine } from '@/lib/db/patrimoine';
 import {
   allocation,
-  LIBELLE_CLASSE,
   LIBELLE_PASSIF,
   patrimoineNet,
   totalActifs,
@@ -37,7 +37,7 @@ export default async function PatrimoinePage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-[28px] font-semibold tracking-tight">Patrimoine</h1>
+          <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Patrimoine</h1>
           <p className="mt-1.5 text-[14px] text-text-muted">
             Ta quote-part de détention, actifs et passifs confondus.
           </p>
@@ -45,7 +45,10 @@ export default async function PatrimoinePage() {
         {!demo && <AjoutActif />}
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      {/* Trois cartes empilées mangeaient un écran entier sur téléphone ;
+          deux par rang, et la dernière — la seule qui compte vraiment — seule
+          sur la sienne, en pleine largeur. */}
+      <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:grid-cols-3 sm:gap-4 sm:[&>*:last-child:nth-child(odd)]:col-span-1">
         <CarteKPI label="Actifs" valeurCents={total} />
         <CarteKPI label="Passifs" valeurCents={-totalPassifs(passifs)} />
         <CarteKPI label="Patrimoine net" valeurCents={net} accent />
@@ -68,69 +71,7 @@ export default async function PatrimoinePage() {
             />
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] text-[14px]">
-              <caption className="sr-only">Liste des actifs détenus</caption>
-              <thead>
-                <tr className="border-y border-border text-left text-[12px] text-text-muted">
-                  <th scope="col" className="px-5 py-2.5 font-medium sm:px-6">Actif</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Type</th>
-                  <th scope="col" className="px-3 py-2.5 text-right font-medium">Répartition</th>
-                  <th scope="col" className="px-3 py-2.5 text-right font-medium">Valeur</th>
-                  <th scope="col" className="px-5 py-2.5 text-right font-medium sm:px-6">
-                    Variation 1J
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {actifs.map((actif) => {
-                  const valeur = valeurQuotePart(actif);
-                  const part = total > 0 ? valeur / total : 0;
-
-                  return (
-                    <tr
-                      key={actif.id}
-                      className="h-14 border-b border-border/50 transition-colors last:border-0 hover:bg-surface-hover"
-                    >
-                      <td className="px-5 sm:px-6">
-                        <p className="font-medium">{actif.nom}</p>
-                        <p className="text-[12px] text-text-subtle">
-                          {actif.institution ?? 'Saisie manuelle'}
-                          {actif.quotePart < 100 && ` · ${actif.quotePart} % détenus`}
-                        </p>
-                      </td>
-                      <td className="px-3">
-                        <span className="inline-flex items-center rounded-full bg-surface-2 px-2.5 py-1 text-[11px] text-text-muted">
-                          {LIBELLE_CLASSE[actif.classe]}
-                        </span>
-                      </td>
-                      <td className="px-3">
-                        <div className="flex items-center justify-end gap-2">
-                          <div className="h-1 w-16 overflow-hidden rounded-full bg-surface-2">
-                            <div
-                              className="h-full rounded-full bg-primary"
-                              style={{ width: `${Math.max(2, part * 100)}%` }}
-                            />
-                          </div>
-                          <Pourcentage ratio={part} className="w-12 text-right text-[12px]" />
-                        </div>
-                      </td>
-                      <td className="px-3 text-right">
-                        <Montant cents={valeur} />
-                      </td>
-                      <td className="px-5 text-right sm:px-6">
-                        {actif.variationJourCents === 0 ? (
-                          <span className="text-[13px] text-text-subtle">—</span>
-                        ) : (
-                          <Variation cents={actif.variationJourCents} decimals={2} />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <ListeActifs actifs={actifs} total={total} />
         )}
       </section>
 

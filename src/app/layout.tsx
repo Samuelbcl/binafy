@@ -61,10 +61,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0B0A12' },
-    { media: '(prefers-color-scheme: light)', color: '#F6F6F8' },
-  ],
+  // Le sombre est le défaut quel que soit le réglage du système : la barre du
+  // navigateur suit donc le fond de l'application, pas la préférence du
+  // téléphone. Une barre blanche au-dessus d'un écran sombre trahit le thème.
+  themeColor: '#0B0A12',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

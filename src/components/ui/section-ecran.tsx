@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { PastilleIcone, type Teinte } from './pastille-icone';
@@ -31,6 +31,7 @@ export function SectionEcran({
   teinte,
   action,
   premiere = false,
+  ordre,
   children,
   className,
 }: {
@@ -44,6 +45,11 @@ export function SectionEcran({
   action?: ReactNode;
   /** La première zone d'un écran n'a pas de filet au-dessus d'elle. */
   premiere?: boolean;
+  /**
+   * Rang d'apparition. Les zones entrent l'une après l'autre, 70 ms d'écart :
+   * l'écran se construit de haut en bas au lieu de tomber d'un bloc.
+   */
+  ordre?: number;
   children: ReactNode;
   className?: string;
 }) {
@@ -51,8 +57,10 @@ export function SectionEcran({
     <section
       className={cn(
         premiere ? 'pt-0' : 'mt-10 border-t border-text-subtle/25 pt-8',
+        ordre !== undefined && 'apparait',
         className,
       )}
+      style={ordre !== undefined ? ({ '--delai': `${ordre * 70}ms` } as CSSProperties) : undefined}
     >
       <div className="mb-4 flex items-start justify-between gap-4">
         <div className="flex min-w-0 gap-3">

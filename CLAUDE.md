@@ -112,5 +112,6 @@ node scripts/verifier-fraicheur.mjs   # liste les valeurs fiscales périmées
 node scripts/captures-mobile.mjs captures   # capture chaque écran en 390×844
                                             # et signale les débordements
                                             # (serveur lancé, compte de test créé
-                                            #  puis supprimé)
+                                            #  puis supprimé) ; `--clair` pour
+                                            # le thème clair
 ```

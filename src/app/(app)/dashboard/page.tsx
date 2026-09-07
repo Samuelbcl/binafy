@@ -114,6 +114,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Où j’en suis"
+        ordre={1}
         icone={Gauge}
         teinte="menthe"
         sousTitre="Les trois chiffres qui résument ta situation, au-delà du montant total."
@@ -137,6 +138,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Comment ça évolue"
+        ordre={2}
         icone={LineChart}
         teinte="azur"
         sousTitre="Ce qui a changé depuis hier, et la trajectoire des derniers mois."
@@ -195,6 +197,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Ce que je possède"
+        ordre={3}
         icone={Wallet}
         teinte="violet"
         sousTitre="La répartition de tes actifs, et le détail de ce qui compose le total."
@@ -231,6 +234,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Ce que ça me coûterait"
+        ordre={4}
         icone={Landmark}
         teinte="ambre"
         sousTitre="L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà."
@@ -290,7 +294,7 @@ function PremierEcran() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header>
-        <h1 className="font-display text-[28px] font-semibold tracking-tight">
+        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">
           Ton patrimoine est vide
         </h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">

@@ -169,7 +169,7 @@ function BarreOnglets() {
   return (
     <nav
       aria-label="Navigation principale"
-      className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-around border-t border-border bg-surface px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
+      className="barre-onglets fixed inset-x-0 bottom-0 z-30 flex items-center justify-around px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
     >
       {ONGLETS.map(({ href, libelle, icone: Icone }) => (
         <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
@@ -190,7 +190,7 @@ function BoutonAjout() {
   return (
     <Link
       href="/patrimoine#ajouter"
-      className="fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 grid size-14 place-items-center rounded-full bg-action text-on-action shadow-lg transition-colors hover:bg-action-hover lg:hidden"
+      className="bouton-flottant fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 lg:hidden"
     >
       <Plus className="size-6" />
       <span className="sr-only">Ajouter un actif</span>
@@ -216,12 +216,21 @@ function OngletLien({
       href={href}
       aria-current={actif ? 'page' : undefined}
       className={cn(
-        'flex w-[60px] flex-col items-center gap-1 py-1 transition-colors',
+        'flex w-[64px] flex-col items-center gap-0.5 py-1 transition-colors',
         actif ? 'text-primary' : 'text-text-subtle hover:text-text',
       )}
     >
-      <Icone className="size-[21px]" />
-      <span className={cn('text-[10px]', actif ? 'font-bold' : 'font-medium')}>{libelle}</span>
+      {/* La gélule derrière l'icône dit « tu es ici » d'un coup d'œil ; la
+          couleur seule ne le faisait pas sur les petits pictogrammes. */}
+      <span
+        className={cn(
+          'grid h-7 w-12 place-items-center rounded-full transition-colors',
+          actif && 'onglet-actif',
+        )}
+      >
+        <Icone className="size-[20px]" />
+      </span>
+      <span className={cn('text-[10.5px]', actif ? 'font-bold' : 'font-medium')}>{libelle}</span>
     </Link>
   );
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 /**
@@ -22,25 +22,41 @@ import { cn } from '@/lib/cn';
  * télécharger.
  */
 function MotifVide({ className }: { className?: string }) {
+  // Un dégradé SVG porte un id ; deux états vides sur le même écran en
+  // auraient deux identiques et le second pointerait sur le premier.
+  const id = useId();
+  const degrade = `url(#${id})`;
+
   return (
     <svg
       viewBox="0 0 120 68"
       fill="none"
       aria-hidden
-      className={cn('h-16 w-auto text-primary', className)}
+      className={cn('h-16 w-auto', className)}
     >
+      {/*
+        Du violet à l'ambre, comme les titres. Le vide est le premier écran
+        d'un nouveau compte : s'il est gris, l'application a l'air éteinte
+        avant d'avoir commencé.
+      */}
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" style={{ stopColor: 'var(--primary)' }} />
+          <stop offset="100%" style={{ stopColor: 'var(--ambre)' }} />
+        </linearGradient>
+      </defs>
       {/*
         Trois arcs concentriques ouverts vers le haut, comme le symbole. Leur
         rayon est calé sur la hauteur du cadre : le plus large descend à y=62
         depuis la ligne y=26, soit exactement 36 de rayon. Un rayon plus grand
         sortirait du viewBox et l'arc serait rogné.
       */}
-      <g stroke="currentColor" strokeLinecap="round" strokeWidth="2">
-        <path d="M24 26a36 36 0 0 0 72 0" strokeOpacity="0.2" />
-        <path d="M36 26a24 24 0 0 0 48 0" strokeOpacity="0.34" />
-        <path d="M48 26a12 12 0 0 0 24 0" strokeOpacity="0.5" />
+      <g stroke={degrade} strokeLinecap="round" strokeWidth="2.5">
+        <path d="M24 26a36 36 0 0 0 72 0" strokeOpacity="0.35" />
+        <path d="M36 26a24 24 0 0 0 48 0" strokeOpacity="0.6" />
+        <path d="M48 26a12 12 0 0 0 24 0" strokeOpacity="0.9" />
       </g>
-      <circle cx="60" cy="18" r="7" fill="currentColor" fillOpacity="0.55" />
+      <circle cx="60" cy="18" r="7" fill={degrade} />
     </svg>
   );
 }

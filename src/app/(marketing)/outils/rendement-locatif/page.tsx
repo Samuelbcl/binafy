@@ -69,7 +69,7 @@ export default async function RendementLocatifPage({
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
       <header className="mb-8">
         <p className="label-kpi">Outil gratuit, sans compte</p>
-        <h1 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.5rem)] font-bold leading-tight tracking-[-0.02em]">
+        <h1 className="titre-degrade mt-3 font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em]">
           Ce que ce bien te rapportera vraiment
         </h1>
         <p className="mt-4 text-[16px] leading-relaxed text-text-muted">

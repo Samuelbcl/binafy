@@ -37,7 +37,7 @@ export default async function BudgetPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-[28px] font-semibold tracking-tight">Budget</h1>
+          <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Budget</h1>
           <p className="mt-1.5 text-[14px] text-text-muted">
             Une seule question : combien tu épargnes réellement chaque mois.
           </p>
@@ -247,7 +247,7 @@ function PremierImport() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <header>
-        <h1 className="font-display text-[28px] font-semibold tracking-tight">Budget</h1>
+        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Budget</h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">
           Importe un extrait bancaire et tu sauras ton taux d’épargne réel des douze derniers
           mois, sans le calculer à la main.

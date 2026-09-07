@@ -115,7 +115,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
         </div>
       </section>
 
-      <section className="rounded-[var(--radius-xl)] bg-primary p-6 text-on-primary sm:p-8">
+      <section className="carte-accent p-6 sm:p-8">
         <p className="text-[13px] opacity-75">Montant empruntable</p>
         <p className="chiffre-hero mt-2">
           <Montant cents={result.capaciteEmpruntCents} decimals={0} className="text-on-primary" />

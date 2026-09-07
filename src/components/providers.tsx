@@ -135,7 +135,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="data-theme"
-        defaultTheme="light"
+        defaultTheme="dark"
         enableSystem
         disableTransitionOnChange
       >

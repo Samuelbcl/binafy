@@ -3,10 +3,10 @@
 import { readFileSync, mkdirSync } from 'node:fs';
 import { chromium } from 'playwright';
 
-// `--sombre` capture le meme parcours en theme sombre. Le sombre n'est pas une
-// variante secondaire qu'on regarde une fois : c'est la moitie de l'interface,
-// et sans ces captures ses defauts ne se voient jamais.
-const SOMBRE = process.argv.includes('--sombre');
+// `--clair` capture le meme parcours en theme clair. Le sombre est le defaut
+// de l'application ; le clair reste la moitie de l'interface, et sans ces
+// captures ses defauts ne se voient jamais.
+const CLAIR = process.argv.includes('--clair');
 const SORTIE = process.argv.filter((a) => !a.startsWith('--'))[2] ?? 'captures';
 mkdirSync(SORTIE, { recursive: true });
 
@@ -124,13 +124,13 @@ try {
     isMobile: true,
     hasTouch: true,
     locale: 'fr-BE',
-    colorScheme: SOMBRE ? 'dark' : 'light',
+    colorScheme: CLAIR ? 'light' : 'dark',
   });
   await contexte.addCookies(cookies);
-  // Le theme par defaut de l'app est le clair, meme quand le systeme est
-  // sombre : `colorScheme` ne suffit donc pas, il faut ecrire le choix que
+  // Le theme par defaut de l'app est le sombre, meme quand le systeme est
+  // clair : `colorScheme` ne suffit donc pas, il faut ecrire le choix que
   // next-themes relit au demarrage.
-  if (SOMBRE) await contexte.addInitScript(() => localStorage.setItem('theme', 'dark'));
+  if (CLAIR) await contexte.addInitScript(() => localStorage.setItem('theme', 'light'));
   const page = await contexte.newPage();
 
   const debordements = [];
@@ -169,7 +169,7 @@ try {
     if (trop) debordements.push([chemin, trop]);
 
     await page.screenshot({
-      path: `${SORTIE}/${nom}${SOMBRE ? '-sombre' : ''}.png`,
+      path: `${SORTIE}/${nom}${CLAIR ? '-clair' : ''}.png`,
       fullPage: true,
     });
     console.log(`  ${nom} <- ${chemin}`);

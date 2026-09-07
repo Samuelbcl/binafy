@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { formatEUR, formatPercent } from '@/lib/money';
@@ -36,6 +36,50 @@ export type MetriqueHero = {
   /** Ce que ce chiffre veut dire, en une phrase. Affichée sous le montant. */
   precision?: string;
 };
+
+/**
+ * Le chiffre monte jusqu'à sa valeur au lieu d'y être déjà.
+ *
+ * Sept dixièmes de seconde, en décélérant. Ce n'est pas un effet : c'est ce
+ * qui fait qu'on *regarde* le chiffre au lieu de le voir. Au premier montage il
+ * part de zéro ; quand on change de lecture — brut, net, net d'impôt — il va
+ * de l'ancienne valeur à la nouvelle, et la différence entre les deux se voit
+ * passer. Coupé pour qui a demandé moins de mouvement : le chiffre est alors
+ * posé d'un coup, comme avant.
+ *
+ * Le premier rendu affiche la valeur finale — c'est ce que le serveur a
+ * envoyé, et l'hydratation exige que le client le reproduise. L'animation ne
+ * commence qu'après, pendant que la carte est encore en train d'apparaître.
+ */
+function useCompteur(cible: number): number {
+  const [affiche, setAffiche] = useState(cible);
+  const precedent = useRef<number | null>(null);
+
+  useEffect(() => {
+    const depart = precedent.current ?? 0;
+    precedent.current = cible;
+
+    const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduit || depart === cible) {
+      setAffiche(cible);
+      return;
+    }
+
+    const debut = performance.now();
+    const duree = 720;
+    let trame = 0;
+    const pas = (maintenant: number) => {
+      const progression = Math.min(1, (maintenant - debut) / duree);
+      const eased = 1 - (1 - progression) ** 3;
+      setAffiche(Math.round(depart + (cible - depart) * eased));
+      if (progression < 1) trame = requestAnimationFrame(pas);
+    };
+    trame = requestAnimationFrame(pas);
+    return () => cancelAnimationFrame(trame);
+  }, [cible]);
+
+  return affiche;
+}
 
 export function CarteHero({
   label,
@@ -78,12 +122,12 @@ export function CarteHero({
   const choisie = metriques?.find((m) => m.cle === cleChoisie) ?? metriques?.[0];
 
   const libelle = choisie?.label ?? label;
-  const montantCents = choisie?.valeurCents ?? valeurCents;
+  const montantCents = useCompteur(choisie?.valeurCents ?? valeurCents);
 
   return (
     <section
       className={cn(
-        'carte-accent p-6 sm:p-8',
+        'carte-accent apparait p-6 sm:p-8',
         className,
       )}
     >
