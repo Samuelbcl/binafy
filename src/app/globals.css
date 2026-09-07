@@ -403,6 +403,11 @@
     transform: translateY(-1px);
   }
 
+  /* Au toucher, la carte s'enfonce d'un rien : le doigt sait qu'il a touche. */
+  .carte-interactive:active {
+    transform: scale(0.985);
+  }
+
   /*
    * Boutons. Le look vit ici, la mise en page reste sur l'élément : on y ajoute
    * `w-full`, `gap-2` ou une icône sans toucher au style.

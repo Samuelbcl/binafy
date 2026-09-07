@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
-import { AlertTriangle, Info } from 'lucide-react';
+import type { CSSProperties } from 'react';
+import { AlertTriangle, Bell, Building2, Coins, Info, Landmark, PiggyBank } from 'lucide-react';
+import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
 import { Jauge } from '@/components/ui/jauge';
 import { Montant } from '@/components/ui/montant';
@@ -128,12 +130,15 @@ export default async function FiscalitePage() {
       </header>
 
       {/* 1 — Position fiscale de l'année */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Ma position fiscale</h2>
-          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
-            Ce que l’État prélèvera sur tes revenus de cette année, et ce qu’il te laisse.
-          </p>
+      <section className="space-y-4 apparait" style={{ '--delai': '70ms' } as CSSProperties}>
+        <div className="flex gap-3">
+          <PastilleIcone icone={Building2} teinte="violet" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Ma position fiscale</h2>
+            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+              Ce que l’État prélèvera sur tes revenus de cette année, et ce qu’il te laisse.
+            </p>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <CarteKPITexte
@@ -170,12 +175,15 @@ export default async function FiscalitePage() {
       </section>
 
       {/* 2 — Impôt latent */}
-      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
-        <div>
-          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Impôt latent</h2>
-          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
-            L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà.
-          </p>
+      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '140ms' } as CSSProperties}>
+        <div className="flex gap-3">
+          <PastilleIcone icone={Landmark} teinte="ambre" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Impôt latent</h2>
+            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+              L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà.
+            </p>
+          </div>
         </div>
         <div className="carte p-5 sm:p-6">
           <p className="text-[13px] leading-relaxed text-text-muted">
@@ -245,12 +253,15 @@ export default async function FiscalitePage() {
       </section>
 
       {/* 3 — Alertes */}
-      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
-        <div>
-          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Alertes</h2>
-          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
-            Ce qui mérite ton attention avant la fin de l’année.
-          </p>
+      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '210ms' } as CSSProperties}>
+        <div className="flex gap-3">
+          <PastilleIcone icone={Bell} teinte="rose" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Alertes</h2>
+            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+              Ce qui mérite ton attention avant la fin de l’année.
+            </p>
+          </div>
         </div>
         <ul className="space-y-3">
           {alertes.map((alerte) => (
@@ -271,12 +282,15 @@ export default async function FiscalitePage() {
 
       {/* 4 — Revenus mobiliers */}
       {interetsEpargne && (
-        <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
-          <div>
-          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Revenus mobiliers</h2>
-          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
-            Intérêts et dividendes encaissés, et ce que tu peux récupérer.
-          </p>
+        <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '280ms' } as CSSProperties}>
+          <div className="flex gap-3">
+          <PastilleIcone icone={Coins} teinte="menthe" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Revenus mobiliers</h2>
+            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+              Intérêts et dividendes encaissés, et ce que tu peux récupérer.
+            </p>
+          </div>
         </div>
           <PanneauExplication
             calcul={interetsEpargne}
@@ -287,12 +301,15 @@ export default async function FiscalitePage() {
       )}
 
       {/* 5 — Enveloppes d'épargne fiscale */}
-      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
-        <div>
-          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Enveloppes d’épargne</h2>
-          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
-            Les dispositifs qui réduisent ton impôt, et jusqu’où tu peux les remplir.
-          </p>
+      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '350ms' } as CSSProperties}>
+        <div className="flex gap-3">
+          <PastilleIcone icone={PiggyBank} teinte="lagune" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Enveloppes d’épargne</h2>
+            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+              Les dispositifs qui réduisent ton impôt, et jusqu’où tu peux les remplir.
+            </p>
+          </div>
         </div>
 
         <div className="carte p-5 sm:p-6">

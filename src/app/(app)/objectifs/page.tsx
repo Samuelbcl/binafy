@@ -127,7 +127,7 @@ export default async function ObjectifsPage() {
               />
             </div>
 
-            <dl className="mt-4 grid gap-4 sm:grid-cols-3">
+            <dl className="mt-4 grid grid-cols-3 gap-3 sm:gap-4">
               <div>
                 <dt className="label-kpi">Atteint</dt>
                 <dd className="mt-1">

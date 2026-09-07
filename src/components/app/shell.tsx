@@ -356,6 +356,13 @@ export function AppShell({
             <span className="sr-only">Ouvrir le menu</span>
           </button>
 
+          {/* La marque sur chaque ecran mobile. La barre laterale la porte a
+              partir de lg ; en dessous, sans elle, l'en-tete n'etait qu'une
+              rangee d'icones qui ne disait pas ou l'on etait. */}
+          <div className="lg:hidden">
+            <Logo />
+          </div>
+
           <div className="ml-auto flex items-center gap-1">
             <BoutonDiscretion />
             <BoutonTheme />
