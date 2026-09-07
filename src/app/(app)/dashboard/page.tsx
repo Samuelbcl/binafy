@@ -22,6 +22,7 @@ import {
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
 import { EtatVide } from '@/components/ui/etat-vide';
+import { SectionEcran } from '@/components/ui/section-ecran';
 
 export const metadata: Metadata = {
   title: 'Vue d’ensemble',
@@ -73,9 +74,9 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto max-w-6xl">
       {demo && (
-        <p className="text-[13px] text-text-muted">Bonsoir {PROFIL_DEMO.prenom}</p>
+        <p className="mb-4 text-[13px] text-text-muted">Bonsoir {PROFIL_DEMO.prenom}</p>
       )}
 
       <CarteHero
@@ -111,6 +112,11 @@ export default async function DashboardPage() {
         }
       />
 
+      <SectionEcran
+        titre="Où j’en suis"
+        sousTitre="Les trois chiffres qui résument ta situation, au-delà du montant total."
+        className="mt-8"
+      >
       <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
         <CarteKPITexte
           label="Taux d’épargne lissé"
@@ -124,17 +130,13 @@ export default async function DashboardPage() {
           valeurCents={revenusPassifs12Mois}
           precision="Intérêts d’épargne attendus sur 12 mois, avant précompte"
         />
-        <CarteKPI
-          label="Impôt latent"
-          valeurCents={impotLatent.result.impotLatentCents}
-          precision={`${formatPercent(
-            net > 0 ? impotLatent.result.impotLatentCents / net : 0,
-          )} du patrimoine — plus-values et TOB de sortie sur ${
-            impotLatent.result.lignes.length
-          } positions`}
-        />
       </div>
+      </SectionEcran>
 
+      <SectionEcran
+        titre="Comment ça évolue"
+        sousTitre="Ce qui a changé depuis hier, et la trajectoire des derniers mois."
+      >
       {historique.length > 1 ? (
         <CourbePatrimoine historique={historique} />
       ) : (
@@ -147,12 +149,9 @@ export default async function DashboardPage() {
         </section>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
-        <DonutAllocation allocation={allocation(actifs)} totalCents={totalActifs(actifs)} />
-
-        <section className="carte p-5 sm:p-6">
+      <section className="carte mt-4 p-5 sm:p-6">
           <div className="flex items-baseline justify-between gap-3">
-            <h2 className="font-display text-[17px] font-semibold">Ce qui a bougé</h2>
+            <h3 className="text-[15px] font-bold">Ce qui a bougé aujourd’hui</h3>
             <Link
               href="/patrimoine"
               className="inline-flex items-center gap-1 text-[12px] text-text-muted transition-colors hover:text-primary"
@@ -187,12 +186,18 @@ export default async function DashboardPage() {
               texte="Dès qu’une cotation change ou qu’un import de transactions arrive, les variations de la journée s’affichent ici — la plus forte en premier."
             />
           )}
-        </section>
-      </div>
+      </section>
+      </SectionEcran>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <SectionEcran
+        titre="Ce que je possède"
+        sousTitre="La répartition de tes actifs, et le détail de ce qui compose le total."
+      >
+      <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
+        <DonutAllocation allocation={allocation(actifs)} totalCents={totalActifs(actifs)} />
+
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px] font-semibold">Actifs et passifs</h2>
+          <h3 className="text-[15px] font-bold">Actifs et passifs</h3>
           <dl className="mt-4 space-y-3 text-[14px]">
             <div className="flex items-center justify-between">
               <dt className="text-text-muted">Total des actifs</dt>
@@ -215,12 +220,28 @@ export default async function DashboardPage() {
           </dl>
         </section>
 
-        <PanneauExplication
-          calcul={impotLatent}
-          titre="D’où vient l’impôt latent"
-          className="self-start"
-        />
       </div>
+      </SectionEcran>
+
+      <SectionEcran
+        titre="Ce que ça me coûterait"
+        sousTitre="L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà."
+      >
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,14rem)_1fr]">
+          <CarteKPI
+            label="Impôt latent"
+            valeurCents={impotLatent.result.impotLatentCents}
+            precision={`${formatPercent(
+              net > 0 ? impotLatent.result.impotLatentCents / net : 0,
+            )} de ton patrimoine, sur ${impotLatent.result.lignes.length} positions`}
+          />
+          <PanneauExplication
+            calcul={impotLatent}
+            titre="Voir le calcul, ligne par ligne"
+            className="self-start"
+          />
+        </div>
+      </SectionEcran>
     </div>
   );
 }

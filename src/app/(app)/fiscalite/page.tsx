@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { AlertTriangle, Info } from 'lucide-react';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
+import { Jauge } from '@/components/ui/jauge';
 import { Montant } from '@/components/ui/montant';
 import {
   MentionInformative,
@@ -18,7 +19,7 @@ import { calculerIPP } from '@/lib/tax/ipp';
 import { TAX_PARAMS_2026, parametresNonVerifies } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
 import { calculerPrecompteEpargneReglementee } from '@/lib/tax/precompte';
-import { parametresARevoir } from '@/lib/tax/types';
+import { parametresARevoir, getCents } from '@/lib/tax/types';
 
 export const metadata: Metadata = {
   title: 'Fiscalité',
@@ -84,6 +85,7 @@ export default async function FiscalitePage() {
   );
 
   const nonVerifies = parametresNonVerifies(params);
+  const exonerationAnnuelleCents = getCents(params, 'plus_values.exoneration_annuelle');
   // La date du rendu, pas une horloge dans le calcul : les fonctions fiscales
   // restent pures, c'est la page qui sait quel jour on est.
   const aRevoirMaintenant = parametresARevoir(
@@ -115,8 +117,8 @@ export default async function FiscalitePage() {
   ];
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <header>
+    <div className="mx-auto max-w-5xl">
+      <header className="mb-8">
         <h1 className="font-display text-[28px] font-semibold tracking-tight">Fiscalité</h1>
         <p className="mt-1.5 text-[14px] text-text-muted">
           Ta position pour l’année {params.annee} — {PROFIL_DEMO.commune}, additionnels
@@ -126,7 +128,12 @@ export default async function FiscalitePage() {
 
       {/* 1 — Position fiscale de l'année */}
       <section className="space-y-4">
-        <h2 className="label-kpi">Ma position fiscale</h2>
+        <div>
+          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Ma position fiscale</h2>
+          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            Ce que l’État prélèvera sur tes revenus de cette année, et ce qu’il te laisse.
+          </p>
+        </div>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <CarteKPITexte
             label="Taux marginal"
@@ -144,18 +151,31 @@ export default async function FiscalitePage() {
             valeurCents={ipp.result.totalCents}
             precision="Fédéral et additionnels communaux"
           />
-          <CarteKPI
-            label="Exonération plus-values restante"
-            valeurCents={impotLatent.result.exonerationRestanteCents}
-            precision="Par personne et par an, non reportable"
+          <Jauge
+            label="Exonération plus-values"
+            valeurCents={
+              exonerationAnnuelleCents - impotLatent.result.exonerationRestanteCents
+            }
+            cibleCents={exonerationAnnuelleCents}
+            inverse
+            precision={`Consommée cette année. Il t’en reste ${formatEUR(
+              impotLatent.result.exonerationRestanteCents,
+              { decimals: 0 },
+            )} avant que la taxe ne s’applique.`}
+            className="col-span-2 lg:col-span-1"
           />
         </div>
         <PanneauExplication calcul={ipp} titre="D’où vient ton taux marginal" />
       </section>
 
       {/* 2 — Impôt latent */}
-      <section className="space-y-4">
-        <h2 className="label-kpi">Impôt latent</h2>
+      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
+        <div>
+          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Impôt latent</h2>
+          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà.
+          </p>
+        </div>
         <div className="carte p-5 sm:p-6">
           <p className="text-[13px] leading-relaxed text-text-muted">
             Ce que tu paierais si tu liquidais tout aujourd’hui, ligne par ligne. Partout
@@ -224,8 +244,13 @@ export default async function FiscalitePage() {
       </section>
 
       {/* 3 — Alertes */}
-      <section className="space-y-4">
-        <h2 className="label-kpi">Alertes</h2>
+      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
+        <div>
+          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Alertes</h2>
+          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            Ce qui mérite ton attention avant la fin de l’année.
+          </p>
+        </div>
         <ul className="space-y-3">
           {alertes.map((alerte) => (
             <li key={alerte.titre} className="carte flex gap-3 p-4">
@@ -245,8 +270,13 @@ export default async function FiscalitePage() {
 
       {/* 4 — Revenus mobiliers */}
       {interetsEpargne && (
-        <section className="space-y-4">
-          <h2 className="label-kpi">Revenus mobiliers</h2>
+        <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
+          <div>
+          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Revenus mobiliers</h2>
+          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            Intérêts et dividendes encaissés, et ce que tu peux récupérer.
+          </p>
+        </div>
           <PanneauExplication
             calcul={interetsEpargne}
             titre="Intérêts de ton compte d’épargne réglementé"
@@ -256,8 +286,13 @@ export default async function FiscalitePage() {
       )}
 
       {/* 5 — Enveloppes d'épargne fiscale */}
-      <section className="space-y-4">
-        <h2 className="label-kpi">Enveloppes d’épargne</h2>
+      <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8">
+        <div>
+          <h2 className="text-[17px] font-bold tracking-[-0.01em]">Enveloppes d’épargne</h2>
+          <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            Les dispositifs qui réduisent ton impôt, et jusqu’où tu peux les remplir.
+          </p>
+        </div>
 
         <div className="carte p-5 sm:p-6">
           <h3 className="font-display text-[17px] font-semibold">Épargne-pension</h3>
@@ -363,8 +398,8 @@ export default async function FiscalitePage() {
       </section>
 
       {/* Transparence sur l'état des paramètres fiscaux */}
-      <section className="carte p-5 sm:p-6">
-        <h2 className="font-display text-[17px] font-semibold">État des paramètres fiscaux</h2>
+      <section className="carte mt-10 p-5 sm:p-6">
+        <h2 className="text-[17px] font-bold tracking-[-0.01em]">État des paramètres fiscaux</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           {params.parametres.length} paramètres chargés pour {params.annee}, dont{' '}
           <span className="font-medium text-warning">{nonVerifies.length}</span> encore à
