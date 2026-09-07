@@ -1,6 +1,7 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { formatEUR, formatPercent } from '@/lib/money';
 import { useDiscretion } from '@/components/providers';
@@ -17,9 +18,26 @@ import { Montant } from './montant';
  * La variation n'est pas colorée en vert ou en rouge ici : sur un aplat saturé
  * ces couleurs deviennent illisibles, et le signe suffit à lire le sens.
  */
+
+/**
+ * Une lecture possible du même patrimoine.
+ *
+ * Brut, net de dettes, net d'impôt latent : trois chiffres également vrais qui
+ * répondent à trois questions différentes. Les empiler tous les trois en gros
+ * ne renseigne personne ; on en montre un, et on laisse choisir lequel.
+ */
+export type MetriqueHero = {
+  cle: string;
+  label: string;
+  valeurCents: number;
+  /** Ce que ce chiffre veut dire, en une phrase. Affichée sous le montant. */
+  precision?: string;
+};
+
 export function CarteHero({
   label,
   valeurCents,
+  metriques,
   decimals = 2,
   variationCents,
   ratioVariation,
@@ -29,8 +47,15 @@ export function CarteHero({
   children,
   className,
 }: {
+  /** Libellé du chiffre. Ignoré si `metriques` est fourni. */
   label: string;
+  /** Valeur affichée. Ignorée si `metriques` est fourni. */
   valeurCents: number;
+  /**
+   * Plusieurs lectures du même chiffre. La première est affichée par défaut ;
+   * le libellé devient alors un sélecteur.
+   */
+  metriques?: readonly MetriqueHero[];
   decimals?: number;
   /** Variation absolue sur la période, en centimes. */
   variationCents?: number;
@@ -46,6 +71,11 @@ export function CarteHero({
   className?: string;
 }) {
   const { discret } = useDiscretion();
+  const [cleChoisie, setCleChoisie] = useState(metriques?.[0]?.cle ?? '');
+  const choisie = metriques?.find((m) => m.cle === cleChoisie) ?? metriques?.[0];
+
+  const libelle = choisie?.label ?? label;
+  const montantCents = choisie?.valeurCents ?? valeurCents;
 
   return (
     <section
@@ -55,7 +85,35 @@ export function CarteHero({
       )}
     >
       <div className="flex items-start justify-between gap-4">
-        <p className="text-[13px] opacity-75">{label}</p>
+        {metriques && metriques.length > 1 ? (
+          // Un <select> natif plutôt qu'un menu maison : il s'ouvre en
+          // sélecteur du système sur mobile, se pilote au clavier sans code, et
+          // annonce son état aux lecteurs d'écran. Les options portent leurs
+          // propres couleurs — la liste est peinte par le système, sur fond
+          // clair, où du blanc sur blanc serait invisible.
+          <label className="group relative -m-1 inline-flex items-center gap-1 p-1">
+            <span className="text-[13px] opacity-75">{libelle}</span>
+            <ChevronDown aria-hidden className="size-3.5 opacity-75" />
+            <select
+              aria-label="Choisir le chiffre affiché"
+              value={cleChoisie}
+              onChange={(e) => setCleChoisie(e.target.value)}
+              className="absolute inset-0 cursor-pointer opacity-0"
+            >
+              {metriques.map((m) => (
+                <option
+                  key={m.cle}
+                  value={m.cle}
+                  style={{ color: 'var(--text)', background: 'var(--surface)' }}
+                >
+                  {m.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <p className="text-[13px] opacity-75">{libelle}</p>
+        )}
         {etat && (
           <span className="puce bg-on-primary/15 text-on-primary">{etat}</span>
         )}
@@ -63,7 +121,7 @@ export function CarteHero({
 
       <div className="mt-2 sm:flex sm:items-end sm:justify-between sm:gap-8">
         <h1 className="chiffre-hero">
-          <Montant cents={valeurCents} decimals={decimals} className="text-on-primary" />
+          <Montant cents={montantCents} decimals={decimals} className="text-on-primary" />
         </h1>
         {/* Sous 640px le chiffre secondaire passe sous le principal, sur une
             seule ligne libelle-valeur : empile a droite, il donnait deux blocs
@@ -96,6 +154,12 @@ export function CarteHero({
             </span>
           )}
         </div>
+      )}
+
+      {choisie?.precision && (
+        <p className="mt-4 max-w-lg text-[13px] leading-relaxed opacity-75">
+          {choisie.precision}
+        </p>
       )}
 
       {children}

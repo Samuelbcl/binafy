@@ -81,15 +81,34 @@ export default async function DashboardPage() {
       <CarteHero
         label="Patrimoine net"
         valeurCents={net}
+        metriques={[
+          {
+            cle: 'net',
+            label: 'Patrimoine net',
+            valeurCents: net,
+            precision:
+              'Ce que tu possèdes moins ce que tu dois. C’est le chiffre qui compte au quotidien.',
+          },
+          {
+            cle: 'brut',
+            label: 'Patrimoine brut',
+            valeurCents: totalActifs(actifs),
+            precision:
+              'Tes actifs seuls, dettes non déduites. C’est ce que la plupart des applications affichent sans le dire.',
+          },
+          {
+            cle: 'net_impot',
+            label: 'Net d’impôt latent',
+            valeurCents: net - impotLatent.result.impotLatentCents,
+            precision:
+              'Ce qu’il te resterait après taxe si tu vendais tout aujourd’hui. Personne d’autre ne te le montre.',
+          },
+        ]}
         variationCents={variation}
         ratioVariation={variation === 0 ? undefined : ratioVariation}
         mentionVariation={
           variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'
         }
-        aCote={{
-          label: 'Net d’impôt latent',
-          valeurCents: net - impotLatent.result.impotLatentCents,
-        }}
       />
 
       <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
