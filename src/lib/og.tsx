@@ -70,11 +70,22 @@ export function imageOG({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 26,
-              fontWeight: 700,
             }}
           >
-            N
+            {/* Le nid, en trait — Satori rend le SVG inline, pas les composants. */}
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={COULEURS.fond}
+              strokeWidth="1.9"
+              strokeLinecap="round"
+            >
+              <path d="M3 11.5a9 9 0 0 0 18 0" />
+              <path d="M6.5 11.5a5.5 5.5 0 0 0 11 0" />
+              <circle cx="12" cy="8" r="2.4" fill={COULEURS.fond} stroke="none" />
+            </svg>
           </div>
           <div style={{ color: COULEURS.texte, fontSize: 26, fontWeight: 600 }}>Nestor</div>
         </div>
@@ -168,11 +179,21 @@ export function imageOGSimple({ titre, sousTitre }: { titre: string; sousTitre: 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 26,
-              fontWeight: 700,
             }}
           >
-            N
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={COULEURS.fond}
+              strokeWidth="1.9"
+              strokeLinecap="round"
+            >
+              <path d="M3 11.5a9 9 0 0 0 18 0" />
+              <path d="M6.5 11.5a5.5 5.5 0 0 0 11 0" />
+              <circle cx="12" cy="8" r="2.4" fill={COULEURS.fond} stroke="none" />
+            </svg>
           </div>
           <div style={{ color: COULEURS.texte, fontSize: 26, fontWeight: 600 }}>Nestor</div>
         </div>

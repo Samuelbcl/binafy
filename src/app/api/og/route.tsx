@@ -1,12 +1,16 @@
 import type { NextRequest } from 'next/server';
 import { guideParSlug } from '@/lib/apprendre/guides';
 import { calculerInteretsComposesNets } from '@/lib/finance/interets-composes';
+import { calculerCapaciteEmprunt } from '@/lib/finance/credit';
+import { calculerTauxEpargne } from '@/lib/finance/epargne';
 import { calculerRendementLocatif } from '@/lib/finance/locatif';
 import { calculerProjectionPatrimoine } from '@/lib/finance/projection';
 import { booleenDepuisUrl, choixDepuisUrl, nombreDepuisUrl } from '@/lib/etat-url';
 import { euros, formatEUR, formatPercent } from '@/lib/money';
 import { imageOG, imageOGSimple } from '@/lib/og';
 import { calculerCashNecessaire, coutOrdreAchat, type TypeAchat } from '@/lib/tax/enregistrement';
+import { CAISSES, calculerCotisationsSociales } from '@/lib/tax/independant';
+import { calculerImpotRevenuComplementaire } from '@/lib/tax/ipp';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
 import { REGIONS } from '@/lib/tax/types';
 
@@ -136,6 +140,78 @@ export function GET(request: NextRequest) {
           calcul.result.anneeIndependance !== null
             ? `La rente couvrirait tes dépenses actuelles au bout de ${calcul.result.anneeIndependance} ans.`
             : undefined,
+      });
+    }
+
+    if (outil === 'capacite-emprunt') {
+      const duree = nombreDepuisUrl(p, 'duree', 25);
+      const calcul = calculerCapaciteEmprunt(
+        {
+          revenusNetsMensuelsCents: euros(nombreDepuisUrl(p, 'revenus', 2_400)),
+          chargesMensuellesCents: euros(nombreDepuisUrl(p, 'charges', 0)),
+          dureeAnnees: duree,
+          tauxAnnuelPourcent: nombreDepuisUrl(p, 'taux', 3.4),
+          loyerAttenduMensuelCents: euros(nombreDepuisUrl(p, 'loyer', 0)),
+        },
+        TAX_PARAMS_2026,
+      );
+
+      return imageOG({
+        surtitre: 'Montant empruntable',
+        valeur: formatEUR(calcul.result.capaciteEmpruntCents, { decimals: 0 }),
+        legende: `Sur ${duree} ans, soit ${formatEUR(calcul.result.mensualiteMaxCents, { decimals: 0 })} par mois.`,
+        precision: calcul.result.resteAVivreInsuffisant
+          ? 'Attention : le reste à vivre passe sous le plancher exigé par les banques.'
+          : `Il resterait ${formatEUR(calcul.result.resteAVivreCents, { decimals: 0 })} par mois pour vivre.`,
+      });
+    }
+
+    if (outil === 'budget') {
+      const calcul = calculerTauxEpargne([
+        {
+          mois: '2026-01',
+          revenusCents: euros(nombreDepuisUrl(p, 'revenus', 2_400)),
+          depensesCents: euros(nombreDepuisUrl(p, 'depenses', 1_800)),
+          investiCents: euros(nombreDepuisUrl(p, 'investi', 200)),
+        },
+      ]);
+
+      return imageOG({
+        surtitre: 'Taux d’épargne',
+        valeur: formatPercent(calcul.result.tauxEpargne),
+        legende: `Dont ${formatPercent(calcul.result.tauxInvestissement)} réellement investi — épargner et investir ne sont pas la même chose.`,
+        precision: `${formatEUR(calcul.result.nonDepenseCents, { decimals: 0 })} mis de côté chaque mois.`,
+      });
+    }
+
+    if (outil === 'independant-complementaire') {
+      const revenuCents = euros(nombreDepuisUrl(p, 'revenu', 8_000));
+      const cotisations = calculerCotisationsSociales(
+        {
+          revenuNetImposableCents: revenuCents,
+          statut: 'complementaire',
+          caisse: choixDepuisUrl(p, 'caisse', CAISSES, 'acerta'),
+        },
+        TAX_PARAMS_2026,
+      );
+      const impot = calculerImpotRevenuComplementaire(
+        {
+          revenuPrincipalCents: euros(nombreDepuisUrl(p, 'salaire', 32_000)),
+          revenuComplementaireCents: Math.max(0, revenuCents - cotisations.result.totalCents),
+          additionnelsCommunauxPourcent: nombreDepuisUrl(p, 'communaux', 8.5),
+        },
+        TAX_PARAMS_2026,
+      );
+      const netCents = Math.max(
+        0,
+        revenuCents - cotisations.result.totalCents - impot.result.impotSupplementaireCents,
+      );
+
+      return imageOG({
+        surtitre: 'Ce qu’il reste vraiment',
+        valeur: formatEUR(netCents, { decimals: 0 }),
+        legende: `Sur ${formatEUR(revenuCents, { decimals: 0 })} de revenu d’activité, cotisations et impôt déduits.`,
+        precision: `L’impôt à lui seul en prend ${formatEUR(impot.result.impotSupplementaireCents, { decimals: 0 })} : le complément est taxé dans la tranche du dessus.`,
       });
     }
 

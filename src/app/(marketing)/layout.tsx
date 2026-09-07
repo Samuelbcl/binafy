@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { MarqueNestor } from '@/components/ui/marque';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -6,13 +7,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <header className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <span
-              aria-hidden
-              className="grid size-8 place-items-center rounded-[10px] bg-primary font-display text-[15px] font-bold text-on-primary"
-            >
-              N
-            </span>
-            <span className="font-display text-[17px] font-semibold tracking-tight">Nestor</span>
+            <MarqueNestor />
           </Link>
           <nav aria-label="Navigation du site" className="flex items-center gap-1.5">
             <Link

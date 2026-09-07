@@ -24,6 +24,7 @@ import { useState } from 'react';
 import { useDiscretion, useEstMonte } from '@/components/providers';
 import { cn } from '@/lib/cn';
 import { supabaseNavigateur } from '@/lib/db/client';
+import { MarqueNestor } from '@/components/ui/marque';
 
 const NAVIGATION = [
   { href: '/dashboard', libelle: 'Vue d’ensemble', icone: LayoutDashboard },
@@ -77,13 +78,7 @@ function BoutonTheme() {
 function Logo() {
   return (
     <Link href="/dashboard" className="flex items-center gap-2.5">
-      <span
-        aria-hidden
-        className="grid size-8 place-items-center rounded-[10px] bg-primary font-display text-[15px] font-bold text-on-primary"
-      >
-        N
-      </span>
-      <span className="font-display text-[17px] font-semibold tracking-tight">Nestor</span>
+      <MarqueNestor />
     </Link>
   );
 }

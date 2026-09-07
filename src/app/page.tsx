@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { OUTILS } from '@/lib/outils';
+import { MarqueNestor } from '@/components/ui/marque';
 
 export const metadata: Metadata = {
   title: 'Nestor — Le patrimoine, version belge',
@@ -43,13 +44,7 @@ export default function AccueilPage() {
 
       <header className="max-w-3xl">
         <div className="flex items-center gap-2.5">
-          <span
-            aria-hidden
-            className="grid size-8 place-items-center rounded-[10px] bg-primary font-display text-[15px] font-bold text-on-primary"
-          >
-            N
-          </span>
-          <span className="font-display text-[17px] font-semibold tracking-tight">Nestor</span>
+          <MarqueNestor />
         </div>
 
         <h1 className="mt-10 font-display text-[clamp(2.25rem,6vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em]">

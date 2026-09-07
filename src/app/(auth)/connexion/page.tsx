@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FormulaireConnexion } from '@/components/auth/formulaire-connexion';
 import { modeDemo } from '@/lib/env';
+import { MarqueNestor } from '@/components/ui/marque';
 
 export const metadata: Metadata = {
   title: 'Connexion',
@@ -35,13 +36,7 @@ export default async function ConnexionPage({ searchParams }: PageProps<'/connex
     <div className="flex min-h-screen flex-col items-center justify-center px-5 py-12">
       <div className="w-full max-w-sm">
         <Link href="/" className="flex items-center justify-center gap-2.5">
-          <span
-            aria-hidden
-            className="grid size-9 place-items-center rounded-[11px] bg-primary font-display text-[16px] font-bold text-on-primary"
-          >
-            N
-          </span>
-          <span className="font-display text-[19px] font-semibold tracking-tight">Nestor</span>
+          <MarqueNestor taille="grande" />
         </Link>
 
         <h1 className="mt-8 text-center font-display text-[24px] font-semibold tracking-tight">
