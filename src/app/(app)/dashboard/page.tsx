@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Gauge, Landmark, LineChart, Plus, Wallet } from 'lucide-react';
+import { ArrowRight, Gauge, Landmark, LineChart, Plus, Target, Wallet } from 'lucide-react';
+import { CarteObjectif } from '@/components/objectifs/carte-objectif';
 import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
 import { DonutAllocation } from '@/components/charts/donut-allocation';
 import { CarteHero } from '@/components/ui/carte-hero';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
 import { Montant } from '@/components/ui/montant';
 import { PanneauExplication } from '@/components/ui/panneau-explication';
+import { chargerObjectifs } from '@/lib/db/objectifs';
 import { chargerPatrimoine } from '@/lib/db/patrimoine';
 import { budgetDemo, MOUVEMENTS_DEMO, PROFIL_DEMO } from '@/lib/demo/donnees';
 import { calculerTauxEpargneCompare } from '@/lib/finance/epargne';
@@ -37,6 +39,7 @@ export const metadata: Metadata = {
  */
 export default async function DashboardPage() {
   const { actifs, passifs, historique, demo } = await chargerPatrimoine();
+  const { objectifs } = await chargerObjectifs(actifs);
 
   const net = patrimoineNet(actifs, passifs);
   const variation = variationJour(actifs);
@@ -112,13 +115,53 @@ export default async function DashboardPage() {
         }
       />
 
+      {/*
+        Les objectifs juste sous le chiffre principal : c'est la question qui
+        suit « combien j'ai » — « et par rapport à ce que je vise ? ». Compacts,
+        quatre au plus ; la page dediee a le reste.
+      */}
+      <SectionEcran
+        titre="Mes objectifs"
+        sousTitre="Ce que tu vises, et où tu en es pour chacun."
+        icone={Target}
+        teinte="rose"
+        ordre={1}
+        premiere
+        className="mt-8"
+        action={
+          <Link
+            href="/objectifs"
+            className="inline-flex shrink-0 items-center gap-1 text-[12px] text-text-muted transition-colors hover:text-primary"
+          >
+            Tout voir
+            <ArrowRight className="size-3.5" />
+          </Link>
+        }
+      >
+        {objectifs.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {objectifs.slice(0, 4).map((o) => (
+              <CarteObjectif key={o.id} objectif={o} compact />
+            ))}
+          </div>
+        ) : (
+          <section className="carte p-5 sm:p-6">
+            <EtatVide
+              dense
+              titre="Commence par le matelas de sécurité"
+              texte="Trois à six mois de charges fixes, disponibles tout de suite. C’est l’objectif qui protège tous les autres."
+              action={{ href: '/objectifs/nouveau?inspiration=matelas', libelle: 'Créer cet objectif' }}
+            />
+          </section>
+        )}
+      </SectionEcran>
+
       <SectionEcran
         titre="Où j’en suis"
-        ordre={1}
+        ordre={2}
         icone={Gauge}
         teinte="menthe"
         sousTitre="Les trois chiffres qui résument ta situation, au-delà du montant total."
-        className="mt-8"
       >
       <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
         <CarteKPITexte
@@ -138,7 +181,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Comment ça évolue"
-        ordre={2}
+        ordre={3}
         icone={LineChart}
         teinte="azur"
         sousTitre="Ce qui a changé depuis hier, et la trajectoire des derniers mois."
@@ -197,7 +240,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Ce que je possède"
-        ordre={3}
+        ordre={4}
         icone={Wallet}
         teinte="violet"
         sousTitre="La répartition de tes actifs, et le détail de ce qui compose le total."
@@ -234,7 +277,7 @@ export default async function DashboardPage() {
 
       <SectionEcran
         titre="Ce que ça me coûterait"
-        ordre={4}
+        ordre={5}
         icone={Landmark}
         teinte="ambre"
         sousTitre="L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà."

@@ -52,6 +52,8 @@ const PAGES = [
   ['app-fiscalite', '/fiscalite'],
   ['app-projections', '/projections'],
   ['app-objectifs', '/objectifs'],
+  ['app-objectifs-matelas', '/objectifs?onglet=matelas'],
+  ['app-objectif-nouveau', '/objectifs/nouveau'],
   ['app-parametres', '/parametres'],
 ];
 
@@ -88,7 +90,7 @@ try {
       apikey: SERVICE,
       Authorization: `Bearer ${SERVICE}`,
       'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
+      Prefer: 'return=representation',
     },
     body: JSON.stringify(
       [
@@ -116,6 +118,34 @@ try {
     ? [{ name: `sb-${ref}-auth-token`, value: morceaux[0] }]
     : morceaux.map((m, i) => ({ name: `sb-${ref}-auth-token.${i}`, value: m }))
   ).map((c) => ({ ...c, domain: 'localhost', path: '/' }));
+
+  // Un objectif en cours, rattache au compte d'epargne : sans lui, la page
+  // Objectifs et la zone du tableau de bord ne montrent que l'etat vide.
+  const lignesActifs = await (await fetch(`${URL_SB}/rest/v1/assets?user_id=eq.${userId}&select=id,classe`, {
+    headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}` },
+  })).json();
+  const epargne = Array.isArray(lignesActifs) ? lignesActifs.find((a) => a.classe === 'compte_epargne') : null;
+  const dans = (mois) => {
+    const d = new Date();
+    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + mois, 1)).toISOString().slice(0, 10);
+  };
+  const objectifs = await (await fetch(`${URL_SB}/rest/v1/goals`, {
+    method: 'POST',
+    headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+    body: JSON.stringify([
+      { user_id: userId, nom: 'Mon matelas de securite', type: 'precaution', montant_cible_cents: 840000, echeance: dans(10),
+        parametres: { icone: 'bouclier', teinte: 'menthe', contribution_cents: 15000, frequence: 'mois', inspiration: 'matelas' } },
+      { user_id: userId, nom: 'Un grand voyage', type: 'libre', montant_cible_cents: 350000, echeance: dans(18),
+        parametres: { icone: 'avion', teinte: 'lagune', contribution_cents: 100000, frequence: 'annee', inspiration: 'voyage' } },
+    ]),
+  })).json();
+  if (epargne && Array.isArray(objectifs) && objectifs[0]) {
+    await fetch(`${URL_SB}/rest/v1/goal_assets`, {
+      method: 'POST',
+      headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify([{ goal_id: objectifs[0].id, asset_id: epargne.id }]),
+    });
+  }
 
   const navigateur = await chromium.launch();
   const contexte = await navigateur.newContext({
@@ -154,19 +184,47 @@ try {
         return false;
       };
 
+      // Seul le cote droit elargit le document : un tiroir range a gauche par
+      // une translation negative n'y change rien. Les elements rognes sont
+      // gardes a part — quand rien d'autre ne depasse, c'est l'un d'eux qui
+      // s'echappe de son rogneur (position absolue, transformation).
+      const suspects = [];
       for (const el of document.querySelectorAll('*')) {
         const r = el.getBoundingClientRect();
-        if (rogne(el)) continue;
-        if (r.right > window.innerWidth + 1 || r.left < -1) {
-          coupables.push(
-            `${el.tagName.toLowerCase()}.${String(el.className).slice(0, 90)} → ${Math.round(r.left)}..${Math.round(r.right)}`,
-          );
-        }
+        if (r.right <= window.innerWidth + 1) continue;
+        const ligne = `${el.tagName.toLowerCase()}.${String(el.className).slice(0, 90)} → ${Math.round(r.left)}..${Math.round(r.right)}`;
+        if (rogne(el)) suspects.push(ligne);
+        else coupables.push(ligne);
         if (coupables.length >= 5) break;
       }
-      return { largeur: document.documentElement.scrollWidth, coupables };
+      return {
+        largeur: document.documentElement.scrollWidth,
+        coupables: coupables.length > 0 ? coupables : suspects.slice(0, 5).map((l) => `(rogne) ${l}`),
+      };
     });
     if (trop) debordements.push([chemin, trop]);
+
+    // SONDE=chemin (sans barre : Git Bash la convertirait en chemin Windows) :
+    // quand aucun rectangle ne depasse et que la page deborde
+    // quand meme, on cherche le coupable par elimination — on masque chaque
+    // element a son tour et on regarde si la largeur retombe.
+    if (trop && process.env.SONDE && chemin.includes(process.env.SONDE)) {
+      const responsables = await page.evaluate(() => {
+        const ok = () => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1;
+        const trouves = [];
+        for (const el of document.querySelectorAll('main *')) {
+          const avant = el.style.display;
+          el.style.display = 'none';
+          const repare = ok();
+          el.style.display = avant;
+          if (repare) trouves.push(`${el.tagName.toLowerCase()}.${String(el.className).slice(0, 100)}`);
+          if (trouves.length >= 14) break;
+        }
+        return trouves;
+      });
+      console.log('  sonde', chemin, ':');
+      for (const r of responsables) console.log('     ', r);
+    }
 
     await page.screenshot({
       path: `${SORTIE}/${nom}${CLAIR ? '-clair' : ''}.png`,

@@ -187,13 +187,19 @@ function BarreOnglets() {
  * revient à l'apprentissage.
  */
 function BoutonAjout() {
+  const pathname = usePathname();
+  // Sur les objectifs, le « + » cree un objectif ; partout ailleurs, un actif.
+  // Et sur l'ecran de creation lui-meme, il n'a rien a proposer.
+  const objectifs = pathname.startsWith('/objectifs');
+  if (pathname === '/objectifs/nouveau') return null;
+
   return (
     <Link
-      href="/patrimoine#ajouter"
+      href={objectifs ? '/objectifs/nouveau' : '/patrimoine#ajouter'}
       className="bouton-flottant fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 lg:hidden"
     >
       <Plus className="size-6" />
-      <span className="sr-only">Ajouter un actif</span>
+      <span className="sr-only">{objectifs ? 'Nouvel objectif' : 'Ajouter un actif'}</span>
     </Link>
   );
 }

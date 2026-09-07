@@ -1,5 +1,6 @@
 import { calculerDroitsEnregistrement, coutOrdreAchat } from '@/lib/tax/enregistrement';
 import { calculerEpargnePension } from '@/lib/tax/epargne-fiscale';
+import { calculerEpargnePrecaution } from '@/lib/finance/epargne';
 import { calculerRendementLocatif } from '@/lib/finance/locatif';
 import { calculerImpotRevenusLocatifs } from '@/lib/tax/immobilier';
 import {
@@ -254,6 +255,32 @@ export const DEMONSTRATIONS: Record<string, () => Demonstration> = {
   'independant-demarrage': () => ({
     enonce: 'Tu t’inscris à la BCE et tu actives un numéro de TVA via un guichet d’entreprises.',
     resultat: calculerCoutDemarrage({ avecTVA: true }, P),
+  }),
+
+  /**
+   * Le matelas de sécurité se calcule sur les charges fixes, pas sur les
+   * dépenses : c'est la même fonction que l'objectif « matelas » de l'app.
+   */
+  'matelas-trois-mois': () => ({
+    enonce:
+      'Tes charges fixes tournent autour de 1 100 € par mois — loyer, énergie, abonnements, assurances. Tu vises trois mois de couverture, le bas de la fourchette, et tu as déjà 1 800 € de côté. Tu épargnes 200 € par mois.',
+    resultat: calculerEpargnePrecaution({
+      chargesFixesMensuellesCents: 110_000,
+      moisDeCouverture: 3,
+      dejaEpargneCents: 180_000,
+      capaciteEpargneMensuelleCents: 20_000,
+    }),
+  }),
+
+  'matelas-six-mois': () => ({
+    enonce:
+      'Mêmes charges fixes, même épargne déjà là, même rythme de 200 € par mois — mais tu vises six mois, parce que ton ménage vit sur un seul revenu.',
+    resultat: calculerEpargnePrecaution({
+      chargesFixesMensuellesCents: 110_000,
+      moisDeCouverture: 6,
+      dejaEpargneCents: 180_000,
+      capaciteEpargneMensuelleCents: 20_000,
+    }),
   }),
 };
 

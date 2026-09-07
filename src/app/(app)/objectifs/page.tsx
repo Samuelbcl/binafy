@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CarteKPI } from '@/components/ui/carte-kpi';
-import { Montant } from '@/components/ui/montant';
+import { ArrowRight, BookOpen, Plus, ShieldCheck, Upload } from 'lucide-react';
+import { BoutonSupprimer } from '@/components/objectifs/bouton-supprimer';
+import { CarteObjectif } from '@/components/objectifs/carte-objectif';
+import { FriseObjectifs } from '@/components/objectifs/frise-objectifs';
+import { EtatVide } from '@/components/ui/etat-vide';
+import { Jauge } from '@/components/ui/jauge';
 import { PanneauExplication } from '@/components/ui/panneau-explication';
-import { chargerPatrimoine } from '@/lib/db/patrimoine';
-import { budgetDemo, CATEGORIES_DEMO } from '@/lib/demo/donnees';
-import { valeurQuotePart } from '@/lib/patrimoine/types';
-import { calculerEpargnePrecaution, calculerTauxEpargneCompare } from '@/lib/finance/epargne';
-import { calculerCashNecessaire } from '@/lib/tax/enregistrement';
-import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
-import { euros, formatPercent } from '@/lib/money';
+import { PastilleIcone } from '@/components/ui/pastille-icone';
+import { cn } from '@/lib/cn';
+import { calculerEpargnePrecaution } from '@/lib/finance/epargne';
+import { etatObjectif } from '@/lib/finance/objectifs';
+import { formatEUR } from '@/lib/money';
+import { chargerContexteObjectifs } from '@/lib/objectifs/contexte';
 
 export const metadata: Metadata = {
   title: 'Objectifs',
@@ -19,153 +22,209 @@ export const metadata: Metadata = {
 /**
  * Module objectifs (doc 02 § module 5).
  *
- * Les deux objectifs spéciaux se **calculent**, ils ne se déclarent pas :
- * l'épargne de précaution depuis les charges fixes constatées, l'apport immobilier
- * depuis le module frais d'acquisition. Et la date d'atteinte est projetée au
- * rythme d'épargne réel des derniers mois, pas au rythme déclaré.
+ * Deux onglets. *Objectifs* : ce que tu vises, posé sur une frise, avec pour
+ * chacun où tu en es et ce qui te sépare de la cible. *Matelas de sécurité* :
+ * l'objectif qui passe avant tous les autres, dont la cible se **calcule**
+ * depuis les charges fixes du budget au lieu de se deviner — et le guide qui
+ * explique pourquoi, gratuit et sans compte.
+ *
+ * Aucun jugement, aucune félicitation : un objectif est atteint, en route, en
+ * retard ou sans rythme, et chaque état vient avec le chiffre qui le prouve.
  */
-export default async function ObjectifsPage() {
-  const { actifs } = await chargerPatrimoine();
-  const budget = calculerTauxEpargneCompare(budgetDemo());
-  const capaciteMensuelle = Math.round(
-    budget.result.lisse12Mois.nonDepenseCents / (budget.result.lisse12Mois.moisComptes || 1),
-  );
+export default async function ObjectifsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const { onglet } = await searchParams;
+  const ongletActif = onglet === 'matelas' ? 'matelas' : 'objectifs';
+  const ctx = await chargerContexteObjectifs();
+  const aujourdhui = new Date();
 
-  // Charges fixes détectées : logement, transport, abonnements.
-  const chargesFixes = CATEGORIES_DEMO.filter((c) =>
-    ['Logement', 'Transport', 'Abonnements'].includes(c.nom),
-  ).reduce((s, c) => s + c.montantCents, 0);
-
-  const epargneLiquide = actifs
-    .filter((a) => ['compte_epargne', 'compte_courant'].includes(a.classe))
-    .reduce((somme, a) => somme + valeurQuotePart(a), 0);
+  const etats = ctx.objectifs.map((o) => etatObjectif(o, aujourdhui).etat);
+  const atteints = etats.filter((e) => e === 'atteint').length;
+  const enRetard = etats.filter((e) => e === 'en_retard').length;
+  const sansRythme = etats.filter((e) => e === 'sans_rythme').length;
 
   const precaution = calculerEpargnePrecaution({
-    chargesFixesMensuellesCents: chargesFixes,
+    chargesFixesMensuellesCents: ctx.chargesFixesCents,
     moisDeCouverture: 4,
-    dejaEpargneCents: epargneLiquide,
-    capaciteEpargneMensuelleCents: capaciteMensuelle,
+    dejaEpargneCents: ctx.epargneLiquideCents,
+    capaciteEpargneMensuelleCents: ctx.capaciteMensuelleCents,
   });
-
-  // Apport immobilier : la cible vient du moteur de frais d'acquisition, donc elle est juste.
-  const acquisition = calculerCashNecessaire(
-    { prixCents: euros(280_000), region: 'wallonie', typeAchat: 'propre_unique' },
-    TAX_PARAMS_2026,
-  );
-  const apport = calculerEpargnePrecaution({
-    chargesFixesMensuellesCents: Math.round(acquisition.result.cashTotalCents / 4),
-    moisDeCouverture: 4,
-    dejaEpargneCents: epargneLiquide,
-    capaciteEpargneMensuelleCents: capaciteMensuelle,
-  });
-
-  const objectifs = [
-    {
-      id: 'precaution',
-      nom: 'Épargne de précaution',
-      sousTitre: `4 mois de charges fixes, calculés sur ton budget réel`,
-      calcul: precaution,
-      cible: precaution.result.cibleCents,
-      atteint: epargneLiquide,
-    },
-    {
-      id: 'apport',
-      nom: 'Apport pour un achat à 280 000 €',
-      sousTitre: 'Cible issue du calculateur de frais d’acquisition, en Wallonie',
-      calcul: apport,
-      cible: acquisition.result.cashTotalCents,
-      atteint: epargneLiquide,
-    },
-  ];
+  const matelas = ctx.objectifs.find((o) => o.type === 'precaution');
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
-      <header>
-        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Objectifs</h1>
-        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-text-muted">
-          Transformer une intention floue en date. La progression est projetée au rythme
-          d’épargne réellement constaté sur les douze derniers mois, pas au rythme déclaré.
-        </p>
+    <div className="mx-auto max-w-4xl">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">
+            Objectifs
+          </h1>
+          <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-text-muted">
+            Transformer une intention floue en date. Chaque objectif dit où tu en es, et ce qui
+            te sépare de la cible — une date ou un montant par mois, jamais un jugement.
+          </p>
+        </div>
+        <Link href="/objectifs/nouveau" className="bouton-chaud">
+          <Plus className="size-4" />
+          Nouvel objectif
+        </Link>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <CarteKPI
-          label="Capacité d’épargne constatée"
-          valeurCents={capaciteMensuelle}
-          precision={`Moyenne réelle sur 12 mois, soit ${formatPercent(
-            budget.result.lisse12Mois.tauxEpargne,
-          )} de tes revenus`}
-        />
-        <CarteKPI
-          label="Épargne liquide disponible"
-          valeurCents={epargneLiquide}
-          precision="Comptes courant et épargne"
-        />
-      </div>
+      {/* Deux onglets, dans l'URL : un lien se partage et revient au bon endroit. */}
+      <nav aria-label="Sections" className="mt-6 flex gap-6 border-b border-text-subtle/25">
+        <Onglet href="/objectifs" actif={ongletActif === 'objectifs'}>
+          Objectifs
+        </Onglet>
+        <Onglet href="/objectifs?onglet=matelas" actif={ongletActif === 'matelas'}>
+          Matelas de sécurité
+        </Onglet>
+      </nav>
 
-      {objectifs.map((objectif) => {
-        const progression = objectif.cible > 0
-          ? Math.min(1, objectif.atteint / objectif.cible)
-          : 0;
-        const reste = Math.max(0, objectif.cible - objectif.atteint);
-        const mois = capaciteMensuelle > 0 ? Math.ceil(reste / capaciteMensuelle) : null;
+      {ongletActif === 'objectifs' ? (
+        <div className="apparait mt-6 space-y-4">
+          {ctx.objectifs.length === 0 ? (
+            <section className="carte p-5 sm:p-6">
+              <EtatVide
+                titre="Ton premier objectif t’attend"
+                texte="Une cible, une date, un rythme : Nestor projette le reste et te dit si ça tient. Le matelas de sécurité est le bon premier — trois à six mois de charges fixes, disponibles tout de suite."
+                action={{ href: '/objectifs/nouveau?inspiration=matelas', libelle: 'Commencer par le matelas' }}
+              >
+                <Link
+                  href="/objectifs/nouveau"
+                  className="mt-1 text-[13px] text-text-muted underline underline-offset-2 hover:text-text"
+                >
+                  ou créer un autre objectif
+                </Link>
+              </EtatVide>
+            </section>
+          ) : (
+            <>
+              <FriseObjectifs objectifs={ctx.objectifs} />
 
-        return (
-          <section key={objectif.id} className="carte p-5 sm:p-6">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="font-display text-[17px] font-semibold">{objectif.nom}</h2>
-              <span className="font-mono text-[13px] tabular-nums text-text-muted">
-                {formatPercent(progression)}
-              </span>
-            </div>
-            <p className="mt-1 text-[12px] text-text-subtle">{objectif.sousTitre}</p>
+              {/* L'état d'ensemble, en une ligne factuelle. */}
+              <p className="px-1 text-[13px] text-text-muted">
+                {ctx.objectifs.length} objectif{ctx.objectifs.length > 1 ? 's' : ''}
+                {atteints > 0 && (
+                  <>
+                    {' · '}
+                    <span className="text-positive">{atteints} atteint{atteints > 1 ? 's' : ''}</span>
+                  </>
+                )}
+                {enRetard > 0 && (
+                  <>
+                    {' · '}
+                    <span className="text-warning">{enRetard} en retard</span>
+                  </>
+                )}
+                {sansRythme > 0 && <>{' · '}{sansRythme} sans rythme</>}
+              </p>
 
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-surface-2">
-              <div
-                className="h-full rounded-full bg-primary transition-[width] duration-500"
-                style={{ width: `${Math.max(1, progression * 100)}%` }}
-              />
-            </div>
-
-            <dl className="mt-4 grid grid-cols-3 gap-3 sm:gap-4">
-              <div>
-                <dt className="label-kpi">Atteint</dt>
-                <dd className="mt-1">
-                  <Montant cents={objectif.atteint} decimals={0} />
-                </dd>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {ctx.objectifs.map((objectif) => (
+                  <CarteObjectif
+                    key={objectif.id}
+                    objectif={objectif}
+                    action={!ctx.demo && <BoutonSupprimer id={objectif.id} nom={objectif.nom} />}
+                  />
+                ))}
               </div>
-              <div>
-                <dt className="label-kpi">Cible</dt>
-                <dd className="mt-1">
-                  <Montant cents={objectif.cible} decimals={0} />
-                </dd>
-              </div>
-              <div>
-                <dt className="label-kpi">Échéance projetée</dt>
-                <dd className="mt-1 font-mono text-[15px] tabular-nums">
-                  {reste === 0
-                    ? 'Atteint'
-                    : mois === null
-                      ? '—'
-                      : `${mois} mois`}
-                </dd>
-              </div>
-            </dl>
 
-            <div className="mt-4">
-              <PanneauExplication calcul={objectif.calcul} titre="Comment la cible est calculée" />
+              {ctx.demo && (
+                <p className="text-[12px] leading-relaxed text-text-subtle">
+                  Exemple de la démo. Connecte-toi pour créer les tiens et les retrouver à
+                  chaque visite.
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="apparait mt-6 space-y-4">
+          <section className="carte p-5 sm:p-6">
+            <div className="flex items-start gap-3">
+              <PastilleIcone icone={ShieldCheck} teinte="menthe" taille="grande" />
+              <div className="min-w-0">
+                <h2 className="text-[17px] font-semibold tracking-[-0.01em]">
+                  Le premier objectif, avant tout le reste
+                </h2>
+                <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
+                  Trois à six mois de charges fixes, disponibles tout de suite, sur un compte
+                  d’épargne réglementé. Pas pour rapporter : pour qu’un imprévu ne t’oblige
+                  jamais à vendre au mauvais moment ni à emprunter au mauvais taux. Sans lui,
+                  chaque autre objectif est une promesse qu’un pneu crevé peut casser.
+                </p>
+              </div>
             </div>
           </section>
-        );
-      })}
 
-      <p className="text-[12px] leading-relaxed text-text-subtle">
-        La création d’objectifs libres arrive avec la persistance en base. Voir{' '}
-        <Link href="/projections" className="text-text-muted underline underline-offset-2">
-          les projections
-        </Link>{' '}
-        pour ajuster les hypothèses.
-      </p>
+          {ctx.chargesFixesCents > 0 ? (
+            <>
+              <Jauge
+                label="Matelas constitué"
+                valeurCents={ctx.epargneLiquideCents}
+                cibleCents={precaution.result.cibleCents}
+                ton="positif"
+                precision={
+                  precaution.result.resteAConstituerCents === 0
+                    ? `Quatre mois de charges fixes sont couverts. Le guide dit comment le garder disponible.`
+                    : precaution.result.moisRestants
+                      ? `Encore ${formatEUR(precaution.result.resteAConstituerCents, { decimals: 0 })} : environ ${precaution.result.moisRestants} mois à ta capacité d’épargne constatée.`
+                      : `Encore ${formatEUR(precaution.result.resteAConstituerCents, { decimals: 0 })} pour couvrir quatre mois.`
+                }
+              />
+              <PanneauExplication calcul={precaution} titre="Comment la cible est calculée" />
+            </>
+          ) : (
+            <section className="carte p-5 sm:p-6">
+              <p className="text-[14px] font-semibold">La cible se calcule depuis ton budget</p>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-text-muted">
+                Importe un extrait bancaire : Nestor repère tes charges fixes — logement,
+                transport, abonnements — et en déduit le matelas qu’il te faut. Sans budget, tu
+                peux quand même le fixer toi-même.
+              </p>
+              <Link href="/budget" className="bouton-secondaire mt-4">
+                <Upload className="size-4" />
+                Importer un extrait
+              </Link>
+            </section>
+          )}
+
+          <div className="flex flex-wrap gap-3">
+            {matelas ? (
+              <Link href={`/objectifs#${matelas.id}`} className="bouton-secondaire">
+                Voir mon objectif matelas
+                <ArrowRight className="size-4" />
+              </Link>
+            ) : (
+              <Link href="/objectifs/nouveau?inspiration=matelas" className="bouton-chaud">
+                <Plus className="size-4" />
+                Créer cet objectif
+              </Link>
+            )}
+            <Link href="/apprendre/matelas-de-securite-belgique" className="bouton-secondaire">
+              <BookOpen className="size-4" />
+              Lire le guide
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function Onglet({ href, actif, children }: { href: string; actif: boolean; children: string }) {
+  return (
+    <Link
+      href={href}
+      aria-current={actif ? 'page' : undefined}
+      className={cn(
+        '-mb-px border-b-2 pb-3 text-[14px] font-semibold transition-colors',
+        actif ? 'border-ambre text-text' : 'border-transparent text-text-muted hover:text-text',
+      )}
+    >
+      {children}
+    </Link>
   );
 }

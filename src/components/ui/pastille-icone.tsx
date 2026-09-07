@@ -9,7 +9,8 @@ import { cn } from '@/lib/cn';
  * partout dans l'application — c'est la constance qui en fait un repère, pas la
  * couleur elle-même.
  */
-export type Teinte = 'violet' | 'menthe' | 'ambre' | 'rose' | 'azur' | 'lagune' | 'terre';
+export const TEINTES = ['violet', 'menthe', 'ambre', 'rose', 'azur', 'lagune', 'terre'] as const;
+export type Teinte = (typeof TEINTES)[number];
 
 const CLASSE: Record<Teinte, string> = {
   violet: 'pastille-violet',

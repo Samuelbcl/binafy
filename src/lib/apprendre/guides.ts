@@ -875,7 +875,170 @@ const INDEPENDANT_COMPLEMENTAIRE: Guide = {
   suite: ['epargne-pension-deux-plafonds'],
 };
 
+
+const MATELAS_SECURITE: Guide = {
+  slug: 'matelas-de-securite-belgique',
+  titre: 'Le matelas de sécurité en Belgique : combien, où, et pourquoi avant tout le reste',
+  resume:
+    'Chiffrer ta propre réserve depuis tes charges fixes, la loger sans perdre l’exonération, et savoir ce que la Sécu couvre déjà — et ce qu’elle ne couvre pas.',
+  categorie: 'budget',
+  niveau: 'debutant',
+  dureeMinutes: 8,
+  verifieLe: '2026-09-07',
+  anneeRevenus: 2026,
+  parametresLies: [
+    'epargne_reglementee.exoneration_interets',
+    'epargne_reglementee.taux_precompte_reduit',
+    'precompte_mobilier.taux',
+  ],
+  blocs: [
+    {
+      type: 'para',
+      texte:
+        'Un matelas de sécurité ne sert pas à un imprévu abstrait. Il sert à des moments précis où de l’argent doit sortir vite, sans détour par un placement à revendre ni par un crédit à négocier dans l’urgence.',
+    },
+
+    { type: 'titre', texte: 'Ce qu’un imprévu déclenche, en vrai' },
+    {
+      type: 'para',
+      texte:
+        'Déménager en est un, et il se chiffre précisément. En Wallonie, un propriétaire peut exiger une garantie locative allant jusqu’à deux mois de loyer — depuis le 1er juin 2023 —, en plus du premier mois d’occupation et des frais de déménagement. Sur un loyer de 750 €, la garantie seule immobilise 1 500 €, à sortir avant même d’avoir la clé, souvent au moment où l’on quitte un logement pour de bonnes raisons : un nouvel emploi, une rupture, un enfant.',
+    },
+    {
+      type: 'note',
+      titre: 'Ce que ce guide ne chiffre pas',
+      texte:
+        'Une franchise d’assurance, une réparation de voiture ou le remplacement d’un appareil sont sans doute les déclencheurs les plus fréquents. Mais aucune source officielle belge ne publie de montant moyen fiable pour ces postes — les chiffres qui circulent viennent de comparateurs commerciaux, pas d’une administration. Plutôt qu’inventer un ordre de grandeur, ce guide s’appuie sur les cas où un montant légal existe.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Le point commun de ces situations : elles ne préviennent pas, et elles n’attendent pas que le reste du budget se libère. Le matelas existe pour que la réponse ne dépende ni d’un découvert, ni d’une carte de crédit, ni d’une vente d’ETF au pire moment.',
+    },
+
+    { type: 'titre', texte: 'Combien : trois à six mois de charges fixes' },
+    {
+      type: 'para',
+      texte:
+        'La cible ne se calcule pas sur le revenu, ni sur les dépenses totales, restaurants et abonnements de streaming compris. Elle se calcule sur les charges fixes : ce qui tombe même si le revenu s’arrête le mois prochain — loyer ou crédit, énergie, assurances, abonnements, remboursements. C’est la distinction que fait Nestor en lisant ton budget : il repère les charges fixes et en déduit la cible. Elle ne se déclare pas, elle se calcule.',
+    },
+    {
+      type: 'liste',
+      items: [
+        'Salarié en CDI, revenu stable, ménage à deux revenus : le bas de la fourchette, trois mois, couvre la plupart des délais administratifs décrits plus bas.',
+        'Ménage à un seul revenu, indépendant, ou revenu variable : le haut de la fourchette, six mois, parce qu’un accident de parcours touche l’unique source de revenu.',
+        'Indépendant complémentaire : le matelas se calcule sur les charges du ménage entier, pas sur la seule activité. C’est elle qui s’arrête en premier en cas de coup dur, pas le salaire principal.',
+      ],
+    },
+    {
+      type: 'demonstration',
+      cle: 'matelas-trois-mois',
+      titre: 'Trois mois : la cible basse',
+      introduction:
+        'Nestor calcule cette cible depuis les charges fixes détectées dans le budget importé, pas depuis un chiffre déclaré à la main.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'matelas-six-mois',
+      titre: 'Six mois : la cible haute',
+      introduction:
+        'Mêmes charges fixes, couverture plus large. Ce qui change, c’est ce qu’il reste à épargner — et en combien de temps, au rythme réel.',
+    },
+
+    { type: 'titre', texte: 'Ce que la Sécu couvre déjà — et ce qu’elle ne couvre pas' },
+    {
+      type: 'para',
+      texte:
+        'Le matelas ne remplace ni la mutuelle ni l’ONEM. Il comble ce qu’ils ne couvrent pas : les semaines sans aucun paiement, et l’écart entre un revenu réel et une indemnité plafonnée.',
+    },
+    {
+      type: 'note',
+      titre: 'Incapacité de travail : ce que la mutuelle paie, et depuis quand',
+      texte:
+        'Un employé malade continue d’être payé par son employeur pendant les trente premiers jours : c’est le salaire garanti. Un ouvrier suit un barème dégressif sur la même période — 100 % la première semaine, 85,88 % la deuxième, puis un partage avec la mutuelle. Passé ce mois, la mutuelle prend le relais à 60 % du salaire brut, plafonné à un montant journalier fixé par l’INAMI (113,62 € par jour à partir du 1er septembre 2026, en semaine de six jours) : au-delà d’un certain salaire, l’écart entre l’indemnité et le revenu réel se creuse. Un indépendant n’a pas d’employeur pour avancer ce salaire : l’indemnité forfaitaire de la mutuelle ne démarre qu’au quinzième jour d’incapacité.',
+    },
+    {
+      type: 'note',
+      titre: 'Chômage : une dégressivité connue, un délai à anticiper',
+      texte:
+        'L’allocation suit trois périodes : 65 % du dernier salaire plafonné les trois premiers mois, 60 % jusqu’à la fin de la première année, puis une dégressivité par paliers avant un forfait. Côté procédure, le dossier doit parvenir au bureau du chômage dans les deux mois, qui dispose ensuite d’un mois pour statuer — l’organisme de paiement peut avancer un montant provisoire, il n’y est pas obligé. Depuis 2026, une réforme limite en outre la durée totale des allocations dans le temps ; sa portée exacte dépasse ce guide.',
+    },
+
+    { type: 'titre', texte: 'Où le placer' },
+    {
+      type: 'para',
+      texte:
+        'Sur un compte d’épargne réglementé, une première tranche d’intérêts est exonérée chaque année, par personne ; au-delà, seul l’excédent est taxé, à un taux réduit plutôt qu’au taux standard des revenus mobiliers. Le compte porte aussi une prime de fidélité, mais elle ne récompense que l’argent resté en place douze mois complets : un retrait la fait perdre sur tout ce qui n’avait pas bouclé son cycle. Le mécanisme complet, avec son propre piège, a son guide.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'epargne-reglementee',
+      titre: 'Ce que le matelas rapporte, une fois placé au bon endroit',
+      introduction:
+        'Un solde proche d’une cible réelle, sur un compte réglementé. Le calcul est celui qu’exécute l’application, avec les taux en vigueur.',
+    },
+    {
+      type: 'note',
+      titre: 'Le compte à vue : pas un piège, un choix à rendement nul',
+      texte:
+        'Un compte à vue ne rapporte rien, ou presque : la loi ne lui impose aucune rémunération. Il reste accessible en une seconde, ce qui en fait le candidat le plus commode — et le plus tentant : l’argent qui y dort se dépense plus facilement que celui posé sur un compte à part. Ce n’est pas une règle fiscale, c’est un arbitrage qui te revient.',
+    },
+    {
+      type: 'note',
+      titre: 'Le risque bancaire, couvert jusqu’à 100 000 €',
+      texte:
+        'Quelle que soit la banque, le Fonds de garantie belge protège les dépôts à hauteur de 100 000 € par personne et par établissement en cas de faillite, avec un remboursement en quelques jours ouvrables. Pour un matelas de quelques milliers d’euros, la question ne se pose pas ; elle redevient pertinente si plusieurs objectifs finissent regroupés sur le même compte.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Un ETF ou l’épargne-pension ne sont pas écartés ici par jugement, mais par incompatibilité avec ce que le matelas doit faire : être disponible en un jour, pas dans trente. Un ETF peut valoir moins le jour précis où l’argent doit sortir — la volatilité ne prévient pas plus que la panne de voiture. L’épargne-pension est indisponible avant 60 ans et taxée par anticipation dès cet âge : elle est construite pour rester bloquée, pas pour être piochée un mardi.',
+    },
+
+    {
+      type: 'piege',
+      titre: 'Le même euro ne peut pas être deux coussins à la fois',
+      texte:
+        'Beaucoup comptent leur épargne à la fois comme matelas de sécurité et comme apport pour un achat immobilier. Le jour de l’acte, cet argent part chez le notaire — et le matelas disparaît au moment précis où les charges fixes augmentent le plus, avec un crédit en plus à rembourser chaque mois. Un même montant ne peut pas remplir deux objectifs qui, par construction, ne se déclenchent jamais au même moment. Dans Nestor, ce sont deux objectifs distincts, rattachés à des comptes distincts.',
+    },
+    {
+      type: 'piege',
+      titre: 'Un taux « boosté » hors compte réglementé perd l’exonération',
+      texte:
+        'Certaines offres affichent un taux plus élevé qu’un compte d’épargne réglementé, sur un compte qui n’en a pas le statut légal. Rien d’illégal — mais ce compte ne bénéficie ni de l’exonération d’intérêts, ni du taux réduit, ni d’aucune règle de prime encadrée par la loi : chaque euro d’intérêt y est taxé au taux standard dès le premier. Lire les conditions, pas seulement le chiffre en gras, change ce que le matelas rapporte réellement.',
+    },
+
+    {
+      type: 'outil',
+      href: '/outils/budget',
+      libelle: 'Calculer ma cible avec mes charges réelles',
+      texte:
+        'Le calculateur de budget sépare épargne et investissement, et en déduit la cible d’épargne de précaution qui découle de tes charges.',
+    },
+
+    { type: 'titre', texte: 'Une fois le matelas constitué' },
+    {
+      type: 'para',
+      texte:
+        'Une fois la cible atteinte, d’autres enveloppes entrent en jeu : l’épargne-pension et sa réduction d’impôt, un compte-titres et sa fiscalité en trois temps, un projet immobilier et son apport. Chacune a ses règles, ses plafonds et son piège, détaillés dans les guides qui leur sont consacrés. Voilà ce que chaque option coûte et comment elle fonctionne. Le choix t’appartient.',
+    },
+
+    { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
+    {
+      type: 'liste',
+      items: [
+        'Un montant moyen fiable pour une franchise d’assurance, une réparation automobile ou un appareil : aucune source officielle belge ne le publie.',
+        'Le montant exact de l’indemnité forfaitaire d’incapacité d’un indépendant selon sa situation familiale.',
+        'La durée précise des allocations de chômage depuis la réforme de 2026.',
+        'Les plafonds de garantie locative à Bruxelles et en Flandre, qui diffèrent de la règle wallonne citée ici.',
+      ],
+    },
+  ],
+  suite: ['compte-epargne-reglemente-prime-fidelite', 'epargne-pension-deux-plafonds'],
+};
+
 export const GUIDES: readonly Guide[] = [
+  MATELAS_SECURITE,
   FISCALITE_ETF,
   PLUS_VALUES_2026,
   DROITS_ENREGISTREMENT_WALLONIE,
