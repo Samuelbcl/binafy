@@ -5,6 +5,7 @@ import {
   parametresNonVerifies,
   TAX_PARAMS_2026,
 } from './parametres';
+import { parametresARevoir, peremptionDe } from './types';
 
 /**
  * Garde-fou du catalogue fiscal.
@@ -106,5 +107,43 @@ describe('catalogue fiscal — garde-fou', () => {
     expect(hypotheses.length).toBeGreaterThan(0);
     expect(hypotheses.every((p) => p.verifie)).toBe(true);
     expect(parametresNonVerifies().some((p) => p.hypothese)).toBe(false);
+  });
+
+  it('date chaque valeur : sans date de vérification, rien ne peut périmer', () => {
+    const sansDate = PARAMETRES_2026.filter((p) => !p.verifieLe);
+    expect(sansDate.map((p) => p.cle)).toEqual([]);
+  });
+
+  it('classe le rythme de péremption depuis l’unité, sauf mention contraire', () => {
+    // Un montant en euros est indexé chaque année en Belgique ; un taux ne
+    // change qu'avec une loi ; une pratique de marché change sans prévenir.
+    const euros = PARAMETRES_2026.find((p) => p.unite === 'eur' && !p.hypothese && !p.peremption);
+    const taux = PARAMETRES_2026.find(
+      (p) => p.unite === 'pourcent' && !p.hypothese && !p.peremption,
+    );
+    const marche = PARAMETRES_2026.find((p) => p.hypothese && !p.peremption);
+
+    expect(euros && peremptionDe(euros)).toBe('annuelle');
+    expect(taux && peremptionDe(taux)).toBe('legale');
+    expect(marche && peremptionDe(marche)).toBe('commerciale');
+  });
+
+  it('ne signale rien à revoir le jour même de la vérification', () => {
+    // Toutes les valeurs ont été confirmées au 06/09/2026.
+    expect(parametresARevoir(PARAMETRES_2026, '2026-09-07')).toEqual([]);
+  });
+
+  it('signale les tarifs de marché avant les règles légales', () => {
+    // Sept mois plus tard : les pratiques commerciales (183 jours) sont
+    // périmées, les taux légaux (730 jours) ne le sont pas encore.
+    const aRevoirAlors = parametresARevoir(PARAMETRES_2026, '2027-04-15');
+
+    expect(aRevoirAlors.length).toBeGreaterThan(0);
+    expect(aRevoirAlors.every((p) => peremptionDe(p) === 'commerciale')).toBe(true);
+
+    // Deux ans plus tard, tout le catalogue est à reprendre.
+    expect(parametresARevoir(PARAMETRES_2026, '2028-10-01').length).toBe(
+      PARAMETRES_2026.length,
+    );
   });
 });

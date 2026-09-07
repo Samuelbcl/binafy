@@ -18,6 +18,7 @@ import { calculerIPP } from '@/lib/tax/ipp';
 import { TAX_PARAMS_2026, parametresNonVerifies } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
 import { calculerPrecompteEpargneReglementee } from '@/lib/tax/precompte';
+import { parametresARevoir } from '@/lib/tax/types';
 
 export const metadata: Metadata = {
   title: 'Fiscalité',
@@ -83,6 +84,12 @@ export default async function FiscalitePage() {
   );
 
   const nonVerifies = parametresNonVerifies(params);
+  // La date du rendu, pas une horloge dans le calcul : les fonctions fiscales
+  // restent pures, c'est la page qui sait quel jour on est.
+  const aRevoirMaintenant = parametresARevoir(
+    params.parametres,
+    new Date().toISOString().slice(0, 10),
+  );
 
   const alertes = [
     {
@@ -362,6 +369,22 @@ export default async function FiscalitePage() {
           {params.parametres.length} paramètres chargés pour {params.annee}, dont{' '}
           <span className="font-medium text-warning">{nonVerifies.length}</span> encore à
           confirmer à la source officielle. Chaque calcul qui en dépend l’indique.
+        </p>
+        {/*
+          Une valeur exacte le jour où on l'écrit devient fausse toute seule :
+          la Belgique indexe ses montants chaque année. On affiche donc aussi ce
+          qui a dépassé sa durée de validité, pas seulement ce qui n'a jamais
+          été confirmé.
+        */}
+        <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
+          {aRevoirMaintenant.length === 0 ? (
+            <>Aucune valeur n’a dépassé sa durée de validité.</>
+          ) : (
+            <>
+              <span className="font-medium text-warning">{aRevoirMaintenant.length}</span> ont
+              dépassé leur durée de validité et attendent une revue.
+            </>
+          )}
         </p>
         <details className="mt-4">
           <summary className="cursor-pointer text-[12px] text-text-muted hover:text-text">

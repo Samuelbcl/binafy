@@ -90,6 +90,15 @@ Ces points complètent la doc, ils ne la remplacent pas.
    non vérifié. La liste de travail est dans `docs/11-parametres-a-verifier.md`, générée
    depuis le catalogue par `node scripts/generer-seed-fiscal.mjs`.
 
+4. **Chaque valeur porte une durée de validité.** `verifie` dit si une valeur a
+   été confirmée ; il ne dit pas si elle l'est encore. Or la Belgique indexe ses
+   montants chaque année : un chiffre exact le jour où on l'écrit devient faux
+   tout seul. D'où `peremption` sur `TaxParameter`, déduite de l'unité à défaut
+   d'être déclarée — un montant en euros est indexé (365 j), un taux relève de la
+   loi (730 j), une pratique de marché change sans prévenir (183 j). La page
+   Fiscalité affiche l'état, et `scripts/verifier-fraicheur.mjs` le rend
+   exploitable en CI.
+
 ## Commandes
 
 ```bash
@@ -98,6 +107,8 @@ npm test            # Vitest — le moteur de calcul doit rester vert
 npm run typecheck   # tsc --noEmit
 npm run build       # build de production
 node scripts/generer-seed-fiscal.mjs   # régénère le seed SQL et docs/11
+node scripts/verifier-fraicheur.mjs   # liste les valeurs fiscales périmées
+                                      # (sort en code 1 s'il y en a)
 node scripts/captures-mobile.mjs captures   # capture chaque écran en 390×844
                                             # et signale les débordements
                                             # (serveur lancé, compte de test créé

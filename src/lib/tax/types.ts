@@ -21,6 +21,35 @@ export const LIBELLE_REGION: Record<RegionFiscale, string> = {
 
 export type UniteParametre = 'pourcent' | 'eur' | 'coefficient' | 'annees';
 
+/**
+ * Rythme auquel une valeur devient suspecte.
+ *
+ * Un paramètre exact le jour où on l'écrit devient faux tout seul, sans que
+ * personne n'y touche : c'est le mode de défaillance principal d'un moteur
+ * fiscal. On lui associe donc une durée de validité, et non une simple date de
+ * dernière vérification.
+ */
+export type Peremption =
+  /** Montant indexé chaque année — plafonds, exonérations, tranches. */
+  | 'annuelle'
+  /** Taux fixé par la loi : ne bouge qu'à la faveur d'une réforme. */
+  | 'legale'
+  /** Tarif de marché — frais de caisse, guichets, barème notarial. */
+  | 'commerciale'
+  /** Convention ou constante de calcul, sans source qui bouge. */
+  | 'stable';
+
+/** Durée de validité, en jours, avant qu'une valeur doive être revue. */
+export const JOURS_PEREMPTION: Record<Peremption, number> = {
+  // L'indexation est publiée en fin d'année : au-delà d'un an, un montant en
+  // euros est presque sûrement dépassé.
+  annuelle: 365,
+  // Les tarifs commerciaux changent sans annonce et sans publication.
+  commerciale: 183,
+  legale: 730,
+  stable: 1825,
+};
+
 /** Une ligne de `tax_parameters`, telle qu'injectée dans un calculateur. */
 export type TaxParameter = {
   cle: string;
@@ -46,7 +75,66 @@ export type TaxParameter = {
    * qui est une autre affaire.
    */
   hypothese?: boolean;
+  /**
+   * Rythme de péremption. À défaut, il se déduit de l'unité : un montant en
+   * euros est indexé chaque année, un taux relève de la loi. Ne le renseigne
+   * que pour contredire cette déduction.
+   */
+  peremption?: Peremption;
 };
+
+/**
+ * Rythme de péremption d'une valeur, déduit à défaut d'être déclaré.
+ *
+ * La déduction n'est pas arbitraire : en Belgique, presque tout montant en
+ * euros inscrit au CIR 92 est indexé annuellement, alors qu'un taux ne change
+ * qu'avec une loi. Une valeur marquée `hypothese` est une pratique de marché,
+ * donc du ressort commercial.
+ */
+export function peremptionDe(p: TaxParameter): Peremption {
+  if (p.peremption) return p.peremption;
+  if (p.hypothese) return 'commerciale';
+  return p.unite === 'eur' ? 'annuelle' : 'legale';
+}
+
+/** Jours écoulés depuis la dernière vérification. `null` si jamais vérifiée. */
+export function joursDepuisVerification(
+  p: TaxParameter,
+  aujourdhui: string,
+): number | null {
+  if (!p.verifieLe) return null;
+  const ecart = Date.parse(aujourdhui) - Date.parse(p.verifieLe);
+  return Number.isFinite(ecart) ? Math.floor(ecart / 86_400_000) : null;
+}
+
+/**
+ * Vrai quand la valeur a dépassé sa durée de validité.
+ *
+ * `aujourdhui` est un argument, jamais `Date.now()` : ces fonctions restent
+ * pures, donc testables sur une date figée.
+ */
+export function aRevoir(p: TaxParameter, aujourdhui: string): boolean {
+  const jours = joursDepuisVerification(p, aujourdhui);
+  if (jours === null) return true;
+  return jours > JOURS_PEREMPTION[peremptionDe(p)];
+}
+
+/**
+ * Les valeurs dont la durée de validité est dépassée, de la plus ancienne à la
+ * plus récente.
+ *
+ * C'est le pendant de `parametresNonVerifies` : celui-là dit ce qui n'a jamais
+ * été confirmé, celui-ci dit ce qui l'a été trop longtemps. Les deux ensemble
+ * donnent l'état réel du catalogue.
+ */
+export function parametresARevoir(
+  parametres: readonly TaxParameter[],
+  aujourdhui: string,
+): TaxParameter[] {
+  return parametres
+    .filter((p) => aRevoir(p, aujourdhui))
+    .sort((a, b) => (a.verifieLe ?? '').localeCompare(b.verifieLe ?? ''));
+}
 
 /** Un jeu de paramètres pour une année donnée. */
 export type TaxParamSet = {
@@ -82,19 +170,29 @@ export type CalcResult<T> = {
   hypotheses: string[];
 };
 
-/** Levée quand un paramètre fiscal est absent. On refuse d'inventer une valeur. */
+/**
+ * Levée quand un paramètre fiscal est absent. On refuse d'inventer une valeur.
+ *
+ * Les champs sont assignés dans le corps du constructeur plutôt que déclarés en
+ * paramètres : la syntaxe `constructor(readonly cle: string)` n'est pas du
+ * JavaScript, et Node la refuse quand il exécute un `.ts` en retirant seulement
+ * les types. Or les scripts de maintenance importent ce module directement.
+ */
 export class ParametreFiscalManquantError extends Error {
-  constructor(
-    readonly cle: string,
-    readonly annee: number,
-    readonly region: RegionFiscale | null,
-  ) {
+  readonly cle: string;
+  readonly annee: number;
+  readonly region: RegionFiscale | null;
+
+  constructor(cle: string, annee: number, region: RegionFiscale | null) {
     const cible = region ? `${cle} (${region})` : cle;
     super(
       `Paramètre fiscal manquant : « ${cible} » pour l'année ${annee}. ` +
         `Ajoute-le dans tax_parameters avec sa source officielle — ne le code pas en dur.`,
     );
     this.name = 'ParametreFiscalManquantError';
+    this.cle = cle;
+    this.annee = annee;
+    this.region = region;
   }
 }
 
