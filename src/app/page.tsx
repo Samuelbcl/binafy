@@ -87,18 +87,12 @@ export default function AccueilPage() {
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-3">
-          <Link
-            href="/dashboard"
-            className="bouton-principal"
-          >
-            Voir la démo
+          <Link href="/connexion" className="bouton-principal">
+            Créer mon compte
             <ArrowRight className="size-4" />
           </Link>
-          <Link
-            href="/outils/frais-acquisition"
-            className="inline-flex min-h-11 items-center rounded-[var(--radius)] border border-border px-5 text-[14px] font-medium transition-colors hover:bg-surface-hover"
-          >
-            Essayer un outil
+          <Link href="/apprendre" className="bouton-secondaire">
+            Apprendre la fiscalité belge
           </Link>
         </div>
       </header>

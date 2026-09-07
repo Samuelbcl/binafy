@@ -14,12 +14,23 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             </span>
             <span className="font-display text-[17px] font-semibold tracking-tight">Nestor</span>
           </Link>
-          <Link
-            href="/dashboard"
-            className="inline-flex min-h-11 items-center rounded-[var(--radius)] border border-border px-4 text-[13px] font-medium transition-colors hover:bg-surface-hover"
-          >
-            Voir la démo
-          </Link>
+          <nav aria-label="Navigation du site" className="flex items-center gap-1.5">
+            <Link
+              href="/apprendre"
+              className="inline-flex min-h-11 items-center rounded-full px-4 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
+            >
+              Apprendre
+            </Link>
+            <Link
+              href="/outils/frais-acquisition"
+              className="inline-flex min-h-11 items-center rounded-full px-4 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
+            >
+              Outils
+            </Link>
+            <Link href="/connexion" className="bouton-principal ml-1.5">
+              Créer mon compte
+            </Link>
+          </nav>
         </div>
       </header>
 
@@ -29,6 +40,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         <div className="mx-auto max-w-5xl px-5 py-8 sm:px-6">
           <nav aria-label="Liens de pied de page" className="flex flex-wrap gap-x-5 gap-y-2">
             {[
+              { href: '/apprendre', libelle: 'Apprendre' },
               { href: '/outils/frais-acquisition', libelle: 'Frais d’acquisition' },
               { href: '/outils/interets-composes', libelle: 'Intérêts composés' },
               { href: '/outils/simulateur-patrimoine', libelle: 'Simulateur de patrimoine' },

@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { guideParSlug } from '@/lib/apprendre/guides';
 import { calculerInteretsComposesNets } from '@/lib/finance/interets-composes';
 import { calculerRendementLocatif } from '@/lib/finance/locatif';
 import { calculerProjectionPatrimoine } from '@/lib/finance/projection';
@@ -36,6 +37,16 @@ export function GET(request: NextRequest) {
   const outil = p.outil ?? '';
 
   try {
+    // Un guide ne passe que son slug : le titre vient du catalogue, jamais de
+    // l'URL. Même raison que pour les simulations — une carte publiée sous la
+    // marque Nestor ne doit pouvoir dire que ce que Nestor a écrit.
+    if (outil === 'guide') {
+      const guide = guideParSlug(p.slug ?? '');
+      if (guide) {
+        return imageOGSimple({ titre: guide.titre, sousTitre: guide.resume });
+      }
+    }
+
     if (outil === 'frais-acquisition') {
       const prix = nombreDepuisUrl(p, 'prix', 280_000);
       const region = choixDepuisUrl(p, 'region', REGIONS, 'wallonie');
