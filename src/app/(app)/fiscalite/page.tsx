@@ -20,6 +20,7 @@ import { TAX_PARAMS_2026, parametresNonVerifies } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
 import { calculerPrecompteEpargneReglementee } from '@/lib/tax/precompte';
 import { parametresARevoir, getCents } from '@/lib/tax/types';
+import { SimulateurEpargnePension } from '@/components/fiscalite/simulateur-epargne-pension';
 
 export const metadata: Metadata = {
   title: 'Fiscalité',
@@ -302,53 +303,7 @@ export default async function FiscalitePage() {
             au seul dépassement.
           </p>
 
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {[
-              {
-                titre: 'Au plafond bas',
-                verse: pension.result.comparaison.plafondBas.versementCents,
-                reduction: pension.result.comparaison.plafondBas.reductionCents,
-              },
-              {
-                titre: 'Au plafond haut',
-                verse: pension.result.comparaison.plafondHaut.versementCents,
-                reduction: pension.result.comparaison.plafondHaut.reductionCents,
-              },
-            ].map((option) => (
-              <div key={option.titre} className="rounded-[var(--radius)] border border-border p-4">
-                <p className="label-kpi">{option.titre}</p>
-                <p className="mt-2 text-[13px] text-text-muted">
-                  Verser <Montant cents={option.verse} decimals={0} jamaisMasque />
-                </p>
-                <p className="mt-1 font-mono text-[20px] tabular-nums text-primary">
-                  <Montant cents={option.reduction} decimals={0} jamaisMasque />
-                </p>
-                <p className="text-[11px] text-text-subtle">de réduction d’impôt</p>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-4 text-[13px] leading-relaxed text-text-muted">
-            Soit{' '}
-            <Montant
-              cents={
-                pension.result.comparaison.plafondHaut.versementCents -
-                pension.result.comparaison.plafondBas.versementCents
-              }
-              decimals={0}
-              jamaisMasque
-            />{' '}
-            versés en plus pour{' '}
-            <Montant
-              cents={
-                pension.result.comparaison.plafondHaut.reductionCents -
-                pension.result.comparaison.plafondBas.reductionCents
-              }
-              decimals={0}
-              jamaisMasque
-            />{' '}
-            de réduction supplémentaire. À toi de voir.
-          </p>
+          <SimulateurEpargnePension />
 
           <div className="mt-4">
             <PanneauExplication calcul={pension} titre="Le détail du calcul" />
