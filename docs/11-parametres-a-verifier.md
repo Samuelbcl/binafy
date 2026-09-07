@@ -4,9 +4,9 @@
 > Source : `src/lib/tax/parametres.ts`.
 
 90 paramètres sont chargés pour 2026.
-**86 sont confirmés** — leur valeur est chiffrée explicitement dans
+**84 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**4 règles légales attendent une confirmation** à la source officielle.
+**6 règles légales attendent une confirmation** à la source officielle.
 8 autres valeurs sont des pratiques de marché ou des hypothèses de
 simulation : elles ne relèvent d'aucun texte et ne figurent pas dans cette liste.
 
@@ -44,13 +44,22 @@ Source à consulter : à déterminer
 |---|---|---|
 | `epargne_long_terme.seuil_bareme` | 2040 eur | Épargne à long terme — seuil de revenus du barème du plafond |
 
+### immobilier
+
+Source à consulter : SPF Finances — revenus immobiliers
+
+| Clé | Valeur provisoire | Libellé |
+|---|---|---|
+| `immobilier.coefficient_revalorisation` | 5.75 coefficient | Coefficient de revalorisation du RC — plafonne le forfait de charges |
+
 ### independant
 
 Source à consulter : INASTI et caisses d’assurances sociales
 
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
-| `independant.cout_bce` | 111.5 eur | Inscription à la BCE via un guichet d'entreprises (par unité d'établissement) |
+| `independant.frais_gestion.group_s` | 3.9 pourcent | Frais de gestion — Group S |
+| `independant.frais_gestion.cnasti` | 4.25 pourcent | Frais de gestion — Caisse nationale auxiliaire (CNASTI) |
 
 ### plus_values
 

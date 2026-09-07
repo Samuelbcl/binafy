@@ -27,9 +27,6 @@ import { parametresARevoir, peremptionDe } from './types';
  * `verificateur-fiscal`.
  */
 const DETTE_CONNUE = new Set([
-  // Tarif réglementé, identique chez tous les guichets, mais l'arrêté qui le
-  // fixe n'a pas été lu au texte.
-  'independant.cout_bce',
   // Valeur corrigée le 07/09/2026 (2 040 €, plus 17 070 €) d'après la
   // circulaire 2026/C/6 republiée ; la circulaire elle-même reste à lire.
   'epargne_long_terme.seuil_bareme',
@@ -38,6 +35,15 @@ const DETTE_CONNUE = new Set([
   // l'avis officiel d'indexation.
   'plus_values.report_annuel',
   'plus_values.report_plafond',
+  // Deux caisses dont le tarif 2026 n'a pas pu être lu sur leur propre site :
+  // la page de Group S n'est pas exploitable, et le seul document de la Caisse
+  // nationale auxiliaire date de 2024.
+  'independant.frais_gestion.group_s',
+  'independant.frais_gestion.cnasti',
+  // L'arrêté royal fixant le coefficient de revalorisation des revenus 2026
+  // n'a pas été retrouvé ; une source l'annonce « sous réserve de
+  // confirmation par l'administration ».
+  'immobilier.coefficient_revalorisation',
 ]);
 
 describe('catalogue fiscal — garde-fou', () => {

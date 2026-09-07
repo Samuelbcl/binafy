@@ -31,6 +31,27 @@ un précompte réduit s'applique (taux distinct du taux standard). Deux composan
 (acquise seulement après 12 mois de présence continue des fonds). Un retrait fait perdre
 la prime : Nestor doit le signaler avant que l'utilisateur ne bouge son argent.
 
+**Vérifié au texte le 07/09/2026.** L'exonération est **individuelle**, pas par ménage :
+les intérêts d'un compte joint se divisent à parts égales entre titulaires, et chacun
+applique la sienne — d'où le doublement apparent pour un couple. Un compte au nom d'un
+seul conjoint ne donne droit qu'à une exonération, sauf régime matrimonial rendant les
+revenus communs.
+
+L'AR du 27 août 1993 (art. 2) encadre la structure : rémunération limitée à un taux de
+base et une prime de fidélité, prime plafonnée à la moitié du taux de base maximal et
+plancher au quart du taux offert, préavis possible au-delà d'un certain retrait, frais
+limitativement énumérés. **Point non tranché** : le plafond exact du taux de base — les
+sources divergent entre un maximum fixe et un maximum couplé au taux BCE. Non chiffré
+tant que le texte coordonné n'est pas lu à la main.
+
+L'AR du 18 juin 2013 impose l'affichage séparé des deux taux, en brut hors frais, et
+interdit toute présentation incitant à les additionner.
+
+**Banque étrangère** : la condition d'établissement belge a été jugée contraire à la
+libre prestation de services (CJUE, C-580/15 *Van der Weegen*, 08/06/2017). L'exonération
+s'étend aux établissements de l'EEE offrant un produit à critères analogues ;
+l'administration reste réticente, la question se plaide.
+
 ### Taxe sur les opérations de bourse (TOB)
 Due à chaque achat **et** à chaque vente, avec un plafond par opération. Taux différents
 selon le support :
@@ -73,13 +94,37 @@ suppose nul à défaut — l'hypothèse la moins flatteuse, jamais l'inverse.
 **Rien n'est automatique** (art. 307 § 1er/1 CIR 92) : le précompte de 10 % est retenu
 à la source ; exonération et report se réclament dans la déclaration, pièces à l'appui.
 
-⚠️ Toujours à traiter : compensation des moins-values, régime des participations
-importantes (≥ 20 %, barème distinct, exonération d'un million sur cinq ans), et la
-valeur indexée exacte des montants 2026.
+**Montants de base et indexation.** La loi écrit 4 855 € (exonération), 480 € (report
+annuel) et 2 426 € (plafond du report) : ce sont des montants de base au sens de
+l'article 178 CIR 92. Une vérification du 07/09/2026 a soutenu qu'ils s'appliquaient tels
+quels aux revenus 2026 ; **cette lecture est écartée**. Un coefficient unique de 2,06
+donne exactement 4 855 → 10 000 et 2 426 → 5 000, et l'article 33 de la loi charge le Roi
+d'ajuster le report « de telle sorte qu'il soit égal, *après application de l'article
+178*, à 1 000 euros » — formule qui n'aurait aucun sens si l'article 178 ne s'appliquait
+pas. Le même coefficient donne 480 → 988,66 : c'est ce chiffre non rond que l'article 33
+corrige à partir de 2027. D'où le report maintenu en dette pour 2026.
+
+⚠️ Toujours à traiter : compensation des moins-values et régime des participations
+importantes (≥ 20 %, barème distinct, exonération d'un million sur cinq ans).
 
 ---
 
 ## 2. Revenus immobiliers
+
+**Vérifié au Mémento fiscal du SPF le 07/09/2026.** Le précompte immobilier ne se déduit
+de rien chez un bailleur : la base forfaitaire (RC indexé majoré) est réputée déjà nette
+de charges, et l'imputation du précompte sur l'impôt final a été supprimée lorsqu'il est
+devenu un impôt régional autonome — la date exacte de cette suppression n'a pas été
+retrouvée. Exception hors périmètre du bailleur : le propriétaire qui affecte le bien à
+sa propre activité peut le déduire comme charge professionnelle.
+
+En location professionnelle, la formule de l'article 13 est confirmée : loyer réel moins
+40 % de forfait, plafonné aux deux tiers du RC revalorisé. **Le coefficient de
+revalorisation 2026 (5,75) est en dette** : l'arrêté qui le fixe n'a pas été retrouvé.
+Si le locataire est un particulier qui n'affecte qu'une partie du bien à sa profession,
+la base porte sur le loyer **entier**, sauf bail enregistré répartissant explicitement
+les deux usages.
+
 
 ### Le principe belge, très différent de la France
 Pour un bien loué à un particulier qui l'occupe à des fins privées, l'imposition ne
@@ -118,6 +163,23 @@ de l'acte. Le non-respect entraîne le rappel de la différence, majorée d'int�
 fait perdre le taux réduit sur l'achat suivant. Sur un bien à 280 000 €, l'écart entre
 3 % et 12,5 % dépasse 26 000 €. Le module immobilier doit chiffrer cet arbitrage
 explicitement : c'est le calcul qui, à lui seul, justifie l'app pour la cible.
+
+**Vérifié le 07/09/2026.** Le rappel de droits en cas de rupture de condition est majoré
+de l'**intérêt légal au taux civil**, exigible depuis l'enregistrement de l'acte
+(art. 44bis §5 du Code wallon, rétabli par le décret du 05/12/2024) ; la force majeure et
+la raison impérieuse familiale, médicale, professionnelle ou sociale sont prévues comme
+exceptions. **Aucune portabilité** des droits en Wallonie — la Flandre a elle-même
+supprimé la sienne en 2022. Le délai de prescription de l'action en récupération n'a pas
+été retrouvé.
+
+Flandre, depuis le 01/01/2026 : domiciliation dans les 3 ans **et** maintien ininterrompu
+d'au moins 1 an, acquisitions scindées exclues du taux réduit. Bruxelles : abattement en
+tout ou rien au-delà du prix plafond, domiciliation dans les 3 ans, maintien 5 ans,
+abattement supplémentaire par classe énergétique gagnée (2 minimum) — non modélisé.
+
+Neuf sous TVA : le terrain suit la TVA seulement si vendu avec le bâtiment, au même
+acquéreur, par le même vendeur, simultanément. À défaut, il reste aux droits
+d'enregistrement.
 
 ### Frais d'acquisition complets
 ```

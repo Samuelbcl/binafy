@@ -255,8 +255,9 @@ describe('indépendant complémentaire', () => {
     );
     expect(r.result.sousLeSeuil).toBe(false);
     expect(r.result.cotisationsCents).toBe(euros(410)); // 2 000 × 20,5 %
-    // Sans caisse choisie, on retient la médiane du marché : 3,65 %.
-    expect(r.result.fraisGestionCents).toBe(euros(14.97)); // 410 × 3,65 %
+    // Sans caisse choisie, on retient la médiane du marché, relevée sur les
+    // huit tarifs officiels le 07/09/2026 : 4,00 %.
+    expect(r.result.fraisGestionCents).toBe(euros(16.4)); // 410 × 4,00 %
   });
 
   it('prévient que le seuil frappe la totalité, pas le dépassement', () => {
@@ -276,9 +277,10 @@ describe('indépendant complémentaire', () => {
       { revenuNetImposableCents: euros(20_000), statut: 'principal', caisse: 'partena' },
       P,
     );
-    // 4 100 € de cotisations : 3,05 % chez Acerta contre 4,25 % chez Partena.
+    // 4 100 € de cotisations : 3,05 % chez Acerta contre 4,20 % chez Partena.
+    // Tarifs 2026 relevés sur les documents des caisses elles-mêmes.
     expect(acerta.result.fraisGestionCents).toBe(euros(125.05));
-    expect(partena.result.fraisGestionCents).toBe(euros(174.25));
+    expect(partena.result.fraisGestionCents).toBe(euros(172.2));
     expect(partena.result.totalCents).toBeGreaterThan(acerta.result.totalCents);
   });
 

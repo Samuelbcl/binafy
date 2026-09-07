@@ -210,7 +210,7 @@ const PLUS_VALUES_2026: Guide = {
       type: 'note',
       titre: 'Le montant exact du report pour 2026 reste à confirmer',
       texte:
-        'La loi fixe le report en montants de base à indexer, et ne garantit la valeur ronde de mille euros par an qu’à partir des revenus 2027. Pour 2026, Nestor affiche la valeur annoncée par les sources professionnelles et la marque comme non confirmée tant que l’avis officiel d’indexation ne l’a pas fixée.',
+        'La loi écrit ces montants en valeurs de base, à indexer. Le plafond cumulé tombe rond une fois indexé ; l’incrément annuel, non — c’est d’ailleurs pour l’arrondir que le législateur a chargé le Roi de l’ajuster, mais seulement à partir des revenus 2027. Pour 2026, Nestor affiche la valeur ronde annoncée partout et la marque comme non confirmée, faute d’avoir retrouvé l’avis officiel d’indexation.',
     },
     {
       type: 'note',
@@ -321,20 +321,38 @@ const DROITS_ENREGISTREMENT_WALLONIE: Guide = {
     {
       type: 'para',
       texte:
-        'Domiciliation manquée, résidence quittée avant trois ans, revente promise et non faite : l’administration réclame la différence entre le taux plein et le taux réduit. La documentation officielle wallonne consultée décrit ce rappel sans en détailler les intérêts de retard — ce point mérite d’être confirmé auprès de ton notaire si tu es concerné.',
-    },
-
-    { type: 'titre', texte: 'Les autres Régions, pour situer' },
-    {
-      type: 'para',
-      texte:
-        'La Flandre applique un taux réduit plus bas que la Wallonie sur l’habitation propre et unique, et un taux plein légèrement inférieur. Bruxelles procède autrement : un taux unique, corrigé par un abattement qui efface les droits sur une première tranche du prix, à condition que le prix total reste sous un plafond.',
+        'Domiciliation manquée, résidence quittée avant trois ans, revente promise et non faite : l’administration réclame la différence entre le taux plein et le taux réduit, majorée de l’intérêt légal au taux civil. Cet intérêt court depuis l’enregistrement de l’acte, pas depuis le jour où la condition a été rompue — la note s’alourdit donc d’autant plus qu’on est resté longtemps dans les clous avant d’en sortir.',
     },
     {
       type: 'note',
-      titre: 'Ce guide est wallon',
+      titre: 'La force majeure est prévue par le texte',
       texte:
-        'Les taux des trois Régions sont dans le moteur de Nestor et vérifiés. En revanche, les conditions fines des régimes flamand et bruxellois — délais de domiciliation, définition exacte du bien unique, dégressivité éventuelle de l’abattement bruxellois — n’ont pas été vérifiées à la même profondeur. Ne te fie pas à ce guide pour un achat hors Wallonie.',
+        'Le décret réserve le taux réduit à qui n’a pas pu respecter les conditions pour un motif de force majeure ou une raison impérieuse d’ordre familial, médical, professionnel ou social. Une mutation, une séparation ou une maladie ne font donc pas automatiquement tomber l’avantage.',
+    },
+
+    { type: 'titre', texte: 'Les autres Régions' },
+    {
+      type: 'para',
+      texte:
+        'La Flandre descend plus bas encore sur l’habitation propre et unique, avec un taux plein légèrement inférieur au wallon. Ses conditions se sont durcies au 1er janvier 2026 : à la domiciliation dans les trois ans s’ajoute désormais un maintien d’au moins un an sans interruption, et les acquisitions scindées — usufruit d’un côté, nue-propriété de l’autre — sont exclues du taux réduit.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Bruxelles procède autrement : un taux unique pour tout le monde, corrigé par un abattement qui efface les droits sur une première tranche du prix. C’est du tout ou rien — au-delà du prix plafond, l’abattement disparaît entièrement, sans sortie progressive. Il faut s’y domicilier dans les trois ans et y rester cinq. Un abattement supplémentaire récompense la rénovation énergétique, à raison d’un montant par classe gagnée, à partir de deux classes.',
+    },
+    {
+      type: 'note',
+      titre: 'Pas de portabilité en Wallonie',
+      texte:
+        'Contrairement à ce que la Flandre a longtemps pratiqué — et qu’elle a supprimé en 2022 —, la Wallonie ne permet pas de reporter sur un achat suivant les droits déjà payés sur un précédent. La réforme de 2025 est une baisse de taux assortie de conditions, pas un crédit reportable.',
+    },
+
+    {
+      type: 'note',
+      titre: 'Le neuf, et le sort du terrain',
+      texte:
+        'Un logement neuf se vend sous TVA plutôt que sous droits d’enregistrement. Le terrain suit la TVA seulement si trois conditions sont réunies : il est vendu avec le bâtiment, au même acquéreur, par le même vendeur et au même moment. Achète le terrain d’un côté et fais construire de l’autre, et la quote-part du terrain retombe sous les droits d’enregistrement — au taux qui te concerne.',
     },
 
     {
@@ -349,9 +367,8 @@ const DROITS_ENREGISTREMENT_WALLONIE: Guide = {
     {
       type: 'liste',
       items: [
-        'L’existence d’un mécanisme wallon de portabilité des droits déjà payés : les sources officielles consultées n’en mentionnent aucun, ce qui n’est pas une preuve qu’il n’existe pas.',
-        'Les intérêts de retard applicables à un rappel de droits, et le délai dont dispose l’administration pour le réclamer.',
-        'L’achat en société, l’achat par un non-résident, et le sort de la quote-part du terrain dans un achat neuf sous TVA.',
+        'Le délai dont dispose l’administration pour réclamer un rappel : les textes consultés fixent le contrôle à trois ans pour la clause de revente, mais pas la prescription de l’action en récupération.',
+        'L’achat en société et l’achat par un non-résident.',
       ],
     },
   ],
@@ -377,25 +394,30 @@ const EPARGNE_REGLEMENTEE: Guide = {
     {
       type: 'para',
       texte:
-        'Un compte d’épargne réglementé porte deux rémunérations qui tournent en parallèle et n’obéissent pas aux mêmes règles. Le taux de base court chaque jour sur tout ce qui est sur le compte, dès le lendemain d’un versement, jusqu’au jour du retrait. Rien à faire pour l’obtenir.',
+        'Un compte d’épargne réglementé porte deux rémunérations qui tournent en parallèle et n’obéissent pas aux mêmes règles. Le taux de base court sur tout ce qui est sur le compte, à partir du lendemain d’un versement, et s’arrête au retrait. Rien à faire pour l’obtenir : il est porté en compte une fois par an.',
     },
     {
       type: 'para',
       texte:
-        'La prime de fidélité est autre chose. Elle ne récompense que l’argent resté en place douze mois complets et consécutifs. Elle se calcule versement par versement, pas sur le solde : chaque euro déposé a sa propre horloge, qui démarre le jour du dépôt. Une fois les douze mois écoulés, elle est versée au premier jour du trimestre suivant, et un nouveau cycle démarre.',
+        'La prime de fidélité est autre chose. Elle ne récompense que l’argent resté en place douze mois complets et consécutifs. Elle se calcule versement par versement, pas sur le solde : chaque euro déposé a sa propre horloge, qui démarre le jour du dépôt. Une fois les douze mois écoulés, elle est versée au trimestre suivant — depuis une réforme de 2012, la prime est payée quatre fois par an et non plus une seule — et un nouveau cycle démarre.',
     },
 
     { type: 'titre', texte: 'Ce que « jusqu’à X % » veut dire' },
     {
       type: 'para',
       texte:
-        'Le taux mis en avant par une banque additionne souvent les deux composantes. Ce total ne se touche que sur un versement resté immobile toute une année pile — un cas peu représentatif de quelqu’un qui épargne et retire au fil des mois. Un arrêté royal impose d’ailleurs aux banques de communiquer le taux de base et la prime séparément : la confusion entre les deux n’a rien d’anecdotique.',
+        'Le taux mis en avant par une banque additionne souvent les deux composantes. Ce total ne se touche que sur un versement resté immobile toute une année pile — un cas peu représentatif de quelqu’un qui épargne et retire au fil des mois. L’arrêté royal du 18 juin 2013 impose d’ailleurs aux banques d’afficher les deux taux séparément, en pourcentage brut hors frais, et précise que « la présentation de ces taux ne peut inciter l’épargnant à procéder à leur addition ». Quand le législateur prend la peine d’écrire ça, c’est que la confusion n’a rien d’anecdotique.',
     },
     {
       type: 'note',
       titre: 'Les taux ne sont pas des paramètres fiscaux',
       texte:
-        'Chaque banque fixe librement son taux de base et sa prime, et peut les modifier. Le taux de base peut changer à tout moment, y compris sur l’argent déjà présent, moyennant information des clients. La prime, elle, est verrouillée pour les douze mois qui suivent chaque versement : un changement annoncé aujourd’hui ne touche que les nouveaux dépôts.',
+        'Chaque banque fixe son taux de base et sa prime, et peut les modifier. Le taux de base peut changer à tout moment, y compris sur l’argent déjà présent, moyennant information des clients. La prime, elle, est verrouillée pour les douze mois qui suivent chaque versement : un changement annoncé aujourd’hui ne touche que les nouveaux dépôts.',
+    },
+    {
+      type: 'para',
+      texte:
+        'La liberté des banques n’est pas totale pour autant : la loi encadre la structure. Un compte réglementé ne peut porter que ces deux rémunérations, à l’exclusion de toute autre. La prime ne peut dépasser la moitié du taux de base maximal autorisé, ni descendre sous le quart du taux de base réellement offert — c’est ce qui empêche d’afficher un taux de base symbolique adossé à une prime mirobolante. La banque peut aussi exiger un préavis au-delà d’un certain montant retiré, et ne peut imputer que des frais limitativement énumérés.',
     },
 
     { type: 'titre', texte: 'Ce que le fisc prélève, et ce qu’il laisse' },
@@ -424,6 +446,18 @@ const EPARGNE_REGLEMENTEE: Guide = {
       texte:
         'Chaque banque applique l’exonération sur son propre compte, sans savoir ce que tu touches ailleurs. Si le total de tes intérêts réglementés dépasse le plafond alors qu’aucune banque n’a rien retenu, c’est à toi de déclarer l’excédent et d’acquitter le précompte réduit.',
     },
+    {
+      type: 'para',
+      texte:
+        'En couple, l’exonération double — mais pas comme on l’imagine. Le SPF Finances ne connaît pas de plafond « par ménage » : l’exonération est individuelle, et ce sont les intérêts d’un compte joint qui se divisent à parts égales entre les titulaires. Chacun applique alors la sienne, ce qui revient bien au double. La conséquence est moins évidente : un compte au nom d’un seul des deux ne donne droit qu’à une exonération, sauf si le régime matrimonial rend ces revenus communs.',
+    },
+
+    {
+      type: 'note',
+      titre: 'Et si la banque n’est pas belge ?',
+      texte:
+        'Le texte réservait l’exonération aux établissements belges. La Cour de justice de l’Union européenne a jugé en 2017 que cette condition entravait la libre prestation de services : elle s’étend désormais aux banques d’un autre État de l’Espace économique européen dont le compte répond à des critères analogues. L’administration reste réticente et la question se plaide encore — si ton compte est logé à l’étranger, ne considère pas l’exonération comme acquise sans avis.',
+    },
 
     { type: 'titre', texte: 'Le piège' },
     {
@@ -448,8 +482,7 @@ const EPARGNE_REGLEMENTEE: Guide = {
       type: 'liste',
       items: [
         'Les comptes à terme, la branche 21 et les autres produits d’épargne ou d’assurance, qui ont leurs propres règles.',
-        'Le doublement du plafond d’exonération pour un couple qui déclare ensemble : mentionné par la presse spécialisée, pas encore confirmé ici à la source officielle.',
-        'La liste complète des conditions qui rendent un compte « réglementé » — frais, devise, État de l’établissement.',
+        'Le plafond exact que la loi impose au taux de base : les sources divergent entre un maximum fixe et un maximum couplé au taux de la Banque centrale européenne. Sans certitude, on ne le chiffre pas.',
         'Le cas d’un compte joint entre titulaires qui ne sont ni mariés ni cohabitants légaux.',
       ],
     },
@@ -531,14 +564,25 @@ const EPARGNE_PENSION: Guide = {
     {
       type: 'para',
       texte:
-        'Ce n’est pas un cas d’école. Selon des statistiques du SPF Finances relayées par l’ordre des experts-comptables, environ deux mille deux cents contribuables ont versé en 2025 un montant situé dans cette zone — et ont reçu moins qu’un versement plus faible leur aurait donné. Nestor chiffre les cinq lignes ; le montant versé, c’est toi qui le choisis.',
+        'Ce n’est pas un cas d’école : la presse économique a chiffré à un peu plus de deux mille les contribuables ayant versé, en 2025, un montant situé dans cette zone — chacun recevant moins qu’un versement plus faible lui aurait donné. Le chiffre est attribué à des statistiques du SPF Finances que nous n’avons pas pu consulter directement. Nestor calcule les cinq lignes ; le montant versé, c’est toi qui le choisis.',
     },
 
     { type: 'titre', texte: 'Ce qui se passe à soixante ans' },
     {
       type: 'para',
       texte:
-        'Ce capital n’échappe pas à l’impôt. À soixante ans, une taxe anticipative est prélevée sur le capital constitué — versements cumulés et rendement produit — que tu retires l’argent ce jour-là ou non. Son taux figure dans les paramètres vérifiés de Nestor ; le mode de calcul exact de son assiette pour les versements poursuivis après soixante ans, lui, n’y figure pas, et ce guide ne s’y engage pas.',
+        'Ce capital n’échappe pas à l’impôt. À soixante ans, une taxe anticipative est prélevée, que tu retires l’argent ce jour-là ou non. Un contrat souscrit après cinquante-cinq ans est taxé à son dixième anniversaire plutôt qu’à cet âge.',
+    },
+    {
+      type: 'piege',
+      titre: 'La taxe ne porte pas sur ce que ton fonds a réellement gagné',
+      texte:
+        'Pour un fonds d’épargne-pension, l’assiette est un capital théorique : tes versements capitalisés à un rendement fictif de 4,75 % par an, fixé par la loi. Si ton fonds a fait mieux, le surplus échappe entièrement à la taxe. S’il a fait moins bien, tu es taxé sur un gain que tu n’as pas eu. Pour une assurance, la taxe porte sur les primes au taux garanti, et les participations bénéficiaires en sont exonérées.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Les versements que tu continues après soixante ans restent déductibles et ne sont plus taxés une seconde fois : la taxe anticipative se paie une fois pour toutes. Ce mécanisme nous vient de sources concordantes mais pas du texte du Code des droits et taxes divers lui-même, que nous n’avons pas pu lire intégralement.',
     },
     {
       type: 'note',
@@ -551,21 +595,21 @@ const EPARGNE_PENSION: Guide = {
     {
       type: 'para',
       texte:
-        'Une circulaire de 2026 gèlerait l’indexation des deux plafonds pendant plusieurs années : ils resteraient identiques pour les revenus 2026 à 2029. Nestor n’a pas encore lu ce texte à sa source primaire — l’information vient de republications professionnelles concordantes, et elle est signalée avec cette réserve.',
+        'L’indexation des deux plafonds est gelée par la loi du 18 décembre 2025 : ils resteront identiques des revenus 2026 aux revenus 2029. Le gel lui-même est dans la loi ; les montants qui en résultent sont publiés par une circulaire administrative, pas par le législateur.',
     },
     {
       type: 'note',
       titre: 'Une réforme annoncée n’est pas une réforme en vigueur',
       texte:
-        'Un plafond unique remplaçant les deux a été annoncé en 2026, en réaction au constat ci-dessus. Le gouvernement ne s’est pas accordé dessus à l’été ; un retour est évoqué pour l’automne. Tant que rien n’est voté ni publié, les deux plafonds décrits ici s’appliquent normalement — et Nestor ne change pas une ligne de calcul sur une annonce.',
+        'Le ministre des Finances a soumis sa proposition au conseil des ministres restreint à la mi-juillet 2026, sans obtenir d’accord ; un partenaire de la coalition pousse un autre texte. Aucun projet de loi du gouvernement n’est déposé, aucune date d’entrée en vigueur n’est fixée, et le dossier revient à l’automne avec le budget. Tant que rien n’est voté ni publié, les deux plafonds décrits ici s’appliquent — et Nestor ne change pas une ligne de calcul sur une annonce.',
     },
 
     { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
     {
       type: 'liste',
       items: [
-        'L’assiette précise de la taxe anticipative — capital réel ou coefficient de conversion selon l’âge du premier versement.',
-        'Le sort des versements poursuivis après soixante ans et leur traitement à la sortie définitive.',
+        'Le traitement à la sortie définitive, une fois la taxe anticipative payée.',
+        'La distinction entre branche 21 et branche 23 dans l’assiette de cette taxe.',
         'L’épargne à long terme, un dispositif distinct au panier fiscal séparé, qui aura son propre guide.',
         'Les frais de gestion de chaque fonds ou assureur : ce ne sont pas des paramètres fiscaux, mais ils pèsent sur le capital constitué.',
       ],
@@ -634,6 +678,12 @@ const RENDEMENT_LOCATIF: Guide = {
         'Rien n’a changé : ni le bien, ni le loyer, ni ta tranche d’impôt. Seul l’usage qu’en fait le locataire.',
     },
     {
+      type: 'note',
+      titre: 'Et si le locataire n’y travaille qu’un peu ?',
+      texte:
+        'Un particulier qui affecte une pièce à son activité fait basculer le bien entier dans le régime professionnel : la base se calcule sur la totalité du loyer. Sauf si un bail enregistré répartit explicitement les parties privée et professionnelle — chacune suit alors son propre régime. Un bail enregistré, dans ce cas précis, vaut de l’argent.',
+    },
+    {
       type: 'para',
       texte:
         'C’est pour cette raison que le champ « usage du bien » pilote tout le calcul dans Nestor : c’est la donnée qui, à elle seule, peut multiplier ton impôt sans que le loyer ait bougé d’un centime.',
@@ -643,7 +693,7 @@ const RENDEMENT_LOCATIF: Guide = {
     {
       type: 'para',
       texte:
-        'Une annonce affiche un rendement brut : le loyer annuel divisé par le prix. Ce chiffre ignore tout ce qui sort réellement de ta poche. Les droits d’enregistrement d’un achat locatif, au taux plein, et les frais de notaire s’ajoutent au prix le jour de l’acte. Puis chaque année tombent les charges non récupérables, la vacance entre deux locataires, une provision pour travaux, et le précompte immobilier — un impôt régional distinct, dû que le bien soit loué ou vide, et qui ne se déduit pas de la base imposable.',
+        'Une annonce affiche un rendement brut : le loyer annuel divisé par le prix. Ce chiffre ignore tout ce qui sort réellement de ta poche. Les droits d’enregistrement d’un achat locatif, au taux plein, et les frais de notaire s’ajoutent au prix le jour de l’acte. Puis chaque année tombent les charges non récupérables, la vacance entre deux locataires, une provision pour travaux, et le précompte immobilier — un impôt régional distinct, dû que le bien soit loué ou vide. Il ne se déduit de rien : la base imposable étant forfaitaire, elle est réputée déjà nette de charges. Le Mémento fiscal du SPF est explicite — l’imputation du précompte immobilier sur l’impôt final a été supprimée quand il est devenu un véritable impôt régional.',
     },
     {
       type: 'demonstration',
@@ -674,7 +724,8 @@ const RENDEMENT_LOCATIF: Guide = {
         'Un bien neuf, où la TVA remplace les droits d’enregistrement.',
         'La revente : la plus-value immobilière suit un régime distinct de la taxe sur les plus-values mobilières de 2026.',
         'La détention via une société, la colocation et le bail étudiant, qui posent leurs propres questions de qualification.',
-        'Les cas particuliers où le précompte immobilier devient déductible, comme le bail à ferme.',
+        'Le cas du propriétaire qui occupe lui-même le bien pour sa propre activité : le précompte immobilier redevient alors une charge professionnelle.',
+        'La valeur exacte du coefficient qui plafonne le forfait de charges : la formule est confirmée au Mémento fiscal, l’arrêté qui fixe le chiffre 2026 ne l’est pas.',
       ],
     },
   ],
@@ -709,7 +760,7 @@ const INDEPENDANT_COMPLEMENTAIRE: Guide = {
     {
       type: 'para',
       texte:
-        'Un indépendant complémentaire exerce déjà une activité salariée à au moins mi-temps — ou une situation reconnue équivalente — et démarre une activité indépendante à côté. Le statut n’existe qu’en miroir de cette activité principale : sous le mi-temps, la caisse bascule l’affiliation vers le titre principal, aux cotisations plus lourdes.',
+        'Un indépendant complémentaire exerce déjà une activité principale et démarre une activité indépendante à côté. L’INASTI chiffre ce « à côté » : un salarié doit prester au moins la moitié des heures d’un temps plein de son entreprise ou de son secteur ; un fonctionnaire, au moins huit mois ou deux cents jours par an et un mi-temps mensuel ; un enseignant statutaire, six dixièmes d’un horaire complet — un contractuel, la moitié suffit. Une allocation de chômage, une indemnité d’incapacité ou une pension anticipée de fonctionnaire ouvrent aussi le statut.',
     },
     {
       type: 'para',
@@ -717,12 +768,19 @@ const INDEPENDANT_COMPLEMENTAIRE: Guide = {
         'Une fois lancé, chaque facture génère deux prélèvements distincts, calculés à des moments différents : une cotisation sociale, et un impôt. Pris séparément, ils se comprennent. C’est leur addition qui surprend — et c’est précisément l’addition que les simulateurs de caisses ne font pas.',
     },
 
+    {
+      type: 'note',
+      titre: 'Si l’activité principale s’arrête',
+      texte:
+        'Le passage au titre principal produit effet immédiatement, mais la caisse le rattache au trimestre en cours, pas au jour exact : arrêter son emploi fin août fait basculer les cotisations depuis le 1er juillet. Préviens ta caisse dans les quinze jours, sinon la régularisation tombe d’un coup sur plusieurs trimestres. Cette règle nous vient d’une caisse et non de l’INASTI : traite-la comme un ordre de grandeur, pas comme une date à opposer à ton dossier.',
+    },
+
     { type: 'titre', texte: 'Avant la première facture' },
     {
       type: 'liste',
       items: [
         'S’affilier à une caisse d’assurances sociales. L’affiliation est gratuite, mais elle doit précéder le premier jour d’activité, pas le suivre.',
-        'S’inscrire à la Banque-Carrefour des Entreprises via un guichet d’entreprises — un tarif réglementé, identique partout.',
+        'S’inscrire à la Banque-Carrefour des Entreprises via un guichet d’entreprises — un droit fixé par arrêté royal et indexé chaque 1er janvier, donc identique partout.',
         'Activer un numéro de TVA si l’activité le demande — là, chaque guichet fixe son prix.',
       ],
     },
@@ -735,16 +793,28 @@ const INDEPENDANT_COMPLEMENTAIRE: Guide = {
     },
     {
       type: 'note',
+      titre: 'Plus besoin de prouver des connaissances de gestion',
+      texte:
+        'L’obligation a disparu partout : en Flandre depuis 2018, à Bruxelles depuis janvier 2024, en Wallonie depuis le 1er octobre 2025. À ne pas confondre avec les compétences professionnelles réglementées de certains métiers — boucher, couvreur, chauffagiste —, qui restent exigées.',
+    },
+    {
+      type: 'note',
       titre: 'La franchise de TVA',
       texte:
         'Sous un certain chiffre d’affaires annuel, tu peux rester en franchise : pas de TVA à facturer, pas de déclaration périodique — mais pas de TVA déductible sur tes achats professionnels non plus. Le seuil figure dans les paramètres vérifiés de Nestor.',
+    },
+    {
+      type: 'piege',
+      titre: 'La franchise de TVA ne dispense pas de la facture électronique',
+      texte:
+        'Depuis le 1er janvier 2026, les factures entre assujettis belges doivent être des factures électroniques structurées, transmises par le réseau Peppol. Rester sous la franchise n’y change rien : tu dois pouvoir en émettre et en recevoir. Seules quelques catégories en sont dispensées — dont les activités exonérées par l’article 44 du Code de la TVA, comme les professions médicales ou l’enseignement.',
     },
 
     { type: 'titre', texte: 'Les cotisations sociales' },
     {
       type: 'para',
       texte:
-        'Elles suivent un barème dégressif : un premier taux sur la première tranche de revenu net, un taux plus bas sur la suivante, plus rien au-delà d’un plafond. Pour la quasi-totalité des complémentaires, seule la première tranche joue. S’y ajoutent les frais de gestion de la caisse — un tarif commercial, qui varie d’un tiers d’une enseigne à l’autre.',
+        'Elles suivent un barème dégressif : un premier taux sur la première tranche de revenu net, un taux plus bas sur la suivante, plus rien au-delà d’un plafond. Pour la quasi-totalité des complémentaires, seule la première tranche joue. S’y ajoutent les frais de gestion de la caisse. Relevés sur les documents tarifaires 2026 des caisses elles-mêmes, ils vont de 3,05 % à 4,25 % des cotisations dues : près de quarante pour cent d’écart sur cette ligne, pour un service identique.',
     },
     {
       type: 'para',
@@ -797,9 +867,8 @@ const INDEPENDANT_COMPLEMENTAIRE: Guide = {
     {
       type: 'liste',
       items: [
-        'Le titre principal et les conditions de bascule d’un statut à l’autre en cours d’année.',
-        'La preuve de connaissances de gestion de base, parfois exigée à l’inscription — son périmètre actuel n’a pas été vérifié ici.',
-        'La facturation électronique structurée entre assujettis, et la question de savoir si elle s’impose à qui reste en franchise de TVA.',
+        'Le titre principal : plancher de cotisation, barème complet, et le détail procédural d’une bascule en cours d’année.',
+        'Le tarif 2026 de deux caisses — Group S et la Caisse nationale auxiliaire — que nous n’avons pas pu lire sur leur propre site.',
         'Le choix entre frais réels et forfait, la sortie de la franchise de TVA, et l’exercice en société.',
       ],
     },

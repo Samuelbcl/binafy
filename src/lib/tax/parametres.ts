@@ -38,6 +38,9 @@ const INASTI = 'https://www.rsvz-inasti.fgov.be';
 const BNB = 'https://www.nbb.be';
 const STATBEL = 'https://statbel.fgov.be';
 const NOTAIRE = 'https://www.notaire.be';
+// Portail régional bruxellois — abattement et ses conditions.
+const BRUXELLES_ABATTEMENT =
+  'https://be.brussels/en/taxes-finances/taxes/property-related-taxes/registration-duties/abatement';
 // Loi du 6 avril 2026 instaurant la taxe sur les plus-values, texte intégral.
 const LOI_PLUS_VALUES =
   'https://www.ejustice.just.fgov.be/cgi/article.pl?language=fr&sum_date=2026-04-21&lg_txt=f&pd_search=2026-04-21&s_editie=1&numac_search=2026002780&caller=sum&2026002780=1&view_numac=2026002780nx2026002780f';
@@ -199,6 +202,18 @@ const DEFS_2026: Def[] = [
     cle: 'plus_values.exoneration_annuelle',
     valeur: 10000,
     unite: 'eur',
+    // La loi du 6 avril 2026 écrit 4 855 € : c'est un **montant de base**, à
+    // indexer selon l'article 178 du CIR 92, comme la quasi-totalité des
+    // montants du Code. Une vérification a soutenu que 4 855 € s'appliquait tel
+    // quel aux revenus 2026 ; on l'écarte, pour deux raisons.
+    //
+    // D'abord l'arithmétique : un seul coefficient de 2,06 donne exactement
+    // 4 855 → 10 000 et 2 426 → 5 000. Ensuite le texte lui-même : l'article 33
+    // charge le Roi d'ajuster le montant du report « de telle sorte qu'il soit
+    // égal, **après application de l'article 178**, à 1 000 euros ». Cette
+    // formule n'aurait aucun sens si l'article 178 ne s'appliquait pas déjà.
+    // Le même coefficient donne 480 → 988,66 : c'est ce chiffre non rond que
+    // l'article 33 vient corriger à partir de 2027.
     libelle: 'Taxe sur les plus-values — exonération annuelle par personne',
     sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
     verifie: true,
@@ -209,11 +224,12 @@ const DEFS_2026: Def[] = [
   // s'ajoute aux suivantes, par tranches annuelles, jusqu'à un plafond cumulé ;
   // les plus anciennes s'imputent d'abord.
   //
-  // Les montants ci-dessous sont les valeurs indexées annoncées par les
-  // sources professionnelles (480 € et 2 426 € de base). La loi ne garantit
-  // le montant exact de 1 000 € qu'à partir des revenus 2027 (art. 33) ; pour
-  // les revenus 2026, la valeur indexée reste à confirmer à l'avis officiel
-  // d'indexation. D'où `verifie: false`, et l'avertissement dans l'interface.
+  // Montants de base : 480 € pour l'incrément annuel, 2 426 € pour le plafond
+  // cumulé. Le plafond indexé tombe sur 5 000 € au coefficient déduit des
+  // autres montants ; l'incrément, lui, donnerait 988,66 € pour les revenus
+  // 2026 — l'article 33 ne garantit la valeur ronde de 1 000 € qu'à partir des
+  // revenus 2027. On retient 1 000 € comme ordre de grandeur, marqué non
+  // vérifié : l'avis officiel d'indexation n'a pas été retrouvé.
   {
     cle: 'plus_values.report_annuel',
     valeur: 1000,
@@ -279,10 +295,14 @@ const DEFS_2026: Def[] = [
     libelle: 'Coefficient de revalorisation du RC — plafonne le forfait de charges',
     // À ne pas confondre avec le coefficient d'indexation (2,30) : celui-ci ne
     // sert qu'au plafond du forfait de charges d'une location professionnelle.
-    // 5,63 pour les revenus 2025, 5,75 pour les revenus 2026.
+    //
+    // Descendu dans la dette le 07/09/2026 : l'arrêté royal qui fixe ce
+    // coefficient pour les revenus 2026 n'a pas été retrouvé, et l'une des
+    // sources qui annoncent 5,75 le donne elle-même « sous réserve de
+    // confirmation par l'administration ». La formule qui l'utilise, elle, est
+    // confirmée au Mémento fiscal du SPF.
     sourceUrl: 'https://fin.belgium.be/fr/particuliers/habitation/louer-donner-location/revenus-locatifs/professionnel',
-    verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'immobilier.forfait_charges_professionnel',
@@ -354,18 +374,29 @@ const DEFS_2026: Def[] = [
     valeur: 200000,
     unite: 'eur',
     libelle: "Droits d'enregistrement — abattement sur la première tranche (Bruxelles)",
-    sourceUrl: 'https://www.notaire.be/immobilier/acheter-et-vendre-un-bien-immobilier/les-frais-lies-lachat/droits-denregistrement-reduction-et-abattement-bruxelles',
+    // Confirmé au portail régional le 07/09/2026, avec ses conditions :
+    // domiciliation dans les 3 ans de l'enregistrement, maintien 5 ans sans
+    // interruption. Un abattement supplémentaire de 25 000 € par classe
+    // énergétique gagnée (deux classes au minimum) existe et n'est pas
+    // modélisé ici — il porterait le délai de domiciliation à 5 ans.
+    sourceUrl: BRUXELLES_ABATTEMENT,
     region: 'bruxelles',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'droits_enregistrement.abattement_prix_max',
     valeur: 600000,
     unite: 'eur',
     libelle: "Abattement bruxellois — prix d'achat maximum pour en bénéficier",
-    sourceUrl: 'https://www.notaire.be/immobilier/acheter-et-vendre-un-bien-immobilier/les-frais-lies-lachat/droits-denregistrement-reduction-et-abattement-bruxelles',
-    region: 'bruxelles', verifie: true, verifieLe: '2026-09-06' },
+    // Tout ou rien, confirmé le 07/09/2026 : au-delà de ce prix, l'abattement
+    // ne s'applique plus du tout. Il n'y a pas de sortie progressive — le
+    // modèle binaire de Nestor est donc le bon.
+    sourceUrl: BRUXELLES_ABATTEMENT,
+    region: 'bruxelles',
+    verifie: true,
+    verifieLe: '2026-09-07',
+  },
   {
     cle: 'droits_enregistrement.abattement',
     valeur: 0,
@@ -729,92 +760,116 @@ const DEFS_2026: Def[] = [
     valeur: 3.05,
     unite: 'pourcent',
     libelle: "Frais de gestion — Acerta",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    sourceUrl:
+      'https://www.acerta.be/uploads/media/695bc89b9b3af/barema-s-2026-b-022-2501-fr-v1-web.pdf',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.xerius',
     valeur: 3.05,
     unite: 'pourcent',
     libelle: "Frais de gestion — Xerius",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    // Le document porte le millesime 2026 dans son nom de fichier mais date
+    // sa reference de 2025 : a reconfirmer en janvier.
+    sourceUrl:
+      'https://media.xerius.be/sites/default/files/documents/2025-12/XER-10630-Barema-Eindklant-en-Zelfstandige-2026_FR_LR%20.pdf',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.liantis',
-    valeur: 3.4,
+    valeur: 3.95,
     unite: 'pourcent',
     libelle: "Frais de gestion — Liantis",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    // Corrige le 07/09/2026 : valait 3,40 % dans le catalogue.
+    sourceUrl:
+      'https://www.liantis.be/fr/devenir-independant/cotisations-sociales/calculer/titre-principal',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.securex',
-    valeur: 3.65,
+    valeur: 4.10,
     unite: 'pourcent',
     libelle: "Frais de gestion — Securex",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    // Corrige le 07/09/2026 : valait 3,65 % dans le catalogue.
+    sourceUrl:
+      'https://www.securex.be/getmedia/14813e25-fb0f-42d5-b6be-fc349ff65bfe/Cotisations-sociales-2026.pdf',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.group_s',
-    valeur: 3.8,
+    valeur: 3.90,
     unite: 'pourcent',
     libelle: "Frais de gestion — Group S",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
-    verifie: true,
-    verifieLe: '2026-09-06',
+    // Non confirme sur le site de Group S, dont la page tarifaire n a pas pu
+    // etre lue. Valeur issue du tableau comparatif du bareme Acerta 2026, qui
+    // la donne lui-meme comme un taux 2025 en attente d approbation.
+    sourceUrl:
+      'https://www.groups.be/fr/group-s-pour-starters-independants/documents-utiles/cotisations',
+    verifie: false,
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.partena',
-    valeur: 4.25,
+    valeur: 4.20,
     unite: 'pourcent',
     libelle: "Frais de gestion — Partena Professional",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    // Corrige le 07/09/2026 : valait 4,25 % dans le catalogue.
+    sourceUrl:
+      'https://www.partena-professional.be/sites/default/files/uploads/Administratieve%20docs%20&%20forms%20FR/ASI/FR-Bareme%202026.pdf',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.ucm',
-    valeur: 4.25,
+    valeur: 4.05,
     unite: 'pourcent',
     libelle: "Frais de gestion — UCM",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    // Corrige le 07/09/2026 : valait 4,25 %. UCM precise que le taux est
+    // valide par le Ministre — ce ne serait donc pas un pur tarif libre.
+    sourceUrl:
+      'https://www.ucm.be/documents/je-gere-mon-activite/note-dinfo-calcul-des-cotisations-sociales-2026',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion.cnasti',
     valeur: 4.25,
     unite: 'pourcent',
     libelle: "Frais de gestion — Caisse nationale auxiliaire (CNASTI)",
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
-    verifie: true,
-    verifieLe: '2026-09-06',
+    // Seul document propre a la caisse : millesime 2024. Une source tierce
+    // donne 4,20 % pour 2026. Non tranche.
+    sourceUrl:
+      'https://www.caisse-nationale-auxiliaire.be/sites/nationalehulpkas/files/2023-12/cotisations_sociales_et_droits_membre_de_la_caisse_nationale_auxiliaire.pdf',
+    verifie: false,
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.frais_gestion_caisse',
-    valeur: 3.65,
+    valeur: 4.00,
     unite: 'pourcent',
     libelle: "Frais de gestion — valeur retenue à défaut de caisse choisie",
-    // Médiane des huit caisses, qui s'échelonnent de 3,05 % à 4,25 %.
-    sourceUrl: 'https://www.mon-secretariat-social.be/caisse-assurance-sociale/',
+    // Mediane des huit caisses relevees le 07/09/2026, qui s echelonnent de
+    // 3,05 % a 4,25 %. Valait 3,65 % sur la foi d un comparateur perime.
+    sourceUrl:
+      'https://www.ucm.be/documents/je-gere-mon-activite/note-dinfo-calcul-des-cotisations-sociales-2026',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.cout_bce',
     valeur: 111.5,
     unite: 'eur',
-    // Tarif 2026 identique chez UCM, Acerta et Securex, qualifié de « mission
-    // légale non soumise à TVA » : un tarif réglementé, pas commercial. Reste en
-    // dette tant que l'arrêté qui le fixe n'a pas été lu au texte.
+    // Base légale trouvée le 07/09/2026 : arrêté royal du 28 mai 2003, qui fixe
+    // un droit de 70 € indexé chaque 1er janvier sur l'indice des prix. Le
+    // tarif est donc réglementé et identique chez tous les guichets — 111,50 €
+    // pour 2026, confirmé chez UCM et Liantis.
     libelle: "Inscription à la BCE via un guichet d'entreprises (par unité d'établissement)",
     sourceUrl: 'https://www.ucm.be/documents/je-demarre/note-dinfo-tarifs-guichet-dentreprises-2026',
+    verifie: true,
     verifieLe: '2026-09-07',
   },
   {
