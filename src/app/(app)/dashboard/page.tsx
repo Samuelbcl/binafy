@@ -21,6 +21,7 @@ import {
 } from '@/lib/patrimoine/types';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
+import { EtatVide } from '@/components/ui/etat-vide';
 
 export const metadata: Metadata = {
   title: 'Vue d’ensemble',
@@ -68,7 +69,7 @@ export default async function DashboardPage() {
 
   // Premier écran après inscription : pas de graphique vide et triste (doc 02).
   if (actifs.length === 0 && passifs.length === 0) {
-    return <EtatVide />;
+    return <PremierEcran />;
   }
 
   return (
@@ -120,10 +121,10 @@ export default async function DashboardPage() {
       ) : (
         <section className="carte p-5 sm:p-6">
           <h2 className="font-display text-[17px] font-semibold">Évolution du patrimoine net</h2>
-          <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-text-muted">
-            L’historique se construit à partir d’un instantané quotidien. La courbe
-            apparaîtra dès qu’il y aura au moins deux points — compte quelques jours.
-          </p>
+          <EtatVide
+            titre="Ta courbe commence demain"
+            texte="Nestor photographie ton patrimoine une fois par jour. Il faut deux points pour tracer une ligne : reviens dans quelques jours, elle sera là — et elle n’aura plus jamais de trou."
+          />
         </section>
       )}
 
@@ -161,10 +162,11 @@ export default async function DashboardPage() {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-[13px] leading-relaxed text-text-muted">
-              Les mouvements apparaîtront ici dès que les cotations quotidiennes ou un
-              import de transactions seront en place.
-            </p>
+            <EtatVide
+              dense
+              titre="Rien n’a encore bougé"
+              texte="Dès qu’une cotation change ou qu’un import de transactions arrive, les variations de la journée s’affichent ici — la plus forte en premier."
+            />
           )}
         </section>
       </div>
@@ -209,7 +211,7 @@ export default async function DashboardPage() {
  * C'est le premier écran après inscription : pas de graphique vide et triste,
  * mais un parcours qui dit quoi faire.
  */
-function EtatVide() {
+function PremierEcran() {
   const etapes = [
     {
       titre: 'Saisir manuellement',

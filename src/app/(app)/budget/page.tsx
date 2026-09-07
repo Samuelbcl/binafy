@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Upload } from 'lucide-react';
+import {} from 'lucide-react';
 import { SankeyBudget } from '@/components/charts/sankey-budget';
 import { ImportCSV } from '@/components/budget/import-csv';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
@@ -8,6 +8,7 @@ import { PanneauExplication } from '@/components/ui/panneau-explication';
 import { chargerBudget, construireFluxSankey } from '@/lib/db/budget';
 import { calculerTauxEpargneCompare } from '@/lib/finance/epargne';
 import { formatPercent } from '@/lib/money';
+import { EtatVide } from '@/components/ui/etat-vide';
 
 export const metadata: Metadata = {
   title: 'Budget',
@@ -22,7 +23,7 @@ export default async function BudgetPage() {
   const budget = await chargerBudget();
 
   if (budget.nombreTransactions === 0) {
-    return <EtatVide />;
+    return <PremierImport />;
   }
 
   const epargne = calculerTauxEpargneCompare(budget.mois);
@@ -101,9 +102,11 @@ export default async function BudgetPage() {
           </p>
 
           {budget.categories.length === 0 ? (
-            <p className="mt-4 text-[13px] text-text-muted">
-              Aucune dépense catégorisée sur le dernier mois.
-            </p>
+            <EtatVide
+              dense
+              titre="Rien à catégoriser pour ce mois"
+              texte="Les enseignes belges sont reconnues automatiquement à l’import — Colruyt, Delhaize, Proximus. Ce qui reste inconnu se range à la main, une fois, puis Nestor s’en souvient."
+            />
           ) : (
             <ul className="mt-4 space-y-3">
               {budget.categories.map((cat) => {
@@ -146,10 +149,11 @@ export default async function BudgetPage() {
           </p>
 
           {budget.abonnements.length === 0 ? (
-            <p className="mt-4 text-[13px] leading-relaxed text-text-muted">
-              Aucun abonnement détecté. Il en faut au moins trois mensualités stables pour
-              qu’une dépense soit reconnue comme récurrente.
-            </p>
+            <EtatVide
+              dense
+              titre="Aucun abonnement repéré pour l’instant"
+              texte="Nestor cherche des montants stables qui reviennent chaque mois. Il en faut trois pour être sûr qu’il s’agit d’un abonnement et non d’une coïncidence — importe quelques mois de plus."
+            />
           ) : (
             <ul className="mt-4 divide-y divide-border/50">
               {budget.abonnements.slice(0, 8).map((abo) => (
@@ -239,7 +243,7 @@ export default async function BudgetPage() {
 }
 
 /** État vide : un budget sans transaction ne doit pas montrer de faux chiffres. */
-function EtatVide() {
+function PremierImport() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <header>
@@ -251,15 +255,10 @@ function EtatVide() {
       </header>
 
       <section className="carte p-6 text-center">
-        <Upload className="mx-auto size-6 text-primary" />
-        <h2 className="mt-4 font-display text-[17px] font-semibold">
-          Aucune transaction pour l’instant
-        </h2>
-        <p className="mx-auto mt-2 max-w-md text-[13px] leading-relaxed text-text-muted">
-          Exporte tes opérations en CSV depuis ton application bancaire. Les colonnes sont
-          détectées automatiquement, les enseignes belges catégorisées, et les doublons
-          écartés si tu réimportes le même fichier.
-        </p>
+        <EtatVide
+          titre="Ton budget tient dans un fichier CSV"
+          texte="Exporte tes opérations depuis ton application bancaire. Les colonnes sont détectées seules, les enseignes belges catégorisées, et si tu réimportes le même fichier deux fois, les doublons sont écartés."
+        />
         <div className="mt-5 flex justify-center">
           <ImportCSV />
         </div>

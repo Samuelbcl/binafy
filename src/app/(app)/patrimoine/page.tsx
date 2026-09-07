@@ -13,6 +13,7 @@ import {
   valeurQuotePart,
 } from '@/lib/patrimoine/types';
 import { baseDeReference } from '@/lib/tax/plus-values';
+import { EtatVide } from '@/components/ui/etat-vide';
 
 export const metadata: Metadata = {
   title: 'Patrimoine',
@@ -59,9 +60,13 @@ export default async function PatrimoinePage() {
         </div>
 
         {actifs.length === 0 ? (
-          <p className="border-t border-border px-5 py-8 text-center text-[14px] text-text-muted sm:px-6">
-            Aucun actif pour l’instant. Ajoute-en un pour commencer.
-          </p>
+          <div className="border-t border-border px-5 sm:px-6">
+            <EtatVide
+              titre="Commence par un seul compte"
+              texte="Pas besoin de tout saisir aujourd’hui. Un compte d’épargne suffit pour voir apparaître ton patrimoine net, ton allocation et ton impôt latent — le reste s’ajoute au fil de l’eau."
+              action={{ href: '/patrimoine#ajouter', libelle: 'Ajouter un actif' }}
+            />
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-[14px]">
