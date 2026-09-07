@@ -1,3 +1,6 @@
+import { calculerDroitsEnregistrement, coutOrdreAchat } from '@/lib/tax/enregistrement';
+import { calculerEpargnePension } from '@/lib/tax/epargne-fiscale';
+import { calculerRendementLocatif } from '@/lib/finance/locatif';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
 import { calculerPrecompteDividendes, calculerPrecompteEpargneReglementee } from '@/lib/tax/precompte';
 import { calculerTaxePlusValues } from '@/lib/tax/plus-values';
@@ -75,6 +78,77 @@ export const DEMONSTRATIONS: Record<string, () => Demonstration> = {
       'Un compte d’épargne réglementé de 6 800 € rémunéré 0,90 % de taux de base et 0,60 % de prime de fidélité, sur une année complète.',
     resultat: calculerPrecompteEpargneReglementee(
       { interetsBaseCents: 6_120, primeFideliteCents: 4_080 },
+      P,
+    ),
+  }),
+
+  // ── Droits d'enregistrement ──────────────────────────────────────────
+  /** Le cas courant : habitation propre et unique en Wallonie. */
+  'enregistrement-taux-reduit': () => ({
+    enonce:
+      'Une maison à 280 000 € en Wallonie, destinée à devenir ton habitation propre et unique.',
+    resultat: calculerDroitsEnregistrement(
+      { prixCents: 28_000_000, region: 'wallonie', typeAchat: 'propre_unique' },
+      P,
+    ),
+  }),
+
+  /** Le même bien, hors conditions du taux réduit. */
+  'enregistrement-taux-plein': () => ({
+    enonce:
+      'Le même bien à 280 000 €, mais acheté pour le louer, ou alors que tu détiens déjà un autre logement.',
+    resultat: calculerDroitsEnregistrement(
+      { prixCents: 28_000_000, region: 'wallonie', typeAchat: 'locatif' },
+      P,
+    ),
+  }),
+
+  /** Le piège du guide : le locatif acheté avant la résidence principale. */
+  'ordre-achat-locatif-avant': () => ({
+    enonce:
+      'Tu achètes d’abord un studio locatif à 180 000 €, puis ta résidence principale à 280 000 € quelques années plus tard.',
+    resultat: coutOrdreAchat(
+      {
+        prixLocatifEnvisageCents: 18_000_000,
+        prixResidencePrincipaleFutureCents: 28_000_000,
+        region: 'wallonie',
+      },
+      P,
+    ),
+  }),
+
+  // ── Épargne-pension ──────────────────────────────────────────────────
+  /** Le plafond bas, celui qui rapporte le plus par euro versé. */
+  'epargne-pension-plafond-bas': () => ({
+    enonce: 'Tu verses le montant du plafond bas sur ton épargne-pension cette année.',
+    resultat: calculerEpargnePension({ versementCents: 105_000 }, P),
+  }),
+
+  /** Le piège : verser plus rapporte moins par euro. */
+  'epargne-pension-entre-deux': () => ({
+    enonce:
+      'Tu verses 300 € de plus, en pensant que la réduction d’impôt suivra proportionnellement.',
+    resultat: calculerEpargnePension({ versementCents: 135_000 }, P),
+  }),
+
+  // ── Rendement locatif ────────────────────────────────────────────────
+  /** L'écart entre le rendement brut affiché et le cash-flow réel. */
+  'rendement-locatif-reel': () => ({
+    enonce:
+      'Un appartement à 200 000 € en Wallonie, loué 850 € par mois à un particulier, revenu cadastral de 900 €, financé à 80 % sur 25 ans à 3,5 %.',
+    resultat: calculerRendementLocatif(
+      {
+        prixCents: 20_000_000,
+        region: 'wallonie',
+        loyerMensuelCents: 85_000,
+        revenuCadastralCents: 90_000,
+        tauxMarginal: 0.5,
+        chargesAnnuellesCents: 120_000,
+        precompteImmobilierAnnuelCents: 80_000,
+        vacancePourcent: 5,
+        provisionTravauxAnnuelleCents: 100_000,
+        credit: { quotitePourcent: 80, tauxAnnuelPourcent: 3.5, dureeAnnees: 25 },
+      },
       P,
     ),
   }),
