@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Plus, ShieldCheck, Upload } from 'lucide-react';
+import { ArrowRight, BookOpen, Check, Plus, ShieldCheck, Upload } from 'lucide-react';
 import { BoutonSupprimer } from '@/components/objectifs/bouton-supprimer';
 import { CarteObjectif } from '@/components/objectifs/carte-objectif';
 import { FriseObjectifs } from '@/components/objectifs/frise-objectifs';
@@ -36,8 +36,9 @@ export default async function ObjectifsPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const { onglet } = await searchParams;
+  const { onglet, cree } = await searchParams;
   const ongletActif = onglet === 'matelas' ? 'matelas' : 'objectifs';
+  const vientDeCreer = cree === '1';
   const ctx = await chargerContexteObjectifs();
   const aujourdhui = new Date();
 
@@ -84,6 +85,15 @@ export default async function ObjectifsPage({
 
       {ongletActif === 'objectifs' ? (
         <div className="apparait mt-6 space-y-4">
+          {vientDeCreer && (
+            <p
+              role="status"
+              className="flex items-center gap-2.5 rounded-[var(--radius)] bg-positive/12 px-4 py-3 text-[13.5px] font-medium text-positive"
+            >
+              <Check className="size-4 shrink-0" strokeWidth={2.5} />
+              Objectif créé. Il apparaît aussi sur ta vue d’ensemble.
+            </p>
+          )}
           {ctx.objectifs.length === 0 ? (
             <section className="carte p-5 sm:p-6">
               <EtatVide

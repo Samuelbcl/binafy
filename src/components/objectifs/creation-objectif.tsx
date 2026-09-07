@@ -156,7 +156,9 @@ export function CreationObjectif({
         actifsLies: lies,
       });
       if (resultat.ok) {
-        router.push('/objectifs');
+        // Le parametre porte la confirmation : la page d'arrivee la montre,
+        // et un rechargement ne la remontre pas puisqu'on retire le parametre.
+        router.push('/objectifs?cree=1');
         router.refresh();
       } else {
         setErreur(resultat.message);
@@ -620,6 +622,17 @@ export function CreationObjectif({
                 <dt className="text-text-muted">Déjà là</dt>
                 <dd>
                   <Montant cents={atteintCents} decimals={0} className="font-semibold" />
+                </dd>
+              </div>
+              <div className="flex items-start justify-between gap-4 py-2.5">
+                <dt className="shrink-0 text-text-muted">Comptes rattachés</dt>
+                <dd className="text-right font-semibold">
+                  {lies.length === 0
+                    ? '—'
+                    : actifs
+                        .filter((a) => lies.includes(a.id))
+                        .map((a) => a.nom)
+                        .join(', ')}
                 </dd>
               </div>
               <div className="flex items-center justify-between py-2.5">

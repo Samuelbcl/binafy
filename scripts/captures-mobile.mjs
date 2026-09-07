@@ -53,6 +53,7 @@ const PAGES = [
   ['app-projections', '/projections'],
   ['app-objectifs', '/objectifs'],
   ['app-objectifs-matelas', '/objectifs?onglet=matelas'],
+  ['app-objectifs-cree', '/objectifs?cree=1'],
   ['app-objectif-nouveau', '/objectifs/nouveau'],
   ['app-parametres', '/parametres'],
 ];
