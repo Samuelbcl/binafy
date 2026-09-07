@@ -154,6 +154,15 @@ Trois classes dans `globals.css`, hauteur 44px, rayon pilule :
 Le look vit dans la classe, la mise en page reste sur l'élément : `w-full`, `mt-4` ou une
 icône s'ajoutent sans toucher au style.
 
+### Navigation
+Écran large : barre latérale fixe de 248px, entrée active en `--primary-soft` + `--primary`.
+
+Mobile : **barre d'onglets en bas**, quatre destinations (Accueil, Patrimoine, Budget,
+Fiscalité) et un bouton rond `--action` au centre pour l'ajout d'un actif. Un menu
+hamburger en haut à gauche est le point le plus difficile à atteindre au pouce sur un
+écran de 390px ; le tiroir du haut ne garde que le secondaire — projections, objectifs,
+paramètres. Le contenu réserve `pb-28` sous lui, sinon la barre recouvre le dernier bloc.
+
 ### Graphique d'évolution
 Aire avec dégradé vertical de `--primary` (opacité .25 → 0), ligne 2px, courbe
 `monotone`. Grille horizontale seule, `--border` en pointillés. Tooltip sur carte

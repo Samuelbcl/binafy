@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Menu,
   Moon,
+  Plus,
   Receipt,
   LogOut,
   Settings,
@@ -116,6 +117,76 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
+
+/**
+ * Barre d'onglets mobile (docs/05).
+ *
+ * Un menu hamburger en haut à gauche est le point le plus difficile à atteindre
+ * au pouce sur un écran de 390 px. Les quatre destinations les plus consultées
+ * descendent donc en bas, et le tiroir du haut garde le reste — projections,
+ * objectifs, paramètres.
+ */
+const ONGLETS = [
+  { href: '/dashboard', libelle: 'Accueil', icone: LayoutDashboard },
+  { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
+  { href: '/budget', libelle: 'Budget', icone: Receipt },
+  { href: '/fiscalite', libelle: 'Fiscalité', icone: Building2 },
+] as const;
+
+function BarreOnglets() {
+  const pathname = usePathname();
+
+  return (
+    <nav
+      aria-label="Navigation principale"
+      className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between border-t border-border bg-surface px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
+    >
+      {ONGLETS.slice(0, 2).map(({ href, libelle, icone: Icone }) => (
+        <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
+      ))}
+
+      <Link
+        href="/patrimoine#ajouter"
+        className="grid size-13 shrink-0 place-items-center rounded-full bg-action text-on-action transition-colors hover:bg-action-hover"
+      >
+        <Plus className="size-[22px]" />
+        <span className="sr-only">Ajouter un actif</span>
+      </Link>
+
+      {ONGLETS.slice(2).map(({ href, libelle, icone: Icone }) => (
+        <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
+      ))}
+    </nav>
+  );
+}
+
+function OngletLien({
+  href,
+  libelle,
+  Icone,
+  pathname,
+}: {
+  href: string;
+  libelle: string;
+  Icone: typeof LayoutDashboard;
+  pathname: string;
+}) {
+  const actif = pathname === href || pathname.startsWith(`${href}/`);
+
+  return (
+    <Link
+      href={href}
+      aria-current={actif ? 'page' : undefined}
+      className={cn(
+        'flex w-16 flex-col items-center gap-1 py-1 transition-colors',
+        actif ? 'text-primary' : 'text-text-subtle hover:text-text',
+      )}
+    >
+      <Icone className="size-[21px]" />
+      <span className={cn('text-[10px]', actif ? 'font-bold' : 'font-medium')}>{libelle}</span>
+    </Link>
+  );
+}
 
 function BoutonDeconnexion() {
   const router = useRouter();
@@ -244,7 +315,8 @@ export function AppShell({
           </div>
         </header>
 
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+        <main className="flex-1 px-4 pt-6 pb-28 sm:px-6 lg:px-8 lg:pb-8">{children}</main>
+        <BarreOnglets />
       </div>
     </div>
   );

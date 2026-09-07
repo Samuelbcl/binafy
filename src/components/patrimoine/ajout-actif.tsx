@@ -1,7 +1,7 @@
 'use client';
 
 import { Loader2, Plus, X } from 'lucide-react';
-import { useActionState, useId, useState } from 'react';
+import { useActionState, useEffect, useId, useState } from 'react';
 import { creerActif, type ResultatAction } from '@/app/(app)/patrimoine/actions';
 import { cn } from '@/lib/cn';
 import { CLASSES_ACTIF, LIBELLE_CLASSE, pocheDe } from '@/lib/patrimoine/types';
@@ -27,6 +27,19 @@ export function AjoutActif() {
   const [ouvert, setOuvert] = useState(false);
   const [classe, setClasse] = useState<string>('compte_courant');
   const idFormulaire = useId();
+
+  // Le bouton « + » de la barre d'onglets pointe sur /patrimoine#ajouter : c'est
+  // la seule façon d'ouvrir ce formulaire depuis une autre page sans remonter
+  // son état jusqu'au shell. On écoute aussi `hashchange`, sinon le clic reste
+  // sans effet quand on est déjà sur la page.
+  useEffect(() => {
+    const ouvrirSiAncre = () => {
+      if (window.location.hash === '#ajouter') setOuvert(true);
+    };
+    ouvrirSiAncre();
+    window.addEventListener('hashchange', ouvrirSiAncre);
+    return () => window.removeEventListener('hashchange', ouvrirSiAncre);
+  }, []);
 
   // La fermeture est une conséquence directe de l'enregistrement : on la traite
   // dans l'action plutôt que dans un effet qui observerait le résultat après coup.
