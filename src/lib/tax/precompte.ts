@@ -134,6 +134,7 @@ export function calculerPrecompteDividendes(
     breakdown,
     sources: [toSource(pTaux), toSource(pExo)],
     hypotheses: [
+      "Ce calcul vise les dividendes d'actions et de fonds detenus en tant que particulier, au taux standard. Les dividendes de ta propre societe — VVPRbis, reserve de liquidation — suivent d'autres taux, non modelises ici.",
       "L'exonération de la première tranche de dividendes n'est pas appliquée automatiquement : elle se réclame dans la déclaration fiscale.",
       "Chez un courtier étranger, le précompte n'est pas retenu à la source : les revenus sont à déclarer soi-même.",
     ],

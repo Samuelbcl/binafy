@@ -101,7 +101,10 @@ const DEFS_2026: Def[] = [
     sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers',
     verifie: true,
     verifieLe: '2026-09-06',
-  },
+      // Indexation gelee jusqu'a l'exercice 2030 (circulaire 2026/C/6, republiee,
+    // non lue en primaire) : le montant tient pour les revenus 2025 a 2029.
+    peremption: 'legale',
+},
   {
     cle: 'epargne_reglementee.exoneration_interets',
     valeur: 1020,
@@ -110,7 +113,10 @@ const DEFS_2026: Def[] = [
     sourceUrl: 'https://fin.belgium.be/fr/particuliers/declaration_impot/taux-imposition-revenus/revenus/revenus-mobiliers',
     verifie: true,
     verifieLe: '2026-09-06',
-  },
+      // Indexation gelee jusqu'a l'exercice 2030 (circulaire 2026/C/6, republiee,
+    // non lue en primaire) : le montant tient pour les revenus 2025 a 2029.
+    peremption: 'legale',
+},
   {
     cle: 'epargne_reglementee.taux_precompte_reduit',
     valeur: 15,
@@ -841,7 +847,13 @@ const DEFS_2026: Def[] = [
     valeur: 1050,
     unite: 'eur',
     libelle: 'Épargne-pension — plafond bas de versement',
-    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension', verifie: true, verifieLe: '2026-09-06' },
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension',
+    verifie: true,
+    verifieLe: '2026-09-06',
+    // Indexation gelee jusqu'a l'exercice 2030 (circulaire 2026/C/6, republiee,
+    // non lue en primaire) : le montant tient pour les revenus 2025 a 2029.
+    peremption: 'legale',
+  },
   {
     cle: 'epargne_pension.reduction_bas',
     valeur: 30,
@@ -853,7 +865,13 @@ const DEFS_2026: Def[] = [
     valeur: 1350,
     unite: 'eur',
     libelle: 'Épargne-pension — plafond haut de versement',
-    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension', verifie: true, verifieLe: '2026-09-06' },
+    sourceUrl: 'https://fin.belgium.be/fr/particuliers/avantages_fiscaux/epargne-pension',
+    verifie: true,
+    verifieLe: '2026-09-06',
+    // Indexation gelee jusqu'a l'exercice 2030 (circulaire 2026/C/6, republiee,
+    // non lue en primaire) : le montant tient pour les revenus 2025 a 2029.
+    peremption: 'legale',
+  },
   {
     cle: 'epargne_pension.reduction_haut',
     valeur: 25,
@@ -881,7 +899,10 @@ const DEFS_2026: Def[] = [
     sourceUrl: 'https://www.wikifin.be/fr/impots-emploi-et-revenus/declaration-dimpots/reductions-fiscales/reduction-pour-lepargne-long-terme',
     verifie: true,
     verifieLe: '2026-09-06',
-  },
+      // Indexation gelee jusqu'a l'exercice 2030 (circulaire 2026/C/6, republiee,
+    // non lue en primaire) : le montant tient pour les revenus 2025 a 2029.
+    peremption: 'legale',
+},
   {
     cle: 'epargne_long_terme.reduction',
     valeur: 30,

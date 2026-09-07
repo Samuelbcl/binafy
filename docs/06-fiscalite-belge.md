@@ -185,6 +185,25 @@ français, ni Livret A. C'est précisément l'erreur qui rend les apps français
 
 ---
 
+## 5 bis. Hors périmètre, et dit comme tel
+
+Balayage d'actualité du 07/09/2026. Ces régimes existent, ont bougé en 2026, et
+Nestor ne les modélise **pas** — par choix de cible (docs/01 : un salarié qui
+épargne, pas un dirigeant de société), pas par oubli. Chaque calculateur concerné
+le dit dans ses hypothèses.
+
+- **VVPRbis** : précompte réduit sur les dividendes de sa propre société, passé de
+  15 % à 18 % au 1er juillet 2026 (loi-programme du 29 mai 2026).
+- **Réserve de liquidation** : précompte de sortie passé de 6,5 % à 9,8 %.
+- **Participations importantes (≥ 20 %)** dans la taxe sur les plus-values : barème
+  distinct (0 % jusqu'à un million sur cinq ans, puis 1,25 / 2,5 / 5 / 10 %).
+- **Taxe annuelle sur les comptes-titres** : 0,15 % → 0,30 % au-delà d'un million.
+
+**Gel d'indexation** (circulaire 2026/C/6, republiée, non lue en primaire) : les
+plafonds d'épargne-pension, le panier d'épargne à long terme et les exonérations sur
+dividendes et épargne réglementée sont figés jusqu'à l'exercice 2030. Leur péremption
+est `legale`, pas `annuelle`.
+
 ## 6. Sources à vérifier avant chaque mise en production
 
 | Domaine | Source officielle |
