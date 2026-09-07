@@ -1,8 +1,18 @@
 import { calculerDroitsEnregistrement, coutOrdreAchat } from '@/lib/tax/enregistrement';
 import { calculerEpargnePension } from '@/lib/tax/epargne-fiscale';
 import { calculerRendementLocatif } from '@/lib/finance/locatif';
+import { calculerImpotRevenusLocatifs } from '@/lib/tax/immobilier';
+import {
+  calculerCotisationsSociales,
+  calculerCoutDemarrage,
+  simulerIndependant,
+} from '@/lib/tax/independant';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
-import { calculerPrecompteDividendes, calculerPrecompteEpargneReglementee } from '@/lib/tax/precompte';
+import {
+  calculerPrecompteDividendes,
+  calculerPrecompteEpargneReglementee,
+  calculerPrecompteInterets,
+} from '@/lib/tax/precompte';
 import { calculerTaxePlusValues } from '@/lib/tax/plus-values';
 import { calculerTOBAllerRetour } from '@/lib/tax/tob';
 import type { CalcResult } from '@/lib/tax/types';
@@ -151,6 +161,99 @@ export const DEMONSTRATIONS: Record<string, () => Demonstration> = {
       },
       P,
     ),
+  }),
+
+  // ── Compte d'épargne réglementé ──────────────────────────────────────
+  /** Au-delà de l'exonération, seul l'excédent est taxé, au taux réduit. */
+  'epargne-reglementee-au-dela': () => ({
+    enonce:
+      'Tes comptes d’épargne réglementés te rapportent 1 240 € d’intérêts sur l’année, tous comptes confondus.',
+    resultat: calculerPrecompteEpargneReglementee(
+      { interetsBaseCents: 74_400, primeFideliteCents: 49_600 },
+      P,
+    ),
+  }),
+
+  /** Le même montant, sur un compte qui n'est pas réglementé. */
+  'interets-non-reglementes': () => ({
+    enonce:
+      'Les mêmes 1 240 € d’intérêts, mais sur un compte à terme ou un compte d’épargne non réglementé.',
+    resultat: calculerPrecompteInterets({ interetsCents: 124_000 }, P),
+  }),
+
+  /** La zone perdante : plus versé, moins rendu. */
+  'epargne-pension-zone-perdante': () => ({
+    enonce:
+      'Tu verses 1 200 €, en pensant faire un effort raisonnable au-delà du plafond bas.',
+    resultat: calculerEpargnePension({ versementCents: 120_000 }, P),
+  }),
+
+  /** Le point où le plafond haut rattrape enfin le plafond bas. */
+  'epargne-pension-bascule': () => ({
+    enonce: 'Tu verses le montant exact à partir duquel le plafond haut rend autant que le bas.',
+    resultat: calculerEpargnePension({ versementCents: 126_000 }, P),
+  }),
+
+  /** Le régime belge : l'impôt porte sur le revenu cadastral, pas sur le loyer. */
+  'impot-locatif-particulier': () => ({
+    enonce:
+      'Un studio au revenu cadastral de 750 €, loué 850 € par mois à un particulier qui y habite. Tu es dans la tranche marginale à 45 %.',
+    resultat: calculerImpotRevenusLocatifs(
+      {
+        revenuCadastralCents: 75_000,
+        usage: 'locatif_prive',
+        loyerAnnuelCents: 1_020_000,
+        tauxMarginal: 0.45,
+      },
+      P,
+    ),
+  }),
+
+  /** Le piège : même bien, même loyer, locataire professionnel. */
+  'impot-locatif-professionnel': () => ({
+    enonce:
+      'Le même studio, le même loyer — mais loué à une société qui en fait son bureau.',
+    resultat: calculerImpotRevenusLocatifs(
+      {
+        revenuCadastralCents: 75_000,
+        usage: 'locatif_pro',
+        loyerAnnuelCents: 1_020_000,
+        tauxMarginal: 0.45,
+      },
+      P,
+    ),
+  }),
+
+  // ── Indépendant complémentaire ───────────────────────────────────────
+  /** Le couperet : franchir le seuil déclenche la cotisation sur tout. */
+  'independant-seuil-couperet': () => ({
+    enonce:
+      'Ton activité complémentaire dégage 2 000 € de revenu net dans l’année — à peine au-dessus du seuil d’exemption.',
+    resultat: calculerCotisationsSociales(
+      { revenuNetImposableCents: 200_000, statut: 'complementaire' },
+      P,
+    ),
+  }),
+
+  /** Du chiffre facturé à ce qui reste, cotisations et impôt marginal compris. */
+  'independant-du-brut-au-net': () => ({
+    enonce:
+      'Tu factures 6 000 € sur l’année, avec 600 € de frais professionnels, à côté d’un salaire imposable de 34 000 €. Additionnels communaux moyens.',
+    resultat: simulerIndependant(
+      {
+        chiffreAffairesCents: 600_000,
+        chargesCents: 60_000,
+        statut: 'complementaire',
+        revenuSalarieCents: 3_400_000,
+      },
+      P,
+    ),
+  }),
+
+  /** Ce qu'il faut sortir avant la première facture. */
+  'independant-demarrage': () => ({
+    enonce: 'Tu t’inscris à la BCE et tu actives un numéro de TVA via un guichet d’entreprises.',
+    resultat: calculerCoutDemarrage({ avecTVA: true }, P),
   }),
 };
 

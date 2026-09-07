@@ -74,16 +74,11 @@ export default function ApprendrePage() {
       <section className="mt-14">
         <h2 className="text-[18px] font-bold tracking-[-0.015em]">Ce qui arrive</h2>
         <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-text-muted">
-          Les guides sont écrits dans l’ordre des sujets les plus mal traités ailleurs.
-          Ceux-ci sont en préparation :
+          Les sept sujets les plus mal traités ailleurs sont couverts. Les prochains guides
+          suivront les questions que les lecteurs posent le plus — dis-nous laquelle te manque.
         </p>
         <ul className="mt-5 grid gap-3 sm:grid-cols-2">
           {[
-            'Droits d’enregistrement en Wallonie : 3 % ou 12,5 %',
-            'Devenir indépendant complémentaire en Belgique',
-            'Rendement locatif réel : pourquoi on n’est pas taxé sur les loyers',
-            'Compte d’épargne réglementé : taux de base et prime de fidélité',
-            'Épargne-pension : les deux plafonds',
           ].map((titre) => (
             <li
               key={titre}

@@ -62,8 +62,20 @@ Implications produit, à traiter comme des fonctionnalités à part entière :
 4. Alerter en fin d'année si l'exonération annuelle n'est pas consommée alors que
    l'utilisateur a des plus-values latentes — sans jamais recommander de vendre.
 
-⚠️ Régime récent : mécanismes de report de pertes, traitement des participations
-importantes et modalités déclaratives à revérifier sur le SPF Finances avant mise en prod.
+**Report de l'exonération** (art. 96/2, al. 1er, 3° et al. 3 CIR 92, loi du 6 avril 2026
+lue au texte le 07/09/2026) : la part d'exonération non consommée une année s'ajoute
+aux suivantes par tranches annuelles (480 € de base, ~1 000 € indexés), jusqu'à un
+plafond cumulé (2 426 € de base, ~5 000 € indexés), les plus anciennes imputées d'abord.
+La loi ne garantit le montant rond de 1 000 € qu'à partir des revenus 2027 (art. 33) :
+la valeur 2026 reste `verifie: false`. Le calculateur prend le report en entrée et le
+suppose nul à défaut — l'hypothèse la moins flatteuse, jamais l'inverse.
+
+**Rien n'est automatique** (art. 307 § 1er/1 CIR 92) : le précompte de 10 % est retenu
+à la source ; exonération et report se réclament dans la déclaration, pièces à l'appui.
+
+⚠️ Toujours à traiter : compensation des moins-values, régime des participations
+importantes (≥ 20 %, barème distinct, exonération d'un million sur cinq ans), et la
+valeur indexée exacte des montants 2026.
 
 ---
 

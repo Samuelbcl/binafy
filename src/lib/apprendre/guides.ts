@@ -194,11 +194,23 @@ const PLUS_VALUES_2026: Guide = {
         'C’est la raison pour laquelle Nestor stocke une valeur de référence 2025 sur chaque position et la réclame explicitement à la saisie. Une position sans cette valeur est signalée dans le calcul d’impôt latent, plutôt que d’être estimée en silence.',
     },
 
-    { type: 'titre', texte: 'L’exonération est annuelle et personnelle' },
+    { type: 'titre', texte: 'L’exonération est personnelle — et ce que tu n’utilises pas ne se perd pas' },
     {
       type: 'para',
       texte:
-        'Elle se reconstitue chaque année civile et s’apprécie par personne, pas par ménage ni par compte. Deux conséquences pratiques : elle ne s’accumule pas d’une année sur l’autre, et un couple qui déclare ensemble en dispose deux fois — à condition que chacun soit titulaire de ses propres positions.',
+        'Elle s’apprécie par personne, pas par ménage ni par compte : un couple qui déclare ensemble en dispose deux fois, à condition que chacun soit titulaire de ses propres positions. Et contrairement à ce qu’on lit souvent, elle ne se remet pas à zéro chaque premier janvier : la loi prévoit que la part non utilisée une année s’ajoute aux suivantes, par tranches annuelles, jusqu’à un plafond cumulé — les plus anciennes s’imputent d’abord.',
+    },
+    {
+      type: 'piege',
+      titre: 'Rien n’est automatique',
+      texte:
+        'Ton courtier retient le précompte au taux plein sur chaque plus-value, sans appliquer ni l’exonération ni son report. C’est dans ta déclaration que tu les réclames, pièces justificatives à l’appui — le relevé des années précédentes prouvant ce que tu n’as pas consommé. Qui ne réclame rien paie le taux plein sur tout.',
+    },
+    {
+      type: 'note',
+      titre: 'Le montant exact du report pour 2026 reste à confirmer',
+      texte:
+        'La loi fixe le report en montants de base à indexer, et ne garantit la valeur ronde de mille euros par an qu’à partir des revenus 2027. Pour 2026, Nestor affiche la valeur annoncée par les sources professionnelles et la marque comme non confirmée tant que l’avis officiel d’indexation ne l’a pas fixée.',
     },
     {
       type: 'note',
@@ -346,10 +358,463 @@ const DROITS_ENREGISTREMENT_WALLONIE: Guide = {
   suite: ['taxe-plus-values-2026'],
 };
 
+const EPARGNE_REGLEMENTEE: Guide = {
+  slug: 'compte-epargne-reglemente-prime-fidelite',
+  titre: 'Compte d’épargne réglementé : taux de base et prime de fidélité',
+  resume:
+    'Lire le taux qu’affiche ta banque pour ce qu’il est, et repérer le seul geste qui fait perdre de l’argent sans qu’elle ait touché à ses taux.',
+  categorie: 'fiscalite',
+  niveau: 'debutant',
+  dureeMinutes: 8,
+  verifieLe: '2026-09-07',
+  anneeRevenus: 2026,
+  parametresLies: [
+    'epargne_reglementee.exoneration_interets',
+    'epargne_reglementee.taux_precompte_reduit',
+    'precompte_mobilier.taux',
+  ],
+  blocs: [
+    {
+      type: 'para',
+      texte:
+        'Un compte d’épargne réglementé porte deux rémunérations qui tournent en parallèle et n’obéissent pas aux mêmes règles. Le taux de base court chaque jour sur tout ce qui est sur le compte, dès le lendemain d’un versement, jusqu’au jour du retrait. Rien à faire pour l’obtenir.',
+    },
+    {
+      type: 'para',
+      texte:
+        'La prime de fidélité est autre chose. Elle ne récompense que l’argent resté en place douze mois complets et consécutifs. Elle se calcule versement par versement, pas sur le solde : chaque euro déposé a sa propre horloge, qui démarre le jour du dépôt. Une fois les douze mois écoulés, elle est versée au premier jour du trimestre suivant, et un nouveau cycle démarre.',
+    },
+
+    { type: 'titre', texte: 'Ce que « jusqu’à X % » veut dire' },
+    {
+      type: 'para',
+      texte:
+        'Le taux mis en avant par une banque additionne souvent les deux composantes. Ce total ne se touche que sur un versement resté immobile toute une année pile — un cas peu représentatif de quelqu’un qui épargne et retire au fil des mois. Un arrêté royal impose d’ailleurs aux banques de communiquer le taux de base et la prime séparément : la confusion entre les deux n’a rien d’anecdotique.',
+    },
+    {
+      type: 'note',
+      titre: 'Les taux ne sont pas des paramètres fiscaux',
+      texte:
+        'Chaque banque fixe librement son taux de base et sa prime, et peut les modifier. Le taux de base peut changer à tout moment, y compris sur l’argent déjà présent, moyennant information des clients. La prime, elle, est verrouillée pour les douze mois qui suivent chaque versement : un changement annoncé aujourd’hui ne touche que les nouveaux dépôts.',
+    },
+
+    { type: 'titre', texte: 'Ce que le fisc prélève, et ce qu’il laisse' },
+    {
+      type: 'para',
+      texte:
+        'C’est ici que le mot « réglementé » compte. Un compte qui remplit les conditions légales bénéficie de deux faveurs : une première tranche d’intérêts exonérée de précompte chaque année, par personne et tous comptes réglementés confondus, puis un taux réduit sur l’excédent — au lieu du taux standard qui frappe le reste des revenus mobiliers.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'epargne-reglementee-au-dela',
+      titre: 'Une année d’intérêts qui dépasse l’exonération',
+      introduction:
+        'Seul l’excédent est taxé, et au taux réduit. Le gros des intérêts reste intact.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'interets-non-reglementes',
+      titre: 'Les mêmes intérêts, sur un compte non réglementé',
+      introduction:
+        'Compte à terme, produit d’une banque étrangère hors régime belge, compte avec frais : aucune faveur, le taux standard s’applique dès le premier euro.',
+    },
+    {
+      type: 'note',
+      titre: 'Plusieurs banques, une seule exonération',
+      texte:
+        'Chaque banque applique l’exonération sur son propre compte, sans savoir ce que tu touches ailleurs. Si le total de tes intérêts réglementés dépasse le plafond alors qu’aucune banque n’a rien retenu, c’est à toi de déclarer l’excédent et d’acquitter le précompte réduit.',
+    },
+
+    { type: 'titre', texte: 'Le piège' },
+    {
+      type: 'piege',
+      titre: 'La prime se perd versement par versement, pas selon l’âge du compte',
+      texte:
+        'On pense souvent : « mon argent est là depuis deux ans, la prime est acquise ». Faux. L’ancienneté du compte ne protège que l’argent qui, individuellement, y est resté douze mois. Vider son compte fait perdre la prime sur tout ce qui n’avait pas encore bouclé son cycle — un versement de janvier retiré en novembre ne rapportera jamais sa prime, même si le reste du solde dort là depuis des années.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Une nuance utile en cas de retrait partiel : la banque impute d’abord le retrait sur les montants dont le cycle est le moins avancé. Les versements récents partent en premier, ce qui protège l’argent le plus proche de ses douze mois. Ça ne change rien pour un retrait total.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Nestor connaît la date de tes versements sur les comptes que tu y enregistres : il peut donc te dire, avant un retrait, ce que ce retrait te coûterait en prime.',
+    },
+
+    { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
+    {
+      type: 'liste',
+      items: [
+        'Les comptes à terme, la branche 21 et les autres produits d’épargne ou d’assurance, qui ont leurs propres règles.',
+        'Le doublement du plafond d’exonération pour un couple qui déclare ensemble : mentionné par la presse spécialisée, pas encore confirmé ici à la source officielle.',
+        'La liste complète des conditions qui rendent un compte « réglementé » — frais, devise, État de l’établissement.',
+        'Le cas d’un compte joint entre titulaires qui ne sont ni mariés ni cohabitants légaux.',
+      ],
+    },
+  ],
+  suite: ['fiscalite-etf-belgique'],
+};
+
+const EPARGNE_PENSION: Guide = {
+  slug: 'epargne-pension-deux-plafonds',
+  titre: 'Épargne-pension : les deux plafonds',
+  resume:
+    'Calculer ce que rend chaque plafond de versement, et situer le montant à partir duquel le plafond haut redevient intéressant.',
+  categorie: 'fiscalite',
+  niveau: 'intermediaire',
+  dureeMinutes: 8,
+  verifieLe: '2026-09-07',
+  anneeRevenus: 2026,
+  parametresLies: [
+    'epargne_pension.plafond_bas',
+    'epargne_pension.reduction_bas',
+    'epargne_pension.plafond_haut',
+    'epargne_pension.reduction_haut',
+    'epargne_pension.taxe_anticipative',
+  ],
+  blocs: [
+    {
+      type: 'para',
+      texte:
+        'L’épargne-pension donne droit à une réduction d’impôt sur ce que tu y verses dans l’année. Jusque-là, rien de surprenant. Ce qui surprend, c’est qu’il existe deux plafonds de versement, chacun avec son propre taux de réduction — et que le taux retenu s’applique à la totalité du versement, pas seulement à la part qui dépasse le premier plafond.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Ce n’est pas un barème progressif comme celui de l’impôt sur le revenu, où seule la tranche supplémentaire change de taux. Ici, verser un euro de plus que le plafond bas fait basculer tout le calcul sur un taux plus faible. C’est ce mécanisme, et lui seul, qui produit le piège de ce guide.',
+    },
+
+    { type: 'titre', texte: 'Le même effort, deux résultats' },
+    {
+      type: 'demonstration',
+      cle: 'epargne-pension-plafond-bas',
+      titre: 'Verser exactement le plafond bas',
+      introduction: 'La réduction la plus élevée par euro versé.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'epargne-pension-entre-deux',
+      titre: 'Verser le plafond haut',
+      introduction:
+        'Trois cents euros de plus immobilisés. Regarde ce que la réduction gagne, elle.',
+    },
+    {
+      type: 'note',
+      titre: 'Le choix se fait à la banque, pas sur la déclaration',
+      texte:
+        'Pour verser au-delà du plafond bas, il faut le signaler explicitement à l’organisme qui gère le compte ou le contrat. Ce choix vaut pour l’année de revenus en cours ; pour revenir au plafond bas l’année suivante, il faut le refaire.',
+    },
+
+    { type: 'titre', texte: 'Le piège' },
+    {
+      type: 'piege',
+      titre: 'Entre les deux plafonds, verser plus fait recevoir moins',
+      texte:
+        'Dès le premier euro au-dessus du plafond bas, le taux réduit s’applique à tout le versement. Il existe donc une zone entière où tu immobilises plus d’argent et reçois moins de réduction en euros que si tu t’étais arrêté au plafond bas. Il faut atteindre un point de bascule pour seulement retrouver ce que le plafond bas rendait déjà.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'epargne-pension-zone-perdante',
+      titre: 'Au cœur de la zone perdante',
+      introduction:
+        'Cent cinquante euros de plus que le plafond bas. Compare la réduction obtenue à celle du plafond bas.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'epargne-pension-bascule',
+      titre: 'Le point de bascule',
+      introduction:
+        'Le montant où le plafond haut rend enfin autant que le bas. En dessous, on perd ; au-dessus, on gagne — au maximum quelques dizaines d’euros.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Ce n’est pas un cas d’école. Selon des statistiques du SPF Finances relayées par l’ordre des experts-comptables, environ deux mille deux cents contribuables ont versé en 2025 un montant situé dans cette zone — et ont reçu moins qu’un versement plus faible leur aurait donné. Nestor chiffre les cinq lignes ; le montant versé, c’est toi qui le choisis.',
+    },
+
+    { type: 'titre', texte: 'Ce qui se passe à soixante ans' },
+    {
+      type: 'para',
+      texte:
+        'Ce capital n’échappe pas à l’impôt. À soixante ans, une taxe anticipative est prélevée sur le capital constitué — versements cumulés et rendement produit — que tu retires l’argent ce jour-là ou non. Son taux figure dans les paramètres vérifiés de Nestor ; le mode de calcul exact de son assiette pour les versements poursuivis après soixante ans, lui, n’y figure pas, et ce guide ne s’y engage pas.',
+    },
+    {
+      type: 'note',
+      titre: 'Fonds ou assurance, en une phrase',
+      texte:
+        'Un fonds d’épargne-pension place l’argent en actions et en obligations sans garantie de capital ; une assurance épargne-pension garantit un capital minimum, en échange d’un rendement généralement plus faible. La fiscalité décrite ici est la même pour les deux.',
+    },
+
+    { type: 'titre', texte: 'Ce qui bouge, et ce qui est seulement annoncé' },
+    {
+      type: 'para',
+      texte:
+        'Une circulaire de 2026 gèlerait l’indexation des deux plafonds pendant plusieurs années : ils resteraient identiques pour les revenus 2026 à 2029. Nestor n’a pas encore lu ce texte à sa source primaire — l’information vient de republications professionnelles concordantes, et elle est signalée avec cette réserve.',
+    },
+    {
+      type: 'note',
+      titre: 'Une réforme annoncée n’est pas une réforme en vigueur',
+      texte:
+        'Un plafond unique remplaçant les deux a été annoncé en 2026, en réaction au constat ci-dessus. Le gouvernement ne s’est pas accordé dessus à l’été ; un retour est évoqué pour l’automne. Tant que rien n’est voté ni publié, les deux plafonds décrits ici s’appliquent normalement — et Nestor ne change pas une ligne de calcul sur une annonce.',
+    },
+
+    { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
+    {
+      type: 'liste',
+      items: [
+        'L’assiette précise de la taxe anticipative — capital réel ou coefficient de conversion selon l’âge du premier versement.',
+        'Le sort des versements poursuivis après soixante ans et leur traitement à la sortie définitive.',
+        'L’épargne à long terme, un dispositif distinct au panier fiscal séparé, qui aura son propre guide.',
+        'Les frais de gestion de chaque fonds ou assureur : ce ne sont pas des paramètres fiscaux, mais ils pèsent sur le capital constitué.',
+      ],
+    },
+  ],
+  suite: ['compte-epargne-reglemente-prime-fidelite'],
+};
+
+const RENDEMENT_LOCATIF: Guide = {
+  slug: 'rendement-locatif-reel-belgique',
+  titre: 'Rendement locatif réel : pourquoi on n’est pas taxé sur les loyers',
+  resume:
+    'Calculer ce qu’un bien loué te coûte ou te rapporte vraiment, impôt compris — et pourquoi ça change du tout au tout selon qui l’occupe.',
+  categorie: 'immobilier',
+  niveau: 'intermediaire',
+  dureeMinutes: 8,
+  verifieLe: '2026-09-07',
+  anneeRevenus: 2026,
+  parametresLies: [
+    'rc.coefficient_indexation',
+    'rc.majoration_locatif',
+    'immobilier.coefficient_revalorisation',
+    'immobilier.forfait_charges_professionnel',
+    'ipp.tranche_3.taux',
+    'droits_enregistrement.autre',
+  ],
+  blocs: [
+    {
+      type: 'para',
+      texte:
+        'Tout ce qui s’écrit en français sur la rentabilité locative suppose qu’on est taxé sur le loyer perçu. En Belgique, non. Quand tu loues à un particulier qui y habite, le loyer n’apparaît nulle part dans le calcul de l’impôt : la base imposable se construit à partir du revenu cadastral — une valeur administrative attribuée au bien, indexée chaque année, puis majorée.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Cette base s’ajoute à tes autres revenus et se taxe à ton taux marginal : le taux qui frappe ton dernier euro gagné, pas une moyenne. Deux propriétaires du même bien, au même loyer, ne paient donc pas le même impôt si leurs salaires les placent dans des tranches différentes. Et si tu occupes toi-même le bien, rien de tout ceci ne s’applique : l’habitation propre est exonérée.',
+    },
+
+    { type: 'titre', texte: 'Ce que le fisc regarde vraiment' },
+    {
+      type: 'demonstration',
+      cle: 'impot-locatif-particulier',
+      titre: 'Un studio loué à un particulier',
+      introduction:
+        'Le loyer sert à juger l’investissement, pas à calculer l’impôt. Regarde le taux effectif rapporté au loyer : il n’a rien à voir avec le taux marginal.',
+    },
+    {
+      type: 'note',
+      titre: 'Le piège de l’année, encore',
+      texte:
+        'Le coefficient d’indexation du revenu cadastral et le coefficient de revalorisation changent chaque année. Un calcul qui ne précise pas l’année de revenus peut afficher un chiffre juste — pour l’année d’à côté. Nestor raisonne en année de revenus 2026, déclarés en 2027.',
+    },
+
+    { type: 'titre', texte: 'Le piège' },
+    {
+      type: 'piege',
+      titre: 'Le même bien, un autre locataire, un autre régime',
+      texte:
+        'Tout le calcul précédent suppose un locataire particulier qui occupe le bien à titre privé. Loue le même studio à une société, une profession libérale, ou pour tout usage professionnel, et le régime bascule : la base n’est plus le revenu cadastral majoré mais le loyer réel, diminué d’un forfait de charges — lui-même plafonné en fonction du revenu cadastral revalorisé. Plus le loyer est élevé par rapport au revenu cadastral, plus l’écart se creuse.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'impot-locatif-professionnel',
+      titre: 'Le même studio, loué à une société',
+      introduction:
+        'Rien n’a changé : ni le bien, ni le loyer, ni ta tranche d’impôt. Seul l’usage qu’en fait le locataire.',
+    },
+    {
+      type: 'para',
+      texte:
+        'C’est pour cette raison que le champ « usage du bien » pilote tout le calcul dans Nestor : c’est la donnée qui, à elle seule, peut multiplier ton impôt sans que le loyer ait bougé d’un centime.',
+    },
+
+    { type: 'titre', texte: 'Du rendement affiché au cash-flow réel' },
+    {
+      type: 'para',
+      texte:
+        'Une annonce affiche un rendement brut : le loyer annuel divisé par le prix. Ce chiffre ignore tout ce qui sort réellement de ta poche. Les droits d’enregistrement d’un achat locatif, au taux plein, et les frais de notaire s’ajoutent au prix le jour de l’acte. Puis chaque année tombent les charges non récupérables, la vacance entre deux locataires, une provision pour travaux, et le précompte immobilier — un impôt régional distinct, dû que le bien soit loué ou vide, et qui ne se déduit pas de la base imposable.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'rendement-locatif-reel',
+      titre: 'Un appartement à 200 000 € en Wallonie, financé à 80 %',
+      introduction:
+        'Le rendement de l’annonce, puis chaque poste qui le ronge, jusqu’au cash-flow mensuel après crédit. L’amortissement du capital n’est pas une perte — c’est de l’épargne forcée — mais c’est un flux à sortir chaque mois.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Un cash-flow négatif n’est pas nécessairement un mauvais investissement : la revalorisation éventuelle du bien n’entre pas dans ce calcul, et une partie de l’effort rembourse ta propre dette. Mais c’est un effort à pouvoir porter, pas un rendement à afficher. Voilà ce que ce financement coûte ; le choix t’appartient.',
+    },
+
+    {
+      type: 'outil',
+      href: '/outils/rendement-locatif',
+      libelle: 'Rejouer avec mon bien',
+      texte:
+        'Le calculateur applique ces formules à ton prix, ton loyer, ton revenu cadastral, ta Région, tes charges et ton crédit — avec le détail ligne par ligne et la source de chaque paramètre.',
+    },
+
+    { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
+    {
+      type: 'liste',
+      items: [
+        'Le détail des frais de notaire et de l’acte de crédit : voir le guide sur les droits d’enregistrement et l’outil Frais d’acquisition.',
+        'Un bien neuf, où la TVA remplace les droits d’enregistrement.',
+        'La revente : la plus-value immobilière suit un régime distinct de la taxe sur les plus-values mobilières de 2026.',
+        'La détention via une société, la colocation et le bail étudiant, qui posent leurs propres questions de qualification.',
+        'Les cas particuliers où le précompte immobilier devient déductible, comme le bail à ferme.',
+      ],
+    },
+  ],
+  suite: ['droits-enregistrement-wallonie'],
+};
+
+const INDEPENDANT_COMPLEMENTAIRE: Guide = {
+  slug: 'independant-complementaire-belgique',
+  titre: 'Devenir indépendant complémentaire : ce que ça coûte vraiment',
+  resume:
+    'Calculer ce qu’il te reste réellement sur une facture — pas ce qu’un simulateur de caisse te montre, qui s’arrête avant ce qui coûte le plus cher.',
+  categorie: 'independant',
+  niveau: 'intermediaire',
+  dureeMinutes: 9,
+  verifieLe: '2026-09-07',
+  anneeRevenus: 2026,
+  parametresLies: [
+    'independant.tranche_1.taux',
+    'independant.tranche_1.plafond',
+    'independant.tranche_2.taux',
+    'independant.tranche_2.plafond',
+    'independant.seuil_cotisations_complementaire',
+    'independant.revenu_plancher_principal',
+    'independant.frais_gestion_caisse',
+    'independant.cout_bce',
+    'independant.cout_activation_tva',
+    'tva.seuil_franchise',
+    'ipp.tranche_3.taux',
+    'ipp.additionnels_communaux_moyen',
+  ],
+  blocs: [
+    {
+      type: 'para',
+      texte:
+        'Un indépendant complémentaire exerce déjà une activité salariée à au moins mi-temps — ou une situation reconnue équivalente — et démarre une activité indépendante à côté. Le statut n’existe qu’en miroir de cette activité principale : sous le mi-temps, la caisse bascule l’affiliation vers le titre principal, aux cotisations plus lourdes.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Une fois lancé, chaque facture génère deux prélèvements distincts, calculés à des moments différents : une cotisation sociale, et un impôt. Pris séparément, ils se comprennent. C’est leur addition qui surprend — et c’est précisément l’addition que les simulateurs de caisses ne font pas.',
+    },
+
+    { type: 'titre', texte: 'Avant la première facture' },
+    {
+      type: 'liste',
+      items: [
+        'S’affilier à une caisse d’assurances sociales. L’affiliation est gratuite, mais elle doit précéder le premier jour d’activité, pas le suivre.',
+        'S’inscrire à la Banque-Carrefour des Entreprises via un guichet d’entreprises — un tarif réglementé, identique partout.',
+        'Activer un numéro de TVA si l’activité le demande — là, chaque guichet fixe son prix.',
+      ],
+    },
+    {
+      type: 'demonstration',
+      cle: 'independant-demarrage',
+      titre: 'Le coût de démarrage, payé une fois',
+      introduction:
+        'Deux postes, deux natures : l’inscription est une mission légale du guichet, l’activation de la TVA un service qu’il tarife librement.',
+    },
+    {
+      type: 'note',
+      titre: 'La franchise de TVA',
+      texte:
+        'Sous un certain chiffre d’affaires annuel, tu peux rester en franchise : pas de TVA à facturer, pas de déclaration périodique — mais pas de TVA déductible sur tes achats professionnels non plus. Le seuil figure dans les paramètres vérifiés de Nestor.',
+    },
+
+    { type: 'titre', texte: 'Les cotisations sociales' },
+    {
+      type: 'para',
+      texte:
+        'Elles suivent un barème dégressif : un premier taux sur la première tranche de revenu net, un taux plus bas sur la suivante, plus rien au-delà d’un plafond. Pour la quasi-totalité des complémentaires, seule la première tranche joue. S’y ajoutent les frais de gestion de la caisse — un tarif commercial, qui varie d’un tiers d’une enseigne à l’autre.',
+    },
+    {
+      type: 'para',
+      texte:
+        'La première année, la cotisation est provisoire, calculée sur une estimation. Une fois ta déclaration traitée — deux à trois ans plus tard —, la caisse recalcule sur le revenu réel et envoie une régularisation. Un complément si tu as gagné plus que prévu ; plus rarement un remboursement.',
+    },
+    {
+      type: 'piege',
+      titre: 'Le seuil d’exemption est un couperet, pas une franchise',
+      texte:
+        'Sous le seuil de revenu net annuel, le complémentaire ne paie aucune cotisation. Un euro au-dessus, et la cotisation porte sur la totalité du revenu — pas sur le seul dépassement. Cent euros de revenu supplémentaire peuvent déclencher plusieurs centaines d’euros de cotisations qui n’existaient pas la veille. Contrairement au titre principal, qui cotise sur un revenu plancher même s’il gagne moins, le complémentaire n’a pas de minimum : rien en dessous, tout au-dessus.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'independant-seuil-couperet',
+      titre: 'Juste au-dessus du seuil',
+      introduction:
+        'Le revenu a franchi le seuil de peu. Regarde sur quel montant la cotisation est calculée.',
+    },
+
+    { type: 'titre', texte: 'Le piège qui coûte le plus cher' },
+    {
+      type: 'piege',
+      titre: 'L’impôt, pas la cotisation',
+      texte:
+        'Les simulateurs des caisses calculent ce qu’elles prélèvent, pas ce que tu gardes. Or le revenu complémentaire s’ajoute à ton salaire et se fait taxer dans la tranche marginale du dessus, additionnels communaux compris — un prélèvement qui dépasse souvent la moitié. Rien n’est retenu à la source comme sur un salaire : c’est à toi de le mettre de côté, et la facture arrive un an plus tard.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'independant-du-brut-au-net',
+      titre: 'Du chiffre facturé à ce qui reste',
+      introduction:
+        'Le calcul complet, ligne à ligne. Le salaire imposable est une hypothèse posée pour l’exemple : le calculateur te demande le tien, à lire sur ton avertissement-extrait de rôle.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Ce que ce tableau ne dit pas, c’est s’il faut se lancer. Ça, personne ne peut le calculer à ta place : une activité complémentaire vaut aussi ce qu’elle t’apprend, ce qu’elle prépare, et ce qu’elle te coûte en soirées. Nestor chiffre la partie qui se chiffre.',
+    },
+
+    {
+      type: 'outil',
+      href: '/outils/independant-complementaire',
+      libelle: 'Faire le calcul avec mes chiffres',
+      texte:
+        'Ta caisse, ton salaire imposable, ta commune : le calculateur va jusqu’au net et montre chaque ligne, cotisations et impôt compris.',
+    },
+
+    { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
+    {
+      type: 'liste',
+      items: [
+        'Le titre principal et les conditions de bascule d’un statut à l’autre en cours d’année.',
+        'La preuve de connaissances de gestion de base, parfois exigée à l’inscription — son périmètre actuel n’a pas été vérifié ici.',
+        'La facturation électronique structurée entre assujettis, et la question de savoir si elle s’impose à qui reste en franchise de TVA.',
+        'Le choix entre frais réels et forfait, la sortie de la franchise de TVA, et l’exercice en société.',
+      ],
+    },
+  ],
+  suite: ['epargne-pension-deux-plafonds'],
+};
+
 export const GUIDES: readonly Guide[] = [
   FISCALITE_ETF,
   PLUS_VALUES_2026,
   DROITS_ENREGISTREMENT_WALLONIE,
+  EPARGNE_REGLEMENTEE,
+  EPARGNE_PENSION,
+  RENDEMENT_LOCATIF,
+  INDEPENDANT_COMPLEMENTAIRE,
 ];
 
 export function guideParSlug(slug: string): Guide | undefined {

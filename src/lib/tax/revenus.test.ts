@@ -440,9 +440,11 @@ describe('indépendant complémentaire', () => {
   });
 
   it('chiffre le coût de démarrage avec et sans TVA', () => {
+    // Tarif 2026 des guichets : 111,50 € pour la BCE (réglementé, identique
+    // partout), plus l'activation de la TVA au prix médian du marché.
     const avec = calculerCoutDemarrage({ avecTVA: true }, P);
     const sans = calculerCoutDemarrage({ avecTVA: false }, P);
-    expect(avec.result.totalCents).toBe(euros(183.5));
-    expect(sans.result.totalCents).toBe(euros(105.5));
+    expect(avec.result.totalCents).toBe(euros(189.5));
+    expect(sans.result.totalCents).toBe(euros(111.5));
   });
 });

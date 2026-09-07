@@ -1,4 +1,4 @@
-import type { RegionFiscale, TaxParameter, TaxParamSet, UniteParametre } from './types';
+import type { Peremption, RegionFiscale, TaxParameter, TaxParamSet, UniteParametre } from './types';
 
 /**
  * Catalogue des paramètres fiscaux belges.
@@ -38,6 +38,9 @@ const INASTI = 'https://www.rsvz-inasti.fgov.be';
 const BNB = 'https://www.nbb.be';
 const STATBEL = 'https://statbel.fgov.be';
 const NOTAIRE = 'https://www.notaire.be';
+// Loi du 6 avril 2026 instaurant la taxe sur les plus-values, texte intégral.
+const LOI_PLUS_VALUES =
+  'https://www.ejustice.just.fgov.be/cgi/article.pl?language=fr&sum_date=2026-04-21&lg_txt=f&pd_search=2026-04-21&s_editie=1&numac_search=2026002780&caller=sum&2026002780=1&view_numac=2026002780nx2026002780f';
 // Tableau des cotisations 2026 d'une caisse agréée : l'INASTI publie le premier
 // taux, les tranches supérieures ne se trouvent que dans les barèmes de caisse.
 const LIANTIS_2026 =
@@ -58,6 +61,8 @@ type Def = {
   verifieLe?: string;
   /** Pratique de marché ou hypothèse de simulation, pas une règle légale. */
   hypothese?: boolean;
+  /** Rythme de péremption, quand la déduction depuis l'unité ne convient pas. */
+  peremption?: Peremption;
 };
 
 function def(annee: number, d: Def): TaxParameter {
@@ -71,6 +76,7 @@ function def(annee: number, d: Def): TaxParameter {
     sourceUrl: d.sourceUrl,
     verifieLe: d.verifieLe ?? DOC_06,
     verifie: d.verifie ?? false,
+    ...(d.peremption ? { peremption: d.peremption } : {}),
     hypothese: d.hypothese ?? false,
   };
 }
@@ -190,6 +196,33 @@ const DEFS_2026: Def[] = [
     libelle: 'Taxe sur les plus-values — exonération annuelle par personne',
     sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
     verifie: true,
+  },
+  // Report de l'exonération non utilisée — art. 96/2, al. 1er, 3° et al. 3 du
+  // CIR 92, insérés par la loi du 6 avril 2026 (Moniteur belge du 21/04/2026),
+  // lue au texte le 07/09/2026. La part d'exonération non consommée une année
+  // s'ajoute aux suivantes, par tranches annuelles, jusqu'à un plafond cumulé ;
+  // les plus anciennes s'imputent d'abord.
+  //
+  // Les montants ci-dessous sont les valeurs indexées annoncées par les
+  // sources professionnelles (480 € et 2 426 € de base). La loi ne garantit
+  // le montant exact de 1 000 € qu'à partir des revenus 2027 (art. 33) ; pour
+  // les revenus 2026, la valeur indexée reste à confirmer à l'avis officiel
+  // d'indexation. D'où `verifie: false`, et l'avertissement dans l'interface.
+  {
+    cle: 'plus_values.report_annuel',
+    valeur: 1000,
+    unite: 'eur',
+    libelle: "Taxe sur les plus-values — part d'exonération non utilisée reportable par an",
+    sourceUrl: LOI_PLUS_VALUES,
+    verifieLe: '2026-09-07',
+  },
+  {
+    cle: 'plus_values.report_plafond',
+    valeur: 5000,
+    unite: 'eur',
+    libelle: "Taxe sur les plus-values — plafond cumulé de l'exonération reportée",
+    sourceUrl: LOI_PLUS_VALUES,
+    verifieLe: '2026-09-07',
   },
   // Taxe Reynders — plus-values des fonds obligataires
   {
@@ -460,10 +493,15 @@ const DEFS_2026: Def[] = [
     cle: 'credit.droit_hypotheque',
     valeur: 0.3,
     unite: 'pourcent',
-    libelle: "Droit d'hypothèque sur le montant inscrit",
-    sourceUrl: 'https://www.notaire.be/calcul-de-frais/credit-hypothecaire',
+    // Assiette confirmée le 07/09/2026 : « calculé sur le montant du capital et
+    // des accessoires, comme le droit d'enregistrement » — donc le montant
+    // inscrit, pas le seul montant emprunté. Articles 259 à 267 du Code des
+    // droits d'enregistrement, d'hypothèque et de greffe, non lus au texte.
+    libelle: "Droit d'hypothèque sur le montant inscrit (capital et accessoires)",
+    sourceUrl:
+      'https://www.notaire.be/immobilier/acheter-et-vendre-un-bien-immobilier/les-frais-lies-lachat/les-frais-lies-au-credit-hypothecaire',
     verifie: true,
-    verifieLe: '2026-09-06',
+    verifieLe: '2026-09-07',
   },
     {
     cle: 'credit.frais_dossier',
@@ -764,17 +802,28 @@ const DEFS_2026: Def[] = [
   },
   {
     cle: 'independant.cout_bce',
-    valeur: 105.5,
+    valeur: 111.5,
     unite: 'eur',
-    libelle: "Inscription à la BCE via un guichet d'entreprises",
-    sourceUrl: 'https://economie.fgov.be',
+    // Tarif 2026 identique chez UCM, Acerta et Securex, qualifié de « mission
+    // légale non soumise à TVA » : un tarif réglementé, pas commercial. Reste en
+    // dette tant que l'arrêté qui le fixe n'a pas été lu au texte.
+    libelle: "Inscription à la BCE via un guichet d'entreprises (par unité d'établissement)",
+    sourceUrl: 'https://www.ucm.be/documents/je-demarre/note-dinfo-tarifs-guichet-dentreprises-2026',
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.cout_activation_tva',
     valeur: 78,
     unite: 'eur',
-    libelle: 'Activation du numéro de TVA (TVAC)',
-    sourceUrl: 'https://economie.fgov.be',
+    // Trois guichets, trois prix : 60 € HTVA chez Securex, 78,65 € chez Xerius,
+    // 84,70 € TVAC chez UCM. Il n'y a pas de valeur officielle — c'est un
+    // service payant hors missions légales. La valeur retenue est au milieu de
+    // la fourchette, et sa péremption est celle d'un tarif de marché.
+    libelle: 'Activation du numéro de TVA par le guichet (TVAC, de 60 à 85 € selon l’enseigne)',
+    sourceUrl: 'https://www.xerius.be/fr-be/numero-tva-independant-complementaire',
+    verifie: true,
+    verifieLe: '2026-09-07',
+    hypothese: true,
   },
   {
     cle: 'tva.seuil_franchise',
@@ -854,31 +903,43 @@ const DEFS_2026: Def[] = [
   },
   {
     cle: 'epargne_long_terme.seuil_bareme',
-    valeur: 17070,
+    valeur: 2040,
     unite: 'eur',
     libelle: 'Épargne à long terme — seuil de revenus du barème du plafond',
-    // Le barème qui calcule le plafond selon les revenus n'est publié ni par le
-    // SPF ni par Wikifin, qui renvoient au conseiller. Les trois valeurs
-    // ci-dessous viennent d'une source secondaire et restent à confirmer :
-    // elles sont déclarées dans la dette de `catalogue.test.ts`.
-    sourceUrl: 'https://calculateur-de-salaire.be/guide/epargne-long-terme-belgique',
-    verifieLe: '2026-09-06',
+    // Corrigé le 07/09/2026 : la valeur précédente (17 070 €) ne correspondait à
+    // aucune source — huit fois trop haute. La circulaire 2026/C/6 donne les
+    // montants de base (1 250 € et 1 500 €) et leurs équivalents indexés
+    // 2025-2030 (2 040 € et 2 450 €), et gèle cette indexation jusqu'à
+    // l'exercice 2030 : la valeur tient donc pour les revenus 2025 à 2029, d'où
+    // la péremption légale plutôt qu'annuelle. Recoupement arithmétique : la
+    // formule à un terme de CBC (183,60 € + 6 % du revenu) vaut exactement
+    // 2 040 € × (15 % − 6 %) + 6 % du revenu. Reste en dette tant que la
+    // circulaire n'est pas lue en primaire.
+    sourceUrl:
+      'https://blog.forumforthefuture.be/fr/article/circulaire-2026c6-relative-au-gel-de-lindexation-de-depenses-fiscales/29822',
+    verifieLe: '2026-09-07',
+    peremption: 'legale',
   },
   {
     cle: 'epargne_long_terme.taux_premiere_tranche',
     valeur: 15,
     unite: 'pourcent',
     libelle: 'Épargne à long terme — taux sur la première tranche de revenus',
-    sourceUrl: 'https://calculateur-de-salaire.be/guide/epargne-long-terme-belgique',
-    verifieLe: '2026-09-06',
+    // Confirmé le 07/09/2026 par convergence : identique chez toutes les sources
+    // depuis des années, et cohérent au centime avec le seuil et la formule de
+    // CBC. L'article du CIR 92 qui le fixe n'a pas été lu au texte.
+    sourceUrl: 'https://www.cbc.be/particuliers/fr/epargner/calcul-epargne-long-terme.html',
+    verifie: true,
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'epargne_long_terme.taux_tranche_superieure',
     valeur: 6,
     unite: 'pourcent',
     libelle: 'Épargne à long terme — taux au-delà du seuil',
-    sourceUrl: 'https://calculateur-de-salaire.be/guide/epargne-long-terme-belgique',
-    verifieLe: '2026-09-06',
+    sourceUrl: 'https://www.cbc.be/particuliers/fr/epargner/calcul-epargne-long-terme.html',
+    verifie: true,
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'assurance.taxe_prime',

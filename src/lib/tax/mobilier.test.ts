@@ -195,6 +195,37 @@ describe('précompte sur intérêts non réglementés', () => {
 });
 
 describe('taxe sur les plus-values 2026', () => {
+  it('ajoute au plafond l’exonération reportée des années précédentes', () => {
+    // 15 000 € de plus-value, 3 000 € d'exonération non consommée l'an passé :
+    // 13 000 € exonérés, 2 000 € taxables.
+    const r = calculerTaxePlusValues(
+      { plusValueCents: euros(15_000), exonerationReporteeCents: euros(3_000) },
+      P,
+    );
+    expect(r.result.reportRetenuCents).toBe(euros(3_000));
+    expect(r.result.exonereCents).toBe(euros(13_000));
+    expect(r.result.taxeCents).toBe(euros(200));
+    expect(r.breakdown.some((l) => l.libelle.startsWith('Exonération reportée'))).toBe(true);
+  });
+
+  it('plafonne le report cumulé au maximum légal', () => {
+    const r = calculerTaxePlusValues(
+      { plusValueCents: euros(20_000), exonerationReporteeCents: euros(9_000) },
+      P,
+    );
+    // 10 000 € de base + 5 000 € de report au plus : 15 000 € exonérés.
+    expect(r.result.reportRetenuCents).toBe(euros(5_000));
+    expect(r.result.exonereCents).toBe(euros(15_000));
+    expect(r.result.taxeCents).toBe(euros(500));
+  });
+
+  it('suppose un report nul quand rien n’est renseigné', () => {
+    const r = calculerTaxePlusValues({ plusValueCents: euros(15_000) }, P);
+    expect(r.result.reportRetenuCents).toBe(0);
+    expect(r.result.exonereCents).toBe(euros(10_000));
+    expect(r.hypotheses.join(' ')).toContain('report');
+  });
+
   it('n’impose rien tant que l’exonération annuelle n’est pas dépassée', () => {
     const r = calculerTaxePlusValues({ plusValueCents: euros(8_000) }, P);
     expect(r.result.taxeCents).toBe(0);

@@ -55,13 +55,24 @@ describe('épargne-pension', () => {
 
 describe('épargne à long terme', () => {
   it('calcule le plafond selon le barème sur les revenus', () => {
-    // 15 % de 17 070 = 2 560,50, déjà au-dessus du plafond absolu de 2 450.
+    // 15 % des premiers 2 040 € = 306 €, puis 6 % de 15 030 € = 901,80 €.
+    // Le plafond dépend donc bien des revenus : 1 207,80 €, sous le plafond
+    // absolu de 2 450 €.
     const r = calculerEpargneLongTerme(
       { revenuNetImposableCents: euros(17_070), versementCents: euros(3_000) },
       P,
     );
-    expect(r.result.plafondSelonRevenusCents).toBe(euros(2_560.5));
-    expect(r.result.plafondDisponibleCents).toBe(euros(2_450));
+    expect(r.result.plafondSelonRevenusCents).toBe(euros(1_207.8));
+    expect(r.result.plafondDisponibleCents).toBe(euros(1_207.8));
+  });
+
+  it('reproduit la formule à un terme des banques : 183,60 € + 6 % du revenu', () => {
+    // 2 040 € × (15 % − 6 %) = 183,60 € : la constante que CBC publie.
+    const r = calculerEpargneLongTerme(
+      { revenuNetImposableCents: euros(30_000), versementCents: euros(500) },
+      P,
+    );
+    expect(r.result.plafondSelonRevenusCents).toBe(euros(183.6 + 0.06 * 30_000));
   });
 
   it('borne au plafond absolu quel que soit le revenu', () => {
@@ -74,14 +85,14 @@ describe('épargne à long terme', () => {
   });
 
   it('applique le taux dégressif au-delà du seuil', () => {
-    // 15 % de 10 000 = 1 500, aucune tranche supérieure.
+    // 306 € sur les premiers 2 040 €, puis 6 % de 7 960 € = 477,60 €.
     const r = calculerEpargneLongTerme(
       { revenuNetImposableCents: euros(10_000), versementCents: euros(2_000) },
       P,
     );
-    expect(r.result.plafondSelonRevenusCents).toBe(euros(1_500));
-    expect(r.result.versementRetenuCents).toBe(euros(1_500));
-    expect(r.result.excedentCents).toBe(euros(500));
+    expect(r.result.plafondSelonRevenusCents).toBe(euros(783.6));
+    expect(r.result.versementRetenuCents).toBe(euros(783.6));
+    expect(r.result.excedentCents).toBe(euros(1_216.4));
   });
 
   it('déduit ce que le crédit hypothécaire consomme du panier', () => {

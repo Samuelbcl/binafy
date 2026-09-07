@@ -53,6 +53,13 @@ export type TaxePlusValuesInput = {
   plusValueCents: number;
   /** Part de l'exonération annuelle déjà consommée, en centimes. */
   exonerationDejaUtiliseeCents?: number;
+  /**
+   * Exonération non utilisée les années précédentes et reportée sur celle-ci,
+   * en centimes. La loi la plafonne ; le calculateur applique le plafond.
+   * Zéro par défaut : c'est l'hypothèse la plus défavorable, jamais la plus
+   * flatteuse.
+   */
+  exonerationReporteeCents?: number;
 };
 
 export type TaxePlusValuesResult = {
@@ -60,6 +67,8 @@ export type TaxePlusValuesResult = {
   exonereCents: number;
   taxableCents: number;
   exonerationRestanteCents: number;
+  /** Part du report effectivement retenue, après plafonnement. */
+  reportRetenuCents: number;
 };
 
 export function calculerTaxePlusValues(
@@ -68,13 +77,20 @@ export function calculerTaxePlusValues(
 ): CalcResult<TaxePlusValuesResult> {
   const plusValue = Math.max(0, input.plusValueCents);
   const dejaUtilisee = Math.max(0, input.exonerationDejaUtiliseeCents ?? 0);
+  const reportee = Math.max(0, input.exonerationReporteeCents ?? 0);
 
   const pTaux = getParam(params, 'plus_values.taux');
   const pExo = getParam(params, 'plus_values.exoneration_annuelle');
+  const pReportPlafond = getParam(params, 'plus_values.report_plafond');
   const taux = getRate(params, 'plus_values.taux');
   const plafondExoCents = getCents(params, 'plus_values.exoneration_annuelle');
+  const plafondReportCents = getCents(params, 'plus_values.report_plafond');
 
-  const disponible = Math.max(0, plafondExoCents - dejaUtilisee);
+  // L'exonération non consommée les années précédentes se reporte, dans la
+  // limite d'un plafond cumulé (art. 96/2 CIR 92). On ne la devine pas : elle
+  // arrive en entrée, et vaut zéro tant que rien ne la documente.
+  const reportRetenuCents = Math.min(reportee, plafondReportCents);
+  const disponible = Math.max(0, plafondExoCents + reportRetenuCents - dejaUtilisee);
   const exonereCents = Math.min(plusValue, disponible);
   const taxableCents = plusValue - exonereCents;
   const taxeCents = Math.round(taxableCents * taux);
@@ -85,14 +101,28 @@ export function calculerTaxePlusValues(
       exonereCents,
       taxableCents,
       exonerationRestanteCents: Math.max(0, disponible - exonereCents),
+      reportRetenuCents,
     },
     breakdown: [
       { libelle: 'Plus-value réalisée', valeur: plusValue, unite: 'eur' },
+      ...(reportRetenuCents > 0
+        ? [
+            {
+              libelle: 'Exonération reportée des années précédentes',
+              valeur: reportRetenuCents,
+              unite: 'eur' as const,
+              precision:
+                reportee > plafondReportCents
+                  ? `Plafonnée à ${formatEUR(plafondReportCents)} de report cumulé`
+                  : 'Part non consommée les années précédentes, à justifier dans la déclaration',
+            },
+          ]
+        : []),
       {
-        libelle: 'Exonération annuelle appliquée',
+        libelle: 'Exonération appliquée',
         valeur: exonereCents,
         unite: 'eur',
-        precision: `Exonération de ${formatEUR(plafondExoCents)} par personne et par an, dont ${formatEUR(dejaUtilisee)} déjà consommés`,
+        precision: `Exonération de ${formatEUR(plafondExoCents)} par personne et par an${reportRetenuCents > 0 ? `, majorée de ${formatEUR(reportRetenuCents)} de report` : ''}, dont ${formatEUR(dejaUtilisee)} déjà consommés`,
       },
       { libelle: 'Base taxable', valeur: taxableCents, unite: 'eur' },
       {
@@ -103,11 +133,12 @@ export function calculerTaxePlusValues(
         total: true,
       },
     ],
-    sources: [toSource(pTaux), toSource(pExo)],
+    sources: [toSource(pTaux), toSource(pExo), toSource(pReportPlafond)],
     hypotheses: [
       `Seule la plus-value construite à partir du ${DATE_REFERENCE_PLUS_VALUES} entre dans la base.`,
       "La compensation des moins-values et le report de pertes ne sont pas modélisés : modalités à confirmer auprès du SPF Finances.",
-      "L'exonération annuelle s'apprécie par personne, tous actifs financiers confondus.",
+      "L'exonération s'apprécie par personne, tous actifs financiers confondus. Sa part non utilisée une année se reporte sur les suivantes, dans la limite d'un plafond cumulé — ce calcul suppose un report nul tant que tu ne l'as pas renseigné.",
+      "Rien n'est automatique : le précompte est retenu à la source au taux plein, et l'exonération comme son report se réclament dans la déclaration, pièces justificatives à l'appui.",
     ],
   };
 }

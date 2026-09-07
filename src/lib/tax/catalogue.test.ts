@@ -27,16 +27,17 @@ import { parametresARevoir, peremptionDe } from './types';
  * `verificateur-fiscal`.
  */
 const DETTE_CONNUE = new Set([
-  'credit.droit_hypotheque',
-  'credit.frais_acte_forfait',
+  // Tarif réglementé, identique chez tous les guichets, mais l'arrêté qui le
+  // fixe n'a pas été lu au texte.
   'independant.cout_bce',
-  'independant.cout_activation_tva',
-  // Le barème qui calcule le plafond de l'épargne à long terme selon les
-  // revenus n'est publié ni par le SPF ni par Wikifin, qui renvoient au
-  // conseiller. Valeurs issues d'une source secondaire, assumées comme telles.
+  // Valeur corrigée le 07/09/2026 (2 040 €, plus 17 070 €) d'après la
+  // circulaire 2026/C/6 republiée ; la circulaire elle-même reste à lire.
   'epargne_long_terme.seuil_bareme',
-  'epargne_long_terme.taux_premiere_tranche',
-  'epargne_long_terme.taux_tranche_superieure',
+  // Report de l'exonération sur plus-values : la loi ne garantit la valeur
+  // indexée ronde qu'à partir des revenus 2027 (art. 33). Celle de 2026 attend
+  // l'avis officiel d'indexation.
+  'plus_values.report_annuel',
+  'plus_values.report_plafond',
 ]);
 
 describe('catalogue fiscal — garde-fou', () => {
