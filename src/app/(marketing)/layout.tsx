@@ -22,7 +22,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               Apprendre
             </Link>
             <Link
-              href="/outils/frais-acquisition"
+              href="/outils"
               className="inline-flex min-h-11 items-center rounded-full px-4 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
             >
               Outils
@@ -41,10 +41,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           <nav aria-label="Liens de pied de page" className="flex flex-wrap gap-x-5 gap-y-2">
             {[
               { href: '/apprendre', libelle: 'Apprendre' },
-              { href: '/outils/frais-acquisition', libelle: 'Frais d’acquisition' },
-              { href: '/outils/interets-composes', libelle: 'Intérêts composés' },
-              { href: '/outils/simulateur-patrimoine', libelle: 'Simulateur de patrimoine' },
-              { href: '/outils/rendement-locatif', libelle: 'Rendement locatif' },
+              { href: '/outils', libelle: 'Outils' },
               { href: '/confidentialite', libelle: 'Confidentialité' },
               { href: '/conditions', libelle: 'Conditions' },
               { href: '/mentions-legales', libelle: 'Mentions légales' },

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Calculator, FileCheck2, Landmark } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { OUTILS } from '@/lib/outils';
 
 export const metadata: Metadata = {
   title: 'Nestor — Le patrimoine, version belge',
@@ -8,29 +9,6 @@ export const metadata: Metadata = {
     'Suivre, comprendre et piloter son patrimoine en Belgique. Fiscalité belge intégrée à chaque calcul : précompte, TOB, taxe sur les plus-values, droits d’enregistrement par Région.',
 };
 
-const OUTILS = [
-  {
-    href: '/outils/frais-acquisition',
-    titre: 'Frais d’acquisition immobilière',
-    description:
-      'Le cash réel à sortir le jour de l’acte, par Région, et ce que coûte un locatif acheté avant sa résidence principale.',
-    icone: Landmark,
-  },
-  {
-    href: '/outils/interets-composes',
-    titre: 'Intérêts composés',
-    description:
-      'La projection classique, mais avec la version nette de fiscalité belge. Personne d’autre ne la donne.',
-    icone: Calculator,
-  },
-  {
-    href: '/outils/rendement-locatif',
-    titre: 'Rendement locatif belge',
-    description:
-      'Tu n’es pas taxé sur les loyers mais sur le revenu cadastral indexé. Voici ton cash-flow réel après impôt.',
-    icone: FileCheck2,
-  },
-];
 
 
 /**
