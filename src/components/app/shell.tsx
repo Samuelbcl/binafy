@@ -1,7 +1,9 @@
 'use client';
 
 import {
+  BookOpen,
   Building2,
+  Calculator,
   Eye,
   EyeOff,
   LayoutDashboard,
@@ -26,13 +28,34 @@ import { cn } from '@/lib/cn';
 import { supabaseNavigateur } from '@/lib/db/client';
 import { MarqueNestor } from '@/components/ui/marque';
 
+/**
+ * Navigation de l'application, en deux groupes.
+ *
+ * Les outils et les guides n'existaient que sur le site public : une fois
+ * connecté, on ne pouvait plus les atteindre. Or c'est connecté qu'on en a le
+ * plus besoin — on lit un guide sur la TOB parce qu'on vient de voir une ligne
+ * de TOB dans son propre portefeuille. Ils deviennent donc un groupe à part
+ * entière de la barre latérale, pas une ligne perdue dans les paramètres.
+ */
 const NAVIGATION = [
-  { href: '/dashboard', libelle: 'Vue d’ensemble', icone: LayoutDashboard },
-  { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
-  { href: '/budget', libelle: 'Budget', icone: Receipt },
-  { href: '/projections', libelle: 'Projections', icone: TrendingUp },
-  { href: '/objectifs', libelle: 'Objectifs', icone: Target },
-  { href: '/fiscalite', libelle: 'Fiscalité', icone: Building2 },
+  {
+    titre: 'Mon patrimoine',
+    liens: [
+      { href: '/dashboard', libelle: 'Vue d’ensemble', icone: LayoutDashboard },
+      { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
+      { href: '/budget', libelle: 'Budget', icone: Receipt },
+      { href: '/projections', libelle: 'Projections', icone: TrendingUp },
+      { href: '/objectifs', libelle: 'Objectifs', icone: Target },
+      { href: '/fiscalite', libelle: 'Fiscalité', icone: Building2 },
+    ],
+  },
+  {
+    titre: 'Comprendre',
+    liens: [
+      { href: '/apprendre', libelle: 'Apprendre', icone: BookOpen },
+      { href: '/outils', libelle: 'Outils', icone: Calculator },
+    ],
+  },
 ] as const;
 
 function BoutonDiscretion() {
@@ -87,27 +110,34 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col gap-0.5">
-      {NAVIGATION.map(({ href, libelle, icone: Icone }) => {
-        const actif = pathname === href || pathname.startsWith(`${href}/`);
-        return (
-          <Link
-            key={href}
-            href={href}
-            onClick={onNavigate}
-            aria-current={actif ? 'page' : undefined}
-            className={cn(
-              'flex min-h-11 items-center gap-3 rounded-[var(--radius)] px-3 text-[14px] transition-colors',
-              actif
-                ? 'bg-primary-soft font-semibold text-primary'
-                : 'text-text-muted hover:bg-surface-hover hover:text-text',
-            )}
-          >
-            <Icone className="size-[18px] shrink-0" />
-            {libelle}
-          </Link>
-        );
-      })}
+    <nav className="flex flex-col gap-6">
+      {NAVIGATION.map((groupe) => (
+        <div key={groupe.titre} className="flex flex-col gap-0.5">
+          <p className="px-3 pb-1.5 text-[11.5px] font-semibold text-text-subtle">
+            {groupe.titre}
+          </p>
+          {groupe.liens.map(({ href, libelle, icone: Icone }) => {
+            const actif = pathname === href || pathname.startsWith(`${href}/`);
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={onNavigate}
+                aria-current={actif ? 'page' : undefined}
+                className={cn(
+                  'flex min-h-11 items-center gap-3 rounded-[var(--radius)] px-3 text-[14px] transition-colors',
+                  actif
+                    ? 'bg-primary-soft font-semibold text-primary'
+                    : 'text-text-muted hover:bg-surface-hover hover:text-text',
+                )}
+              >
+                <Icone className="size-[18px] shrink-0" />
+                {libelle}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
     </nav>
   );
 }
@@ -126,6 +156,7 @@ const ONGLETS = [
   { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
   { href: '/budget', libelle: 'Budget', icone: Receipt },
   { href: '/fiscalite', libelle: 'Fiscalité', icone: Building2 },
+  { href: '/apprendre', libelle: 'Apprendre', icone: BookOpen },
 ] as const;
 
 function BarreOnglets() {
@@ -134,24 +165,32 @@ function BarreOnglets() {
   return (
     <nav
       aria-label="Navigation principale"
-      className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between border-t border-border bg-surface px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-around border-t border-border bg-surface px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
     >
-      {ONGLETS.slice(0, 2).map(({ href, libelle, icone: Icone }) => (
-        <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
-      ))}
-
-      <Link
-        href="/patrimoine#ajouter"
-        className="grid size-13 shrink-0 place-items-center rounded-full bg-action text-on-action transition-colors hover:bg-action-hover"
-      >
-        <Plus className="size-[22px]" />
-        <span className="sr-only">Ajouter un actif</span>
-      </Link>
-
-      {ONGLETS.slice(2).map(({ href, libelle, icone: Icone }) => (
+      {ONGLETS.map(({ href, libelle, icone: Icone }) => (
         <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
       ))}
     </nav>
+  );
+}
+
+/**
+ * Ajout d'un actif.
+ *
+ * Occupait le centre de la barre d'onglets, ce qui coûtait une destination et
+ * envoyait vers `/patrimoine#ajouter` même depuis le budget. En bouton flottant,
+ * il reste sous le pouce sans manger de place, et la cinquième destination
+ * revient à l'apprentissage.
+ */
+function BoutonAjout() {
+  return (
+    <Link
+      href="/patrimoine#ajouter"
+      className="fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 grid size-14 place-items-center rounded-full bg-action text-on-action shadow-lg transition-colors hover:bg-action-hover lg:hidden"
+    >
+      <Plus className="size-6" />
+      <span className="sr-only">Ajouter un actif</span>
+    </Link>
   );
 }
 
@@ -173,7 +212,7 @@ function OngletLien({
       href={href}
       aria-current={actif ? 'page' : undefined}
       className={cn(
-        'flex w-16 flex-col items-center gap-1 py-1 transition-colors',
+        'flex w-[60px] flex-col items-center gap-1 py-1 transition-colors',
         actif ? 'text-primary' : 'text-text-subtle hover:text-text',
       )}
     >
@@ -311,6 +350,7 @@ export function AppShell({
         </header>
 
         <main className="flex-1 px-4 pt-6 pb-28 sm:px-6 lg:px-8 lg:pb-8">{children}</main>
+        <BoutonAjout />
         <BarreOnglets />
       </div>
     </div>

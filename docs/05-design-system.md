@@ -155,10 +155,19 @@ Le look vit dans la classe, la mise en page reste sur l'élément : `w-full`, `m
 icône s'ajoutent sans toucher au style.
 
 ### Navigation
-Écran large : barre latérale fixe de 248px, entrée active en `--primary-soft` + `--primary`.
+Écran large : barre latérale fixe de 248px en **deux groupes** — « Mon patrimoine »
+(vue d'ensemble, patrimoine, budget, projections, objectifs, fiscalité) et « Comprendre »
+(apprendre, outils). Entrée active en `--primary-soft` + `--primary`.
 
-Mobile : **barre d'onglets en bas**, quatre destinations (Accueil, Patrimoine, Budget,
-Fiscalité) et un bouton rond `--action` au centre pour l'ajout d'un actif. Un menu
+Ce second groupe n'est pas cosmétique : les guides et les calculateurs n'existaient que
+sur le site public, donc devenaient inatteignables une fois connecté. C'est pourtant
+connecté qu'on en a le plus besoin — on lit le guide sur la TOB parce qu'on vient de voir
+une ligne de TOB dans son propre portefeuille.
+
+Mobile : **barre d'onglets en bas**, cinq destinations à largeur égale — Accueil,
+Patrimoine, Budget, Fiscalité, Apprendre. L'ajout d'un actif est un **bouton flottant**
+`--action` au-dessus de la barre, à droite : au centre de la barre il coûtait une
+destination et renvoyait vers `/patrimoine#ajouter` même depuis le budget. Un menu
 hamburger en haut à gauche est le point le plus difficile à atteindre au pouce sur un
 écran de 390px ; le tiroir du haut ne garde que le secondaire — projections, objectifs,
 paramètres. Le contenu réserve `pb-28` sous lui, sinon la barre recouvre le dernier bloc.

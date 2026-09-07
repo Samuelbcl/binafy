@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { LienCompte } from '@/components/marketing/lien-compte';
 import { MarqueNestor } from '@/components/ui/marque';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
@@ -22,9 +23,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             >
               Outils
             </Link>
-            <Link href="/connexion" className="bouton-principal ml-1.5">
-              Créer mon compte
-            </Link>
+            <LienCompte />
           </nav>
         </div>
       </header>
