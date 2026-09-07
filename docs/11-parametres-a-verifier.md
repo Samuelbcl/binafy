@@ -3,8 +3,8 @@
 > **Fichier généré.** Régénérer avec `node scripts/generer-seed-fiscal.mjs`.
 > Source : `src/lib/tax/parametres.ts`.
 
-83 paramètres sont chargés pour 2026.
-**78 sont confirmés** — leur valeur est chiffrée explicitement dans
+88 paramètres sont chargés pour 2026.
+**83 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
 **5 règles légales attendent une confirmation** à la source officielle.
 7 autres valeurs sont des pratiques de marché ou des hypothèses de

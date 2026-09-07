@@ -1,12 +1,14 @@
 import { formatEUR, formatPercent, formatTaux } from '../money';
 import { calculerImpotRevenuComplementaire } from './ipp';
 import {
-  type BreakdownLine,
+  appliquerBaremeProgressif,
+  getBareme,
   getCents,
   getParam,
   getRate,
   mergeSources,
   toSource,
+  type BreakdownLine,
   type CalcResult,
   type TaxParamSet,
 } from './types';
@@ -75,6 +77,12 @@ export type CotisationsResult = {
   /** Vrai si le revenu reste sous le seuil d'exemption du statut complémentaire. */
   sousLeSeuil: boolean;
   seuilCents: number;
+  /**
+   * Vrai quand le titre principal cotise sur le revenu plancher légal plutôt
+   * que sur son revenu réel, inférieur. C'est ce qui produit la « cotisation
+   * minimale » des tableaux de caisse.
+   */
+  plancherApplique: boolean;
   /** Ce qu'il reste avant de franchir le seuil. */
   margeAvantSeuilCents: number;
 };
@@ -92,7 +100,6 @@ export function calculerCotisationsSociales(
 ): CalcResult<CotisationsResult> {
   const revenu = Math.max(0, input.revenuNetImposableCents);
 
-  const pTaux = getParam(params, 'independant.cotisations_taux');
   const pSeuil = getParam(params, 'independant.seuil_cotisations_complementaire');
   // Le taux dépend de la caisse choisie ; sans choix, on prend la médiane.
   const cleFrais = input.caisse
@@ -100,13 +107,30 @@ export function calculerCotisationsSociales(
     : 'independant.frais_gestion_caisse';
   const pFrais = getParam(params, cleFrais);
 
-  const taux = getRate(params, 'independant.cotisations_taux');
   const seuilCents = getCents(params, 'independant.seuil_cotisations_complementaire');
   const tauxFrais = getRate(params, cleFrais);
 
+  // Barème dégressif : 20,5 % sur la première tranche, 14,16 % sur la
+  // deuxième, plus rien au-delà. Longtemps simplifié en taux plat — juste pour
+  // un complémentaire ordinaire, faux dès qu'on dépasse la première tranche.
+  const bareme = getBareme(params, 'independant');
+
   const sousLeSeuil = input.statut === 'complementaire' && revenu < seuilCents;
 
-  const cotisationsCents = sousLeSeuil ? 0 : Math.round(revenu * taux);
+  // Le titre principal cotise au moins sur un revenu plancher, même si son
+  // revenu réel est inférieur : c'est la « cotisation minimale » des tableaux
+  // de caisse. Le complémentaire n'a pas ce plancher — il est dispensé sous son
+  // seuil, puis cotise strictement au prorata (INASTI, vérifié le 07/09/2026).
+  const pPlancher =
+    input.statut === 'principal' ? getParam(params, 'independant.revenu_plancher_principal') : null;
+  const plancherCents = pPlancher ? Math.round(pPlancher.valeur * 100) : 0;
+  const assietteCents = sousLeSeuil ? 0 : Math.max(revenu, plancherCents);
+  const plancherApplique = assietteCents > revenu;
+
+  const { impotCents: cotisationsCents, detail } = appliquerBaremeProgressif(
+    assietteCents,
+    bareme.tranches,
+  );
   const fraisGestionCents = sousLeSeuil ? 0 : Math.round(cotisationsCents * tauxFrais);
   const totalCents = cotisationsCents + fraisGestionCents;
 
@@ -127,12 +151,35 @@ export function calculerCotisationsSociales(
 
   if (!sousLeSeuil) {
     breakdown.push(
-      {
-        libelle: 'Cotisations sociales',
-        valeur: cotisationsCents,
-        unite: 'eur' as const,
-        precision: `${formatEUR(revenu)} × ${formatTaux(pTaux.valeur, 1)}`,
-      },
+      ...(plancherApplique
+        ? [
+            {
+              libelle: 'Revenu plancher du titre principal',
+              valeur: assietteCents,
+              unite: 'eur' as const,
+              precision: `Le titre principal cotise au moins sur ${formatEUR(plancherCents)}, même si son revenu réel est inférieur`,
+            },
+          ]
+        : []),
+      // Une ligne par tranche touchée : c'est là qu'on voit que le taux baisse
+      // avec le revenu, et qu'il tombe à zéro au-delà du plafond.
+      ...detail.map((ligne) =>
+        ligne.taux === 0
+          ? {
+              libelle: `Au-delà de ${formatEUR(ligne.deCents)}`,
+              valeur: 0,
+              unite: 'eur' as const,
+              precision: 'Plus aucune cotisation n’est due sur cette part du revenu',
+            }
+          : {
+              libelle: `Cotisations — tranche à ${formatTaux(ligne.taux * 100, 2)}`,
+              valeur: ligne.impotCents,
+              unite: 'eur' as const,
+              precision: Number.isFinite(ligne.aCents)
+                ? `Sur la part de ${formatEUR(ligne.deCents)} à ${formatEUR(ligne.aCents)}`
+                : `Sur la part au-delà de ${formatEUR(ligne.deCents)}`,
+            },
+      ),
       {
         libelle: input.caisse
           ? `Frais de gestion — ${LIBELLE_CAISSE[input.caisse]}`
@@ -160,13 +207,18 @@ export function calculerCotisationsSociales(
       totalCents,
       sousLeSeuil,
       seuilCents,
+      plancherApplique,
       margeAvantSeuilCents: Math.max(0, seuilCents - revenu),
     },
     breakdown,
-    sources: mergeSources([toSource(pTaux), toSource(pSeuil), toSource(pFrais)]),
+    sources: mergeSources(
+      bareme.sources,
+      [toSource(pSeuil), toSource(pFrais)],
+      pPlancher ? [toSource(pPlancher)] : [],
+    ),
     hypotheses: [
       'Les cotisations sont provisoires la première année puis régularisées sur le revenu réel, avec deux à trois ans de décalage.',
-      'Le taux de cotisation et le seuil sont légaux ; les frais de gestion, eux, sont un tarif commercial propre à chaque caisse.',
+      'Le barème des cotisations, le seuil du complémentaire et le revenu plancher du principal sont légaux et indexés chaque année ; les frais de gestion, eux, sont un tarif commercial propre à chaque caisse.',
       "L'affiliation à une caisse d'assurances sociales est obligatoire avant le début de l'activité.",
     ],
   };
@@ -274,7 +326,7 @@ export function simulerIndependant(
         unite: 'eur',
         precision: cotisations.result.sousLeSeuil
           ? `Revenu sous le seuil de ${formatEUR(cotisations.result.seuilCents)} — aucune cotisation due`
-          : `${formatTaux(getParam(params, 'independant.cotisations_taux').valeur, 1)} du revenu net, frais de gestion compris`,
+          : `Barème dégressif — ${formatTaux(getParam(params, 'independant.tranche_1.taux').valeur, 1)} sur la première tranche —, frais de gestion compris`,
       },
       { libelle: 'Base imposable', valeur: baseImposableCents, unite: 'eur' },
       {

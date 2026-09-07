@@ -290,6 +290,57 @@ describe('indépendant complémentaire', () => {
     expect(r.breakdown.some((l) => l.libelle.includes('Xerius'))).toBe(true);
   });
 
+  it('fait cotiser le titre principal sur le revenu plancher quand il gagne moins', () => {
+    // INASTI, revenus 2026 : plancher de 17 374,08 €, soit la cotisation
+    // minimale de 890,42 € par trimestre publiée par les caisses.
+    const r = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(1_500), statut: 'principal' },
+      TAX_PARAMS_2026,
+    );
+    expect(r.result.plancherApplique).toBe(true);
+    // 17 374,08 € × 20,5 %
+    expect(r.result.cotisationsCents).toBe(356_169);
+    expect(Math.round(r.result.cotisationsCents / 4)).toBe(89_042);
+    expect(r.breakdown.some((l) => l.libelle === 'Revenu plancher du titre principal')).toBe(true);
+  });
+
+  it('n’applique aucun plancher au complémentaire au-dessus de son seuil', () => {
+    // Juste au-dessus du seuil : strictement proportionnel, pas de minimum.
+    const r = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(2_000), statut: 'complementaire' },
+      TAX_PARAMS_2026,
+    );
+    expect(r.result.plancherApplique).toBe(false);
+    expect(r.result.cotisationsCents).toBe(euros(410));
+  });
+
+  it('applique le taux réduit de la deuxième tranche au-delà de 75 024,54 €', () => {
+    const r = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(90_000), statut: 'complementaire' },
+      TAX_PARAMS_2026,
+    );
+    // 75 024,54 × 20,5 % + (90 000 − 75 024,54) × 14,16 %
+    expect(r.result.cotisationsCents).toBe(1_750_056);
+    // Nettement moins que le taux plat qui servait avant.
+    expect(r.result.cotisationsCents).toBeLessThan(Math.round(euros(90_000) * 0.205));
+    expect(r.breakdown.filter((l) => l.libelle.startsWith('Cotisations — tranche')).length).toBe(2);
+  });
+
+  it('ne prélève plus rien au-delà du plafond de 110 562,42 €', () => {
+    const plafonnee = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(110_562.42), statut: 'principal' },
+      TAX_PARAMS_2026,
+    );
+    const audela = calculerCotisationsSociales(
+      { revenuNetImposableCents: euros(150_000), statut: 'principal' },
+      TAX_PARAMS_2026,
+    );
+    // 20 412,19 € par an, soit 5 103,05 € par trimestre — le maximum légal.
+    expect(plafonnee.result.cotisationsCents).toBe(2_041_219);
+    expect(audela.result.cotisationsCents).toBe(plafonnee.result.cotisationsCents);
+    expect(audela.breakdown.some((l) => l.libelle.startsWith('Au-delà de'))).toBe(true);
+  });
+
   it('ne connaît pas de seuil en statut principal', () => {
     const r = calculerCotisationsSociales(
       { revenuNetImposableCents: euros(1_500), statut: 'principal' },

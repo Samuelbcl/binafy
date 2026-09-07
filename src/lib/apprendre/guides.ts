@@ -217,7 +217,140 @@ const PLUS_VALUES_2026: Guide = {
   suite: ['fiscalite-etf-belgique'],
 };
 
-export const GUIDES: readonly Guide[] = [FISCALITE_ETF, PLUS_VALUES_2026];
+const DROITS_ENREGISTREMENT_WALLONIE: Guide = {
+  slug: 'droits-enregistrement-wallonie',
+  titre: 'Droits d’enregistrement en Wallonie : 3 % ou 12,5 %',
+  resume:
+    'Savoir si ton achat ouvre le taux réduit, et ce que l’ordre dans lequel tu achètes tes biens peut te coûter.',
+  categorie: 'immobilier',
+  niveau: 'intermediaire',
+  dureeMinutes: 9,
+  verifieLe: '2026-09-07',
+  anneeRevenus: 2026,
+  parametresLies: [
+    'droits_enregistrement.propre_unique',
+    'droits_enregistrement.autre',
+    'droits_enregistrement.abattement',
+    'droits_enregistrement.abattement_prix_max',
+    'droits_enregistrement.duree_maintien_residence',
+    'immobilier.tva_neuf',
+  ],
+  blocs: [
+    {
+      type: 'para',
+      texte:
+        'Les droits d’enregistrement se paient une seule fois, le jour de l’acte, en plus du prix du bien. C’est un pourcentage du prix d’achat versé à la Région — en Wallonie, deux taux coexistent, et l’écart entre les deux est le poste le plus lourd de tous les frais d’acquisition.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Ces taux ne dépendent pas d’une année de revenus mais de la date de l’acte authentique. Ce sont donc les mêmes que tu signes en janvier ou en décembre.',
+    },
+
+    { type: 'titre', texte: 'Le même bien, deux prix' },
+    {
+      type: 'demonstration',
+      cle: 'enregistrement-taux-reduit',
+      titre: 'Ta première habitation, celle où tu vas vivre',
+      introduction:
+        'Le taux réduit vise l’habitation propre et unique : celle que tu occupes, quand tu n’en possèdes pas d’autre.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'enregistrement-taux-plein',
+      titre: 'Le même bien, hors des conditions du taux réduit',
+      introduction:
+        'Locatif, résidence secondaire, ou simplement : tu possèdes déjà un logement. Ni le prix ni le bien n’ont changé.',
+    },
+
+    { type: 'titre', texte: 'Les quatre conditions du taux réduit' },
+    {
+      type: 'liste',
+      items: [
+        'Acquérir la pleine propriété. Le taux s’apprécie par acquéreur, à hauteur de sa part.',
+        'T’y domicilier dans les trois ans si l’habitation est construite, cinq ans pour un terrain à bâtir.',
+        'Y maintenir ta résidence principale trois ans à compter de cette domiciliation.',
+        'Ne pas déjà posséder, en pleine propriété entière, un autre bien destiné à l’habitation — en Belgique ou ailleurs.',
+      ],
+    },
+    {
+      type: 'note',
+      titre: 'Ce qui ne bloque pas le taux réduit',
+      texte:
+        'Un terrain non bâti, un garage ou un local commercial ne comptent pas comme habitation. Un bien détenu en nue-propriété, en usufruit, ou en indivision avec un tiers autre que ton co-acquéreur ne bloque pas non plus.',
+    },
+
+    { type: 'titre', texte: 'Le piège' },
+    {
+      type: 'piege',
+      titre: 'Acheter un locatif avant sa résidence principale coûte le taux réduit sur celle-ci',
+      texte:
+        'La quatrième condition se lit au moment de l’acte sur ta résidence principale. Si tu as acheté un studio locatif deux ans plus tôt, tu ne possèdes plus une habitation unique : ta résidence principale bascule au taux plein. Le surcoût ne dépend pas du prix du locatif, seulement de celui du logement acheté ensuite.',
+    },
+    {
+      type: 'demonstration',
+      cle: 'ordre-achat-locatif-avant',
+      titre: 'Ce que l’ordre d’achat coûte, en euros',
+      introduction:
+        'Deux achats identiques, dans l’ordre inverse. Seule la chronologie change.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Il existe une porte de sortie, et elle a un prix : tu peux obtenir le taux réduit sur ta résidence principale en t’engageant, dans son acte d’achat, à revendre le bien déjà possédé dans les trois ans. L’administration contrôle à l’échéance. Si la revente n’a pas eu lieu, la différence est réclamée — garder le locatif au-delà de ce délai revient au même que ne jamais s’être engagé.',
+    },
+    {
+      type: 'para',
+      texte:
+        'Ce montant n’est pas un verdict : c’est le seuil que le rendement du bien acheté en premier doit dépasser pour que l’ordre choisi tienne la route. Nestor le chiffre, il ne te dit pas quoi faire.',
+    },
+
+    { type: 'titre', texte: 'Si la condition n’est plus respectée' },
+    {
+      type: 'para',
+      texte:
+        'Domiciliation manquée, résidence quittée avant trois ans, revente promise et non faite : l’administration réclame la différence entre le taux plein et le taux réduit. La documentation officielle wallonne consultée décrit ce rappel sans en détailler les intérêts de retard — ce point mérite d’être confirmé auprès de ton notaire si tu es concerné.',
+    },
+
+    { type: 'titre', texte: 'Les autres Régions, pour situer' },
+    {
+      type: 'para',
+      texte:
+        'La Flandre applique un taux réduit plus bas que la Wallonie sur l’habitation propre et unique, et un taux plein légèrement inférieur. Bruxelles procède autrement : un taux unique, corrigé par un abattement qui efface les droits sur une première tranche du prix, à condition que le prix total reste sous un plafond.',
+    },
+    {
+      type: 'note',
+      titre: 'Ce guide est wallon',
+      texte:
+        'Les taux des trois Régions sont dans le moteur de Nestor et vérifiés. En revanche, les conditions fines des régimes flamand et bruxellois — délais de domiciliation, définition exacte du bien unique, dégressivité éventuelle de l’abattement bruxellois — n’ont pas été vérifiées à la même profondeur. Ne te fie pas à ce guide pour un achat hors Wallonie.',
+    },
+
+    {
+      type: 'outil',
+      href: '/outils/frais-acquisition',
+      libelle: 'Calculer mes frais d’acquisition',
+      texte:
+        'Le calculateur ajoute aux droits les honoraires du notaire, les frais de l’acte de crédit et l’apport, et donne le cash réellement nécessaire le jour de l’acte — dans les deux ordres d’achat possibles.',
+    },
+
+    { type: 'titre', texte: 'Ce que ce guide ne couvre pas' },
+    {
+      type: 'liste',
+      items: [
+        'L’existence d’un mécanisme wallon de portabilité des droits déjà payés : les sources officielles consultées n’en mentionnent aucun, ce qui n’est pas une preuve qu’il n’existe pas.',
+        'Les intérêts de retard applicables à un rappel de droits, et le délai dont dispose l’administration pour le réclamer.',
+        'L’achat en société, l’achat par un non-résident, et le sort de la quote-part du terrain dans un achat neuf sous TVA.',
+      ],
+    },
+  ],
+  suite: ['taxe-plus-values-2026'],
+};
+
+export const GUIDES: readonly Guide[] = [
+  FISCALITE_ETF,
+  PLUS_VALUES_2026,
+  DROITS_ENREGISTREMENT_WALLONIE,
+];
 
 export function guideParSlug(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug);

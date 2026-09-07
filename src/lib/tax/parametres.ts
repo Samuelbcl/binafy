@@ -38,6 +38,10 @@ const INASTI = 'https://www.rsvz-inasti.fgov.be';
 const BNB = 'https://www.nbb.be';
 const STATBEL = 'https://statbel.fgov.be';
 const NOTAIRE = 'https://www.notaire.be';
+// Tableau des cotisations 2026 d'une caisse agréée : l'INASTI publie le premier
+// taux, les tranches supérieures ne se trouvent que dans les barèmes de caisse.
+const LIANTIS_2026 =
+  'https://www.liantis.be/sites/default/files/uploads/tableau_cotisations_2026_1225_FR_digitaal.pdf';
 
 /** Date de rédaction de docs/06. Sert de date de vérification aux valeurs qui en viennent. */
 const DOC_06 = '2026-09-01';
@@ -596,26 +600,81 @@ const DEFS_2026: Def[] = [
   // ───────────────────────────────────────────────────────────
   // 4. Statut d'indépendant
   // ───────────────────────────────────────────────────────────
+  // Barème dégressif des cotisations, confirmé à l'INASTI le 07/09/2026 et
+  // recoupé sur les tableaux 2026 de deux caisses agréées.
+  //
+  // Il a longtemps été simplifié en un taux plat de 20,5 %, ce qui restait juste
+  // pour la cible — un complémentaire gagne rarement plus de 75 000 € — mais
+  // surestimait les cotisations dès qu'on dépassait la première tranche.
   {
-    cle: 'independant.cotisations_taux',
+    cle: 'independant.tranche_1.taux',
     valeur: 20.5,
     unite: 'pourcent',
-    libelle: 'Cotisations sociales — taux sur le revenu net imposable',
-    // Simplification assumée : le barème réel est dégressif — 20,5 % jusqu'à
-    // 75 024,54 €, puis 14,16 %, et rien au-delà de 110 562,42 € (INASTI, 2026).
-    // Pour la cible — un indépendant complémentaire — le premier taux couvre la
-    // quasi-totalité des cas. À affiner si le module indépendant s'étend au
-    // statut principal.
-    sourceUrl: INASTI,
+    libelle: 'Cotisations sociales — taux de la première tranche',
+    sourceUrl: `${INASTI}/fr/faq/combien-de-cotisations-sociales-dois-je-payer`,
     verifie: true,
+    verifieLe: '2026-09-07',
+  },
+  {
+    cle: 'independant.tranche_1.plafond',
+    valeur: 75024.54,
+    unite: 'eur',
+    libelle: 'Cotisations sociales — plafond de la première tranche',
+    sourceUrl: `${INASTI}/fr/faq/combien-de-cotisations-sociales-dois-je-payer`,
+    verifie: true,
+    verifieLe: '2026-09-07',
+  },
+  {
+    cle: 'independant.tranche_2.taux',
+    valeur: 14.16,
+    unite: 'pourcent',
+    libelle: 'Cotisations sociales — taux de la deuxième tranche',
+    sourceUrl: LIANTIS_2026,
+    verifie: true,
+    verifieLe: '2026-09-07',
+  },
+  {
+    cle: 'independant.tranche_2.plafond',
+    valeur: 110562.42,
+    unite: 'eur',
+    libelle: 'Cotisations sociales — plafond au-delà duquel plus rien n’est dû',
+    sourceUrl: LIANTIS_2026,
+    verifie: true,
+    verifieLe: '2026-09-07',
+  },
+  {
+    cle: 'independant.tranche_3.taux',
+    valeur: 0,
+    unite: 'pourcent',
+    libelle: 'Cotisations sociales — au-delà du plafond, plus aucune cotisation',
+    sourceUrl: LIANTIS_2026,
+    verifie: true,
+    verifieLe: '2026-09-07',
+  },
+  {
+    // Le titre principal cotise sur un revenu plancher même si le revenu réel
+    // est inférieur : c'est ce qui produit la cotisation minimale publiée de
+    // 890,42 € par trimestre. Le complémentaire, lui, n'a pas de plancher — il
+    // est simplement dispensé sous son seuil.
+    cle: 'independant.revenu_plancher_principal',
+    valeur: 17374.08,
+    unite: 'eur',
+    libelle: 'Indépendant à titre principal — revenu plancher servant à la cotisation minimale',
+    sourceUrl: `${INASTI}/fr/faq/combien-de-cotisations-sociales-dois-je-payer`,
+    verifie: true,
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'independant.seuil_cotisations_complementaire',
     valeur: 1922.16,
     unite: 'eur',
     libelle: 'Indépendant complémentaire — seuil annuel de revenu net sous lequel aucune cotisation n’est due',
-    sourceUrl: INASTI,
+    // Vérifié le 07/09/2026 : c'est bien une dispense totale, pas un revenu
+    // plancher. Au-dessus du seuil, la cotisation reste proportionnelle, sans
+    // minimum — contrairement au titre principal.
+    sourceUrl: `${INASTI}/fr/independant-titre-complementaire`,
     verifie: true,
+    verifieLe: '2026-09-07',
   },
 
   // Frais de gestion par caisse d'assurances sociales. Ce sont des tarifs
