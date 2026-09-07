@@ -94,15 +94,19 @@ suppose nul à défaut — l'hypothèse la moins flatteuse, jamais l'inverse.
 **Rien n'est automatique** (art. 307 § 1er/1 CIR 92) : le précompte de 10 % est retenu
 à la source ; exonération et report se réclament dans la déclaration, pièces à l'appui.
 
-**Montants de base et indexation.** La loi écrit 4 855 € (exonération), 480 € (report
-annuel) et 2 426 € (plafond du report) : ce sont des montants de base au sens de
-l'article 178 CIR 92. Une vérification du 07/09/2026 a soutenu qu'ils s'appliquaient tels
-quels aux revenus 2026 ; **cette lecture est écartée**. Un coefficient unique de 2,06
-donne exactement 4 855 → 10 000 et 2 426 → 5 000, et l'article 33 de la loi charge le Roi
-d'ajuster le report « de telle sorte qu'il soit égal, *après application de l'article
-178*, à 1 000 euros » — formule qui n'aurait aucun sens si l'article 178 ne s'appliquait
-pas. Le même coefficient donne 480 → 988,66 : c'est ce chiffre non rond que l'article 33
-corrige à partir de 2027. D'où le report maintenu en dette pour 2026.
+**Montants de base et indexation** (circulaire 2026/C/74, lue le 07/09/2026). La loi écrit
+des montants de base à indexer selon l'article 178 CIR 92. Le coefficient de l'exercice
+2027 vaut **2,0592** : 4 855 × 2,0592 = 9 997,42, arrondi à **10 000 €**, ce que la
+circulaire confirme en toutes lettres.
+
+**Le report n'existe pas encore.** La circulaire est explicite : « l'exonération
+complémentaire ne pourra être déterminée et effectivement utilisée pour la première fois
+qu'à partir de l'exercice d'imposition 2028, en tenant compte de la situation de
+l'exercice d'imposition 2027 ». Traduit en années de revenus : ce qu'on ne consomme pas
+en 2026 ouvre un report utilisable en 2027. Pour les revenus 2026, le report utilisable
+est donc **nul**, et c'est cette valeur que porte le catalogue. Les montants de base
+(480 € par an, plafond cumulé 2 426 €) attendent le coefficient de l'exercice 2028, que
+le Roi ajustera pour faire tomber le premier sur 1 000 €.
 
 ⚠️ Toujours à traiter : compensation des moins-values et régime des participations
 importantes (≥ 20 %, barème distinct, exonération d'un million sur cinq ans).
@@ -119,8 +123,10 @@ retrouvée. Exception hors périmètre du bailleur : le propriétaire qui affect
 sa propre activité peut le déduire comme charge professionnelle.
 
 En location professionnelle, la formule de l'article 13 est confirmée : loyer réel moins
-40 % de forfait, plafonné aux deux tiers du RC revalorisé. **Le coefficient de
-revalorisation 2026 (5,75) est en dette** : l'arrêté qui le fixe n'a pas été retrouvé.
+40 % de forfait, plafonné aux deux tiers du RC revalorisé. Le coefficient de
+revalorisation vaut 5,75 pour les revenus 2026 (5,63 pour 2025), donné en clair par le
+SPF. Ne cherche pas d'arrêté royal annuel : depuis 2021-2022 il s'auto-indexe par
+l'article 13 lui-même — 4,23 × (indice santé de décembre N−2 / indice de décembre 2013).
 Si le locataire est un particulier qui n'affecte qu'une partie du bien à sa profession,
 la base porte sur le loyer **entier**, sauf bail enregistré répartissant explicitement
 les deux usages.

@@ -42,6 +42,9 @@ const NOTAIRE = 'https://www.notaire.be';
 const BRUXELLES_ABATTEMENT =
   'https://be.brussels/en/taxes-finances/taxes/property-related-taxes/registration-duties/abatement';
 // Loi du 6 avril 2026 instaurant la taxe sur les plus-values, texte intégral.
+// Circulaire 2026/C/74, qui commente la loi et publie les montants indexés.
+const CIRCULAIRE_PLUS_VALUES =
+  'https://blog.forumforthefuture.be/fr/article/circulaire-2026c74-concernant-limpot-sur-les-plus-values-sur-les-actifs-financiers-a-limpot-des-personnes-physiques/31949';
 const LOI_PLUS_VALUES =
   'https://www.ejustice.just.fgov.be/cgi/article.pl?language=fr&sum_date=2026-04-21&lg_txt=f&pd_search=2026-04-21&s_editie=1&numac_search=2026002780&caller=sum&2026002780=1&view_numac=2026002780nx2026002780f';
 // Tableau des cotisations 2026 d'une caisse agréée : l'INASTI publie le premier
@@ -195,25 +198,27 @@ const DEFS_2026: Def[] = [
     valeur: 10,
     unite: 'pourcent',
     libelle: 'Taxe sur les plus-values sur actifs financiers',
-    sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
+    // Lu au texte de la loi le 07/09/2026 : article 27, qui insère un 5° à
+    // l'article 269 § 1er du CIR 92 — « à 10 p.c., pour les revenus divers
+    // visés à l'article 90, alinéa 1er, 9°, c) ».
+    sourceUrl: LOI_PLUS_VALUES,
     verifie: true,
+    verifieLe: '2026-09-07',
   },
   {
     cle: 'plus_values.exoneration_annuelle',
     valeur: 10000,
     unite: 'eur',
-    // La loi du 6 avril 2026 écrit 4 855 € : c'est un **montant de base**, à
-    // indexer selon l'article 178 du CIR 92, comme la quasi-totalité des
-    // montants du Code. Une vérification a soutenu que 4 855 € s'appliquait tel
-    // quel aux revenus 2026 ; on l'écarte, pour deux raisons.
+    // Confirmé au texte le 07/09/2026. La loi écrit 4 855 € — un montant de
+    // base, à indexer selon l'article 178 du CIR 92. La circulaire 2026/C/74
+    // donne le coefficient de l'exercice 2027 (2,0592) et le résultat :
+    // « Le montant indexé pour l'exercice d'imposition 2027 s'élève à
+    // 10.000 euros ». Le calcul retombe dessus : 4 855 × 2,0592 = 9 997,42,
+    // arrondi au multiple de dix supérieur.
     //
-    // D'abord l'arithmétique : un seul coefficient de 2,06 donne exactement
-    // 4 855 → 10 000 et 2 426 → 5 000. Ensuite le texte lui-même : l'article 33
-    // charge le Roi d'ajuster le montant du report « de telle sorte qu'il soit
-    // égal, **après application de l'article 178**, à 1 000 euros ». Cette
-    // formule n'aurait aucun sens si l'article 178 ne s'appliquait pas déjà.
-    // Le même coefficient donne 480 → 988,66 : c'est ce chiffre non rond que
-    // l'article 33 vient corriger à partir de 2027.
+    // Une vérification avait soutenu que 4 855 € s'appliquait tel quel aux
+    // revenus 2026. Elle a été écartée sur la seule arithmétique, avant que la
+    // circulaire ne le confirme.
     libelle: 'Taxe sur les plus-values — exonération annuelle par personne',
     sourceUrl: `${SPF}/fr/particuliers/declaration_impot/revenus-mobiliers`,
     verifie: true,
@@ -224,27 +229,40 @@ const DEFS_2026: Def[] = [
   // s'ajoute aux suivantes, par tranches annuelles, jusqu'à un plafond cumulé ;
   // les plus anciennes s'imputent d'abord.
   //
-  // Montants de base : 480 € pour l'incrément annuel, 2 426 € pour le plafond
-  // cumulé. Le plafond indexé tombe sur 5 000 € au coefficient déduit des
-  // autres montants ; l'incrément, lui, donnerait 988,66 € pour les revenus
-  // 2026 — l'article 33 ne garantit la valeur ronde de 1 000 € qu'à partir des
-  // revenus 2027. On retient 1 000 € comme ordre de grandeur, marqué non
-  // vérifié : l'avis officiel d'indexation n'a pas été retrouvé.
+  // Le report n'existe pas encore pour les revenus 2026 — et c'est la
+  // circulaire qui le dit, pas une prudence de notre part : « l'exonération
+  // complémentaire ne pourra être déterminée et effectivement utilisée pour la
+  // première fois qu'à partir de l'exercice d'imposition 2028, en tenant compte
+  // de la situation de l'exercice d'imposition 2027 ».
+  //
+  // Autrement dit : la part d'exonération non consommée sur les revenus 2026
+  // ouvre un report utilisable sur les revenus 2027. Pour 2026 lui-même, le
+  // montant utilisable est donc **zéro**, et c'est cette valeur qui est
+  // chargée. Les montants de base de la loi — 480 € par an, plafond cumulé de
+  // 2 426 € — sont conservés ici en commentaire ; leur valeur indexée dépendra
+  // du coefficient de l'exercice 2028, et le Roi ajustera la base pour que le
+  // premier tombe rond sur 1 000 €.
   {
     cle: 'plus_values.report_annuel',
-    valeur: 1000,
+    valeur: 0,
     unite: 'eur',
-    libelle: "Taxe sur les plus-values — part d'exonération non utilisée reportable par an",
-    sourceUrl: LOI_PLUS_VALUES,
+    libelle:
+      "Taxe sur les plus-values — report utilisable cette année (nul : le report ne se constitue qu'à partir des revenus 2026)",
+    sourceUrl: CIRCULAIRE_PLUS_VALUES,
+    verifie: true,
     verifieLe: '2026-09-07',
+    peremption: 'legale',
   },
   {
     cle: 'plus_values.report_plafond',
-    valeur: 5000,
+    valeur: 0,
     unite: 'eur',
-    libelle: "Taxe sur les plus-values — plafond cumulé de l'exonération reportée",
-    sourceUrl: LOI_PLUS_VALUES,
+    libelle:
+      "Taxe sur les plus-values — plafond du report utilisable cette année (nul pour les revenus 2026)",
+    sourceUrl: CIRCULAIRE_PLUS_VALUES,
+    verifie: true,
     verifieLe: '2026-09-07',
+    peremption: 'legale',
   },
   // Taxe Reynders — plus-values des fonds obligataires
   {
@@ -296,12 +314,18 @@ const DEFS_2026: Def[] = [
     // À ne pas confondre avec le coefficient d'indexation (2,30) : celui-ci ne
     // sert qu'au plafond du forfait de charges d'une location professionnelle.
     //
-    // Descendu dans la dette le 07/09/2026 : l'arrêté royal qui fixe ce
-    // coefficient pour les revenus 2026 n'a pas été retrouvé, et l'une des
-    // sources qui annoncent 5,75 le donne elle-même « sous réserve de
-    // confirmation par l'administration ». La formule qui l'utilise, elle, est
-    // confirmée au Mémento fiscal du SPF.
+    // La page du SPF ci-dessous le donne en clair : 5,63 pour les revenus 2025,
+    // 5,75 pour les revenus 2026. Une vérification l'avait cru introuvable et
+    // l'avait fait descendre dans la dette — elle avait échoué à lire cette
+    // page, pas à trouver la valeur. Rétabli le 07/09/2026.
+    //
+    // Il ne faut plus chercher d'arrêté royal annuel : depuis 2021-2022, ce
+    // coefficient s'auto-indexe par l'article 13 du CIR 92 lui-même, selon
+    // 4,23 × (indice santé de décembre N−2 / indice de décembre 2013). Le
+    // calcul refait à la main retombe dessus : 136,69 / 100,36 = 1,36, et
+    // 4,23 × 1,36 = 5,7528, arrondi à 5,75.
     sourceUrl: 'https://fin.belgium.be/fr/particuliers/habitation/louer-donner-location/revenus-locatifs/professionnel',
+    verifie: true,
     verifieLe: '2026-09-07',
   },
   {
@@ -801,15 +825,15 @@ const DEFS_2026: Def[] = [
   },
   {
     cle: 'independant.frais_gestion.group_s',
-    valeur: 3.90,
+    valeur: 3.9,
     unite: 'pourcent',
     libelle: "Frais de gestion — Group S",
-    // Non confirme sur le site de Group S, dont la page tarifaire n a pas pu
-    // etre lue. Valeur issue du tableau comparatif du bareme Acerta 2026, qui
-    // la donne lui-meme comme un taux 2025 en attente d approbation.
-    sourceUrl:
-      'https://www.groups.be/fr/group-s-pour-starters-independants/documents-utiles/cotisations',
-    verifie: false,
+    // Le taux n'est écrit en clair nulle part dans le barème 2026 de Group S :
+    // il se déduit de l'écart entre la cotisation légale et la cotisation
+    // publiée, constant à 3,90 % sur quatre profils du document (titre
+    // principal à deux niveaux de revenu, primostarter, conjoint aidant).
+    sourceUrl: 'https://d1l20vsu7pa1eb.cloudfront.net/storage/cotisations-sociales-2026.pdf',
+    verifie: true,
     verifieLe: '2026-09-07',
   },
   {
@@ -837,14 +861,15 @@ const DEFS_2026: Def[] = [
   },
   {
     cle: 'independant.frais_gestion.cnasti',
-    valeur: 4.25,
+    valeur: 4.2,
     unite: 'pourcent',
-    libelle: "Frais de gestion — Caisse nationale auxiliaire (CNASTI)",
-    // Seul document propre a la caisse : millesime 2024. Une source tierce
-    // donne 4,20 % pour 2026. Non tranche.
+    libelle: "Frais de gestion — Caisse nationale auxiliaire",
+    // Corrigé le 07/09/2026 : le catalogue portait 4,25 %, taux d'une brochure
+    // millésimée 2024. L'édition 2025 dit 4,20 %. Aucune édition 2026 n'est
+    // parue — le taux a déjà bougé d'une année à l'autre, donc le supposer
+    // stable serait une extrapolation. Reste en dette.
     sourceUrl:
-      'https://www.caisse-nationale-auxiliaire.be/sites/nationalehulpkas/files/2023-12/cotisations_sociales_et_droits_membre_de_la_caisse_nationale_auxiliaire.pdf',
-    verifie: false,
+      'https://www.caisse-nationale-auxiliaire.be/sites/nationalehulpkas/files/2025-10/cotisations_sociales_et_droits_membre_de_la_Caisse_nationale_auxiliaire_2025.pdf',
     verifieLe: '2026-09-07',
   },
   {
@@ -983,16 +1008,22 @@ const DEFS_2026: Def[] = [
     unite: 'eur',
     libelle: 'Épargne à long terme — seuil de revenus du barème du plafond',
     // Corrigé le 07/09/2026 : la valeur précédente (17 070 €) ne correspondait à
-    // aucune source — huit fois trop haute. La circulaire 2026/C/6 donne les
-    // montants de base (1 250 € et 1 500 €) et leurs équivalents indexés
-    // 2025-2030 (2 040 € et 2 450 €), et gèle cette indexation jusqu'à
-    // l'exercice 2030 : la valeur tient donc pour les revenus 2025 à 2029, d'où
-    // la péremption légale plutôt qu'annuelle. Recoupement arithmétique : la
-    // formule à un terme de CBC (183,60 € + 6 % du revenu) vaut exactement
-    // 2 040 € × (15 % − 6 %) + 6 % du revenu. Reste en dette tant que la
-    // circulaire n'est pas lue en primaire.
+    // aucune source — huit fois trop haute.
+    //
+    // Confirmé deux fois. La circulaire 2026/C/6 désigne l'article 145/6 parmi
+    // les montants dont l'indexation est gelée au coefficient de l'exercice
+    // 2025 (1,6325) pour les exercices 2026 à 2030. Et l'avis d'indexation
+    // publié au Moniteur belge du 23/02/2024 donne le résultat en toutes
+    // lettres : base 1 250 € → 2 040 €, base 1 500 € → 2 450 € — ce dernier
+    // étant exactement le plafond absolu déjà retenu par Nestor. Le gel fait
+    // tenir ces valeurs des revenus 2025 aux revenus 2029, d'où la péremption
+    // légale plutôt qu'annuelle.
+    //
+    // Recoupement arithmétique : la formule à un terme que publient les banques
+    // (183,60 € + 6 % du revenu) vaut exactement 2 040 × (15 % − 6 %) + 6 %.
     sourceUrl:
       'https://blog.forumforthefuture.be/fr/article/circulaire-2026c6-relative-au-gel-de-lindexation-de-depenses-fiscales/29822',
+    verifie: true,
     verifieLe: '2026-09-07',
     peremption: 'legale',
   },

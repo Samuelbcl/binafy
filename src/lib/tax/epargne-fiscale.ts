@@ -298,7 +298,7 @@ export function calculerEpargneLongTerme(
     hypotheses: [
       'Le plafond est partagé avec les réductions liées au crédit hypothécaire et à l’assurance solde restant dû : le crédit le consomme en priorité.',
       'En Wallonie, les crédits conclus depuis 2025 n’ouvrent plus droit à réduction pour l’habitation propre ; à Bruxelles, depuis 2017. Le panier est alors entièrement disponible.',
-      'Le barème de calcul du plafond selon les revenus n’a pas été confirmé à une source officielle : il est signalé comme tel sous le résultat.',
+      'Le barème du plafond est gelé jusqu’aux revenus 2029 : les montants qui le composent ne seront pas indexés d’ici là.',
       'Le capital est taxé à la sortie, à 60 ans.',
     ],
   };

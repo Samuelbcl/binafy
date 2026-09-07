@@ -127,14 +127,15 @@ describe('épargne à long terme', () => {
     expect(r.result.reductionCents).toBe(0);
   });
 
-  it('signale que le barème du plafond n’est pas confirmé', () => {
+  it('annonce que le barème est gelé, et n’avance plus de valeur incertaine', () => {
     const r = calculerEpargneLongTerme(
       { revenuNetImposableCents: euros(50_000), versementCents: euros(2_450) },
       P,
     );
-    expect(r.hypotheses.join(' ')).toContain('n’a pas été confirmé');
-    // Le résultat doit porter la trace des paramètres incertains.
-    expect(r.sources.some((s) => !s.verifie)).toBe(true);
+    // Confirmé le 07/09/2026 : circulaire 2026/C/6 et avis d'indexation au
+    // Moniteur. Plus aucune source du calcul n'est en attente de confirmation.
+    expect(r.hypotheses.join(' ')).toContain('gelé');
+    expect(r.sources.every((s) => s.verifie)).toBe(true);
   });
 
   it('rappelle la règle wallonne des crédits depuis 2025', () => {

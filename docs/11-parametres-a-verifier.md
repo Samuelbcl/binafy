@@ -4,9 +4,9 @@
 > Source : `src/lib/tax/parametres.ts`.
 
 90 paramètres sont chargés pour 2026.
-**84 sont confirmés** — leur valeur est chiffrée explicitement dans
+**89 sont confirmés** — leur valeur est chiffrée explicitement dans
 `docs/06-fiscalite-belge.md`.
-**6 règles légales attendent une confirmation** à la source officielle.
+**1 règles légales attendent une confirmation** à la source officielle.
 8 autres valeurs sont des pratiques de marché ou des hypothèses de
 simulation : elles ne relèvent d'aucun texte et ne figurent pas dans cette liste.
 
@@ -36,39 +36,13 @@ bonne valeur.
 
 ## Liste par domaine
 
-### epargne_long_terme
-
-Source à consulter : à déterminer
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `epargne_long_terme.seuil_bareme` | 2040 eur | Épargne à long terme — seuil de revenus du barème du plafond |
-
-### immobilier
-
-Source à consulter : SPF Finances — revenus immobiliers
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `immobilier.coefficient_revalorisation` | 5.75 coefficient | Coefficient de revalorisation du RC — plafonne le forfait de charges |
-
 ### independant
 
 Source à consulter : INASTI et caisses d’assurances sociales
 
 | Clé | Valeur provisoire | Libellé |
 |---|---|---|
-| `independant.frais_gestion.group_s` | 3.9 pourcent | Frais de gestion — Group S |
-| `independant.frais_gestion.cnasti` | 4.25 pourcent | Frais de gestion — Caisse nationale auxiliaire (CNASTI) |
-
-### plus_values
-
-Source à consulter : à déterminer
-
-| Clé | Valeur provisoire | Libellé |
-|---|---|---|
-| `plus_values.report_annuel` | 1000 eur | Taxe sur les plus-values — part d'exonération non utilisée reportable par an |
-| `plus_values.report_plafond` | 5000 eur | Taxe sur les plus-values — plafond cumulé de l'exonération reportée |
+| `independant.frais_gestion.cnasti` | 4.2 pourcent | Frais de gestion — Caisse nationale auxiliaire |
 
 ## Rappel
 

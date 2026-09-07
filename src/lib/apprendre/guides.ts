@@ -198,7 +198,7 @@ const PLUS_VALUES_2026: Guide = {
     {
       type: 'para',
       texte:
-        'Elle s’apprécie par personne, pas par ménage ni par compte : un couple qui déclare ensemble en dispose deux fois, à condition que chacun soit titulaire de ses propres positions. Et contrairement à ce qu’on lit souvent, elle ne se remet pas à zéro chaque premier janvier : la loi prévoit que la part non utilisée une année s’ajoute aux suivantes, par tranches annuelles, jusqu’à un plafond cumulé — les plus anciennes s’imputent d’abord.',
+        'Elle s’apprécie par personne, pas par ménage ni par compte : un couple qui déclare ensemble en dispose deux fois, à condition que chacun soit titulaire de ses propres positions. Et contrairement à ce qu’on lit souvent, elle ne se perd pas entièrement en fin d’année : la loi prévoit que la part non utilisée s’ajoute aux années suivantes, par tranches annuelles, jusqu’à un plafond cumulé — les plus anciennes s’imputant d’abord.',
     },
     {
       type: 'piege',
@@ -208,9 +208,9 @@ const PLUS_VALUES_2026: Guide = {
     },
     {
       type: 'note',
-      titre: 'Le montant exact du report pour 2026 reste à confirmer',
+      titre: 'Mais pas cette année : le report démarre seulement maintenant',
       texte:
-        'La loi écrit ces montants en valeurs de base, à indexer. Le plafond cumulé tombe rond une fois indexé ; l’incrément annuel, non — c’est d’ailleurs pour l’arrondir que le législateur a chargé le Roi de l’ajuster, mais seulement à partir des revenus 2027. Pour 2026, Nestor affiche la valeur ronde annoncée partout et la marque comme non confirmée, faute d’avoir retrouvé l’avis officiel d’indexation.',
+        'La taxe elle-même ne s’applique que depuis 2026 : il n’existe donc aucune année antérieure d’où reporter quoi que ce soit. L’administration l’écrit noir sur blanc — le report ne pourra être calculé et utilisé pour la première fois que sur les revenus de 2027, à partir de ce que tu n’auras pas consommé en 2026. Pour cette année, ton exonération vaut son montant plein, ni plus ni moins.',
     },
     {
       type: 'note',
@@ -725,7 +725,6 @@ const RENDEMENT_LOCATIF: Guide = {
         'La revente : la plus-value immobilière suit un régime distinct de la taxe sur les plus-values mobilières de 2026.',
         'La détention via une société, la colocation et le bail étudiant, qui posent leurs propres questions de qualification.',
         'Le cas du propriétaire qui occupe lui-même le bien pour sa propre activité : le précompte immobilier redevient alors une charge professionnelle.',
-        'La valeur exacte du coefficient qui plafonne le forfait de charges : la formule est confirmée au Mémento fiscal, l’arrêté qui fixe le chiffre 2026 ne l’est pas.',
       ],
     },
   ],

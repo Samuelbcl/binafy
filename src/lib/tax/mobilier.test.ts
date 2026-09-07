@@ -1,3 +1,4 @@
+import { getCents } from './types';
 import { describe, expect, it } from 'vitest';
 import { euros } from '../money';
 import { TAX_PARAMS_2026 } from './parametres';
@@ -195,28 +196,32 @@ describe('précompte sur intérêts non réglementés', () => {
 });
 
 describe('taxe sur les plus-values 2026', () => {
-  it('ajoute au plafond l’exonération reportée des années précédentes', () => {
-    // 15 000 € de plus-value, 3 000 € d'exonération non consommée l'an passé :
-    // 13 000 € exonérés, 2 000 € taxables.
+  it('ignore tout report sur les revenus 2026 : il ne se constitue que cette année', () => {
+    // La circulaire 2026/C/74 est explicite : le report ne peut être déterminé
+    // et utilisé qu'à partir de l'exercice 2028, sur la base de l'exercice
+    // 2027. En années de revenus : ce qu'on ne consomme pas en 2026 servira en
+    // 2027. Le plafond du report vaut donc zéro cette année, et un report
+    // fourni par erreur ne peut pas gonfler l'exonération.
     const r = calculerTaxePlusValues(
       { plusValueCents: euros(15_000), exonerationReporteeCents: euros(3_000) },
       P,
     );
-    expect(r.result.reportRetenuCents).toBe(euros(3_000));
-    expect(r.result.exonereCents).toBe(euros(13_000));
-    expect(r.result.taxeCents).toBe(euros(200));
-    expect(r.breakdown.some((l) => l.libelle.startsWith('Exonération reportée'))).toBe(true);
+    expect(r.result.reportRetenuCents).toBe(0);
+    expect(r.result.exonereCents).toBe(euros(10_000));
+    expect(r.result.taxeCents).toBe(euros(500));
+    expect(r.breakdown.some((l) => l.libelle.startsWith('Exonération reportée'))).toBe(false);
   });
 
-  it('plafonne le report cumulé au maximum légal', () => {
+  it('plafonne le report au maximum légal de l’année', () => {
+    // Le mécanisme lui-même reste en place : quand le plafond deviendra non nul,
+    // un report excessif sera ramené à ce plafond plutôt qu'accepté tel quel.
     const r = calculerTaxePlusValues(
       { plusValueCents: euros(20_000), exonerationReporteeCents: euros(9_000) },
       P,
     );
-    // 10 000 € de base + 5 000 € de report au plus : 15 000 € exonérés.
-    expect(r.result.reportRetenuCents).toBe(euros(5_000));
-    expect(r.result.exonereCents).toBe(euros(15_000));
-    expect(r.result.taxeCents).toBe(euros(500));
+    const plafond = getCents(P, 'plus_values.report_plafond');
+    expect(r.result.reportRetenuCents).toBe(Math.min(euros(9_000), plafond));
+    expect(r.result.exonereCents).toBe(euros(10_000) + plafond);
   });
 
   it('suppose un report nul quand rien n’est renseigné', () => {
