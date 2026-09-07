@@ -39,8 +39,15 @@ export function LienCompte() {
   }, []);
 
   return (
-    <Link href={connecte ? '/dashboard' : '/connexion'} className="bouton-principal ml-1.5">
-      {connecte ? 'Mon tableau de bord' : 'Créer mon compte'}
+    <Link
+      href={connecte ? '/dashboard' : '/connexion'}
+      className="bouton-principal ml-0.5 px-3.5 sm:ml-1.5 sm:px-5"
+    >
+      {/* Le libelle long ne tient pas a cote des liens sur un ecran de 390px. */}
+      <span className="sm:hidden">{connecte ? 'Mon espace' : 'Compte'}</span>
+      <span className="hidden sm:inline">
+        {connecte ? 'Mon tableau de bord' : 'Créer mon compte'}
+      </span>
     </Link>
   );
 }

@@ -98,4 +98,8 @@ npm test            # Vitest — le moteur de calcul doit rester vert
 npm run typecheck   # tsc --noEmit
 npm run build       # build de production
 node scripts/generer-seed-fiscal.mjs   # régénère le seed SQL et docs/11
+node scripts/captures-mobile.mjs captures   # capture chaque écran en 390×844
+                                            # et signale les débordements
+                                            # (serveur lancé, compte de test créé
+                                            #  puis supprimé)
 ```

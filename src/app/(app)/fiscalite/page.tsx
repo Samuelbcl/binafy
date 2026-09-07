@@ -120,7 +120,7 @@ export default async function FiscalitePage() {
       {/* 1 — Position fiscale de l'année */}
       <section className="space-y-4">
         <h2 className="label-kpi">Ma position fiscale</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <CarteKPITexte
             label="Taux marginal"
             valeur={formatPercent(ipp.result.tauxMarginal)}
@@ -156,15 +156,19 @@ export default async function FiscalitePage() {
           </p>
 
           <div className="mt-5 overflow-x-auto">
-            <table className="w-full min-w-[560px] text-[14px]">
+            <table className="w-full text-[13.5px] sm:min-w-[560px] sm:text-[14px]">
               <caption className="sr-only">Impôt latent par position</caption>
               <thead>
                 <tr className="border-b border-border text-left text-[12px] text-text-muted">
                   <th scope="col" className="py-2 font-medium">Position</th>
                   <th scope="col" className="py-2 text-right font-medium">Valeur</th>
-                  <th scope="col" className="py-2 text-right font-medium">Base de référence</th>
+                  <th scope="col" className="hidden py-2 text-right font-medium sm:table-cell">
+                    Base de référence
+                  </th>
                   <th scope="col" className="py-2 text-right font-medium">Plus-value latente</th>
-                  <th scope="col" className="py-2 text-right font-medium">TOB de sortie</th>
+                  <th scope="col" className="hidden py-2 text-right font-medium sm:table-cell">
+                    TOB de sortie
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -181,7 +185,7 @@ export default async function FiscalitePage() {
                     <td className="py-2.5 text-right">
                       <Montant cents={ligne.valeurActuelleCents} decimals={0} />
                     </td>
-                    <td className="py-2.5 text-right text-text-muted">
+                    <td className="hidden py-2.5 text-right text-text-muted sm:table-cell">
                       {ligne.baseReferenceCents !== null ? (
                         <Montant cents={ligne.baseReferenceCents} decimals={0} />
                       ) : (
@@ -191,7 +195,7 @@ export default async function FiscalitePage() {
                     <td className="py-2.5 text-right">
                       <Montant cents={ligne.plusValueLatenteCents} decimals={0} colore />
                     </td>
-                    <td className="py-2.5 text-right text-text-muted">
+                    <td className="hidden py-2.5 text-right text-text-muted sm:table-cell">
                       <Montant cents={ligne.tobSortieCents} decimals={2} />
                     </td>
                   </tr>

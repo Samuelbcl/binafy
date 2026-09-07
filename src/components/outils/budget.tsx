@@ -174,22 +174,22 @@ export function OutilBudget({ initiales }: { initiales: ValeursBudget }) {
           />
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
             <p className="label-kpi">Cible</p>
-            <p className="mt-1.5 text-[22px] font-extrabold tracking-[-0.02em]">
+            <p className="mt-1.5 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
               <Montant cents={precaution.result.cibleCents} decimals={0} />
             </p>
           </div>
           <div>
             <p className="label-kpi">Reste à constituer</p>
-            <p className="mt-1.5 text-[22px] font-extrabold tracking-[-0.02em]">
+            <p className="mt-1.5 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
               <Montant cents={precaution.result.resteAConstituerCents} decimals={0} />
             </p>
           </div>
           <div>
             <p className="label-kpi">À ce rythme</p>
-            <p className="mt-1.5 text-[22px] font-extrabold tabular-nums tracking-[-0.02em]">
+            <p className="mt-1.5 text-[19px] font-extrabold tabular-nums tracking-[-0.02em] sm:text-[22px]">
               {precaution.result.moisRestants === null
                 ? '—'
                 : precaution.result.moisRestants === 0

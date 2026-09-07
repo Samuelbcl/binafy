@@ -91,7 +91,7 @@ export default async function DashboardPage() {
         }}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
         <CarteKPITexte
           label="Taux d’épargne lissé"
           valeur={formatPercent(epargne.result.lisse12Mois.tauxEpargne)}

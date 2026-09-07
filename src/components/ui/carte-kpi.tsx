@@ -28,13 +28,16 @@ export function CarteKPI({
   accent?: boolean;
 }) {
   return (
-    <div className={cn('carte carte-interactive p-5', className)}>
+    <div className={cn('carte carte-interactive p-4 sm:p-5', className)}>
       <p className="label-kpi">{label}</p>
       <p className="mt-2">
         <Montant
           cents={valeurCents}
           decimals={decimals}
-          className={cn('font-display text-[26px] font-semibold', accent && 'text-primary')}
+          className={cn(
+            'font-display text-[20px] font-extrabold tracking-[-0.02em] sm:text-[26px]',
+            accent && 'text-primary',
+          )}
         />
       </p>
       {variationCents !== undefined && (
@@ -43,7 +46,7 @@ export function CarteKPI({
         </p>
       )}
       {precision && (
-        <p className="mt-2 text-[12px] leading-snug text-text-subtle">{precision}</p>
+        <p className="mt-2 hidden text-[12px] leading-snug text-text-subtle sm:block">{precision}</p>
       )}
     </div>
   );
@@ -64,18 +67,18 @@ export function CarteKPITexte({
   accent?: boolean;
 }) {
   return (
-    <div className={cn('carte carte-interactive p-5', className)}>
+    <div className={cn('carte carte-interactive p-4 sm:p-5', className)}>
       <p className="label-kpi">{label}</p>
       <p
         className={cn(
-          'mt-2 font-display text-[26px] font-semibold tabular-nums',
+          'mt-2 font-display text-[20px] font-extrabold tabular-nums tracking-[-0.02em] sm:text-[26px]',
           accent && 'text-primary',
         )}
       >
         {valeur}
       </p>
       {precision && (
-        <p className="mt-2 text-[12px] leading-snug text-text-subtle">{precision}</p>
+        <p className="mt-2 hidden text-[12px] leading-snug text-text-subtle sm:block">{precision}</p>
       )}
     </div>
   );

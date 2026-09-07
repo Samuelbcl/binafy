@@ -58,7 +58,7 @@ export function ChampNombre({
           </span>
         )}
       </div>
-      {aide && <p className="text-[11px] leading-snug text-text-subtle">{aide}</p>}
+      {aide && <p className="text-[12px] leading-snug text-text-subtle">{aide}</p>}
     </div>
   );
 }
@@ -97,7 +97,7 @@ export function ChampSelect<T extends string>({
           </option>
         ))}
       </select>
-      {aide && <p className="text-[11px] leading-snug text-text-subtle">{aide}</p>}
+      {aide && <p className="text-[12px] leading-snug text-text-subtle">{aide}</p>}
     </div>
   );
 }
@@ -140,7 +140,7 @@ export function ChampChoix<T extends string>({
           </button>
         ))}
       </div>
-      {aide && <p className="text-[11px] leading-snug text-text-subtle">{aide}</p>}
+      {aide && <p className="text-[12px] leading-snug text-text-subtle">{aide}</p>}
     </div>
   );
 }
@@ -169,6 +169,7 @@ export function ChampBascule({
           onClick={() => onChange(!valeur)}
           className={cn(
             'relative h-6 w-11 shrink-0 rounded-full border transition-colors',
+            "before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-['']",
             valeur ? 'border-primary bg-primary' : 'border-border bg-surface-2',
           )}
         >
@@ -183,7 +184,7 @@ export function ChampBascule({
           {label}
         </label>
       </div>
-      {aide && <p className="text-[11px] leading-snug text-text-subtle">{aide}</p>}
+      {aide && <p className="text-[12px] leading-snug text-text-subtle">{aide}</p>}
     </div>
   );
 }

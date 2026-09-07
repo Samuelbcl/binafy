@@ -61,28 +61,35 @@ export function CarteHero({
         )}
       </div>
 
-      <div className="mt-2 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+      <div className="mt-2 sm:flex sm:items-end sm:justify-between sm:gap-8">
         <h1 className="chiffre-hero">
           <Montant cents={valeurCents} decimals={decimals} className="text-on-primary" />
         </h1>
+        {/* Sous 640px le chiffre secondaire passe sous le principal, sur une
+            seule ligne libelle-valeur : empile a droite, il donnait deux blocs
+            mal alignes que rien ne reliait. */}
         {aCote && (
-          <p className="text-right">
-            <span className="block text-[12.5px] opacity-75">{aCote.label}</span>
+          <p className="mt-4 flex items-baseline justify-between gap-3 border-t border-on-primary/20 pt-3 sm:mt-0 sm:block sm:border-0 sm:pt-0 sm:text-right">
+            <span className="text-[12.5px] opacity-75">{aCote.label}</span>
             <Montant
               cents={aCote.valeurCents}
               decimals={0}
-              className="mt-1 block text-[20px] font-bold text-on-primary"
+              className="text-[18px] font-bold text-on-primary sm:mt-1 sm:block sm:text-[20px]"
             />
           </p>
         )}
       </div>
 
       {variationCents !== undefined && (
-        <div className="mt-4 flex flex-wrap items-center gap-2">
+        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <span className="puce bg-on-primary/15 tabular-nums">
             {formatEUR(variationCents, { sign: 'always', decimals: 2, masked: discret })}
-            {mentionVariation ? ` ${mentionVariation}` : ''}
           </span>
+          {/* La mention sort de la pastille : « aucune cotation depuis la
+              derniere cloture » y formait un ruban large de tout l'ecran. */}
+          {mentionVariation && (
+            <span className="text-[12.5px] opacity-75">{mentionVariation}</span>
+          )}
           {ratioVariation !== undefined && (
             <span className="puce bg-on-primary text-primary tabular-nums">
               {formatPercent(ratioVariation, { sign: 'always', masked: false })}

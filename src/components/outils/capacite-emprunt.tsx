@@ -153,28 +153,28 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
         </section>
       )}
 
-      <section className="grid gap-4 sm:grid-cols-3">
-        <div className="carte p-5">
+      <section className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
+        <div className="carte p-4 sm:p-5">
           <p className="label-kpi">Reste à vivre</p>
-          <p className="mt-2 text-[22px] font-extrabold tracking-[-0.02em]">
+          <p className="mt-2 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
             <Montant cents={result.resteAVivreCents} decimals={0} />
           </p>
           <p className="mt-2 text-[12.5px] leading-snug text-text-subtle">
             Après mensualité et crédits en cours.
           </p>
         </div>
-        <div className="carte p-5">
+        <div className="carte p-4 sm:p-5">
           <p className="label-kpi">Intérêts payés en tout</p>
-          <p className="mt-2 text-[22px] font-extrabold tracking-[-0.02em]">
+          <p className="mt-2 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
             <Montant cents={result.interetsTotauxCents} decimals={0} />
           </p>
           <p className="mt-2 text-[12.5px] leading-snug text-text-subtle">
             Le prix du crédit, sur toute sa durée.
           </p>
         </div>
-        <div className="carte p-5">
+        <div className="carte p-4 sm:p-5">
           <p className="label-kpi">Coût total du crédit</p>
-          <p className="mt-2 text-[22px] font-extrabold tracking-[-0.02em]">
+          <p className="mt-2 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
             <Montant cents={result.coutTotalCreditCents} decimals={0} />
           </p>
           <p className="mt-2 text-[12.5px] leading-snug text-text-subtle">
@@ -187,7 +187,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
 
       <section className="carte p-5 sm:p-6">
         <h2 className="text-[16px] font-bold">Ce que ce calcul ne dit pas</h2>
-        <ul className="mt-3 space-y-2 text-[13.5px] leading-relaxed text-text-muted">
+        <ul className="mt-3 list-disc space-y-2 pl-4 text-[13.5px] leading-relaxed text-text-muted marker:text-text-subtle">
           <li>
             Emprunter ne suffit pas : il faut aussi le cash de l’acte — droits d’enregistrement,
             honoraires, frais d’acte de crédit. C’est souvent ce qui bloque, pas la capacité.

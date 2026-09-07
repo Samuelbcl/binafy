@@ -51,3 +51,6 @@ sources-fiscales/
 # canevas de design genere par la skill design (2,5 Mo), rejouable depuis les .dc.html
 design/*.html
 !design/*.dc.html
+
+# captures de QA mobile, regenerables
+captures/

@@ -8,18 +8,20 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <header className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <MarqueNestor />
+            {/* Sous 640px, le mot-symbole seul : la ligne doit contenir
+                deux liens et un bouton dans 350px utiles. */}
+            <MarqueNestor className="[&>span:last-child]:hidden sm:[&>span:last-child]:inline" />
           </Link>
-          <nav aria-label="Navigation du site" className="flex items-center gap-1.5">
+          <nav aria-label="Navigation du site" className="flex items-center gap-0.5 sm:gap-1.5">
             <Link
               href="/apprendre"
-              className="inline-flex min-h-11 items-center rounded-full px-4 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
+              className="inline-flex min-h-11 items-center rounded-full px-2.5 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text sm:px-4"
             >
               Apprendre
             </Link>
             <Link
               href="/outils"
-              className="inline-flex min-h-11 items-center rounded-full px-4 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
+              className="inline-flex min-h-11 items-center rounded-full px-2.5 text-[13.5px] font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text sm:px-4"
             >
               Outils
             </Link>
