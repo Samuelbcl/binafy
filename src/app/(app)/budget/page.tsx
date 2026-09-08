@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { createElement } from 'react';
+import { iconeCategorie } from '@/lib/budget/icones';
 import {} from 'lucide-react';
 import { SankeyBudget } from '@/components/charts/sankey-budget';
 import { ImportCSV } from '@/components/budget/import-csv';
@@ -37,7 +39,7 @@ export default async function BudgetPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="titre-degrade font-display text-[28px] tracking-tight">Budget</h1>
+          <h1 className="titre-degrade font-display text-[32px] tracking-tight">Budget</h1>
           <p className="mt-1.5 text-[14px] text-text-muted">
             Une seule question : combien tu épargnes réellement chaque mois.
           </p>
@@ -113,13 +115,11 @@ export default async function BudgetPage() {
                 const part = totalDepenses > 0 ? cat.montantCents / totalDepenses : 0;
                 return (
                   <li key={cat.cle}>
-                    <div className="flex items-baseline justify-between gap-3 text-[14px]">
-                      <span className="flex min-w-0 items-center gap-2">
-                        <span
-                          aria-hidden
-                          className="size-2.5 shrink-0 rounded-[3px]"
-                          style={{ background: cat.couleur }}
-                        />
+                    <div className="flex items-center justify-between gap-3 text-[14px]">
+                      <span className="flex min-w-0 items-center gap-3">
+                        {/* La categorie a sa couleur et son icone : on la
+                            retrouve a l'oeil avant de lire son nom. */}
+                        <IconeCategorie nom={cat.nom} couleur={cat.couleur} />
                         <span className="truncate">{cat.nom}</span>
                       </span>
                       <span className="flex shrink-0 items-baseline gap-2">
@@ -247,7 +247,7 @@ function PremierImport() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Budget</h1>
+        <h1 className="titre-degrade font-display text-[32px] tracking-tight">Budget</h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">
           Importe un extrait bancaire et tu sauras ton taux d’épargne réel des douze derniers
           mois, sans le calculer à la main.
@@ -273,5 +273,20 @@ function PremierImport() {
         </p>
       </section>
     </div>
+  );
+}
+
+/** Un carre a grand rayon dans la couleur de la categorie, l'icone en blanc. */
+function IconeCategorie({ nom, couleur }: { nom: string; couleur: string }) {
+  return (
+    <span
+      aria-hidden
+      className="grid size-9 shrink-0 place-items-center rounded-[0.7rem] text-white shadow-[var(--pastille-relief)]"
+      style={{ background: couleur }}
+    >
+      {/* L'icone depend du nom : on la rend par createElement plutot que par
+          une balise dont le type changerait a chaque rendu. */}
+      {createElement(iconeCategorie(nom), { weight: 'fill', className: 'size-[18px]' })}
+    </span>
   );
 }

@@ -37,7 +37,7 @@ export default async function PatrimoinePage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="titre-degrade font-display text-[28px] tracking-tight">Patrimoine</h1>
+          <h1 className="titre-degrade font-display text-[32px] tracking-tight">Patrimoine</h1>
           <p className="mt-1.5 text-[14px] text-text-muted">
             Ta quote-part de détention, actifs et passifs confondus.
           </p>

@@ -37,7 +37,7 @@ export default async function ParametresPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Paramètres</h1>
+        <h1 className="titre-degrade font-display text-[32px] tracking-tight">Paramètres</h1>
         <p className="mt-1.5 text-[14px] text-text-muted">
           Ton profil détermine les taux appliqués dans tous les calculs.
         </p>

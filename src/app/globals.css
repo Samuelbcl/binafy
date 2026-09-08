@@ -3,14 +3,14 @@
 /*
  * Nestor — design system (docs/05-design-system.md)
  *
- * Registre : « épuré, la nuit ». Fond sombre teinté de violet, deux accents
+ * Registre : « lavande ». Fond clair teinté de violet, cartes blanches, deux accents
  * — le violet qui désigne, l'ambre qui réchauffe —, titres en Fraunces,
  * chiffres en Jakarta, cartes très arrondies. Peu d'éléments par écran.
  * Trois mots directeurs : clair, direct, honnête. On manipule l'argent de gens
  * qui n'en ont pas beaucoup — l'interface ne doit ni gamifier ni dramatiser,
  * mais elle n'a pas à être austère pour être sérieuse.
  *
- * Le sombre est le mode par défaut. Le clair reste disponible et complet.
+ * Le clair lavande est le mode par défaut. Le sombre reste disponible et complet.
  */
 
 /*
@@ -26,7 +26,96 @@
  * Racine plutôt que classe : ainsi le premier rendu, avant qu'aucun script
  * n'ait tourné, est déjà le bon. Pas d'éclair blanc au chargement.
  */
+/*
+ * Le clair lavande est la racine.
+ *
+ * Samuel a apporte trois maquettes et dit : « je veux que mon application
+ * ressemble a ca ». Elles sont claires, lavande, en cartes blanches a ombre
+ * douce, avec un violet franc et des pastels par categorie. Le sombre — qu'on
+ * avait retenu la veille — reste complet, un geste plus loin ; il n'est plus
+ * le defaut. Racine plutot que classe : le premier rendu est deja le bon.
+ */
 :root {
+  color-scheme: light;
+
+  /*
+   * Lavande. Le fond n'est pas blanc : il tire vers le violet de la marque,
+   * comme le sombre tirait vers lui. Les cartes sont blanches et flottent
+   * dessus par une ombre douce, pas par un trait. Deux lueurs teintent le
+   * haut de page — violette a gauche, rose a droite.
+   */
+  --bg: #f3f0fa;
+  --surface: #ffffff;
+  --surface-2: #f5f2fb;
+  --surface-hover: #eeeaf8;
+  --border: #e8e3f3;
+
+  --text: #1b1630;
+  --text-muted: #6d6884;
+  --text-subtle: #a29eb8;
+
+  --primary: #6d3bef;
+  --primary-hover: #5a2edb;
+  --primary-soft: #efe9ff;
+  --on-primary: #ffffff;
+
+  --ambre: #f0964c;
+  --ambre-hover: #e0843a;
+  --ambre-soft: #fff0e4;
+  --on-ambre: #2a1a05;
+
+  --action: #1b1630;
+  --action-hover: #2c2547;
+  --on-action: #ffffff;
+
+  --degrade-hero: linear-gradient(140deg, #7d52f7 0%, #6135e0 55%, #4b25c6 100%);
+  --degrade-titre: linear-gradient(96deg, #1b1630 10%, #6d3bef 88%);
+  --degrade-chaud: linear-gradient(120deg, #f59e4b 0%, #f26b8a 100%);
+  --lueur-page:
+    radial-gradient(70% 45% at 8% -5%, rgb(124 77 255 / 0.16), transparent 62%),
+    radial-gradient(55% 40% at 100% 18%, rgb(242 107 162 / 0.12), transparent 60%);
+
+  --positive: #1fa971;
+  --negative: #e5484d;
+  --warning: #ef9f27;
+  --info: #4f7fe6;
+
+  /* Une palette pastel saturee : chaque categorie a sa couleur pleine, et
+     son fond pale s'en deduit par color-mix. */
+  --data-1: #7c4dff;
+  --data-2: #34c38f;
+  --data-3: #f5b942;
+  --data-4: #f26ba2;
+  --data-5: #5b8def;
+  --data-6: #2cc3c1;
+  --data-7: #ff9a62;
+  --data-8: #b0abc4;
+
+  --shadow-card: 0 6px 20px rgb(27 22 48 / 0.06);
+  --glow-primary: 0 14px 40px rgb(109 59 239 / 0.28);
+  --carte-lumiere: none;
+  --pastille-relief:
+    inset 0 1px 0 rgb(255 255 255 / 0.8),
+    0 1px 2px rgb(27 22 48 / 0.06);
+  --lueur-flottant: 0 10px 28px rgb(240 150 76 / 0.35);
+
+  --verre:
+    linear-gradient(180deg, rgb(255 255 255 / 0.86), rgb(255 255 255 / 0.72)),
+    color-mix(in oklab, var(--surface) 40%, transparent);
+  --verre-bord: rgb(27 22 48 / 0.06);
+  --verre-reflet: rgb(255 255 255 / 0.95);
+  --verre-ombre: rgb(27 22 48 / 0.14);
+  --lentille: linear-gradient(180deg, rgb(109 59 239 / 0.16), rgb(109 59 239 / 0.08));
+  --lentille-reflet: rgb(255 255 255 / 0.9);
+  --onglet-actif: var(--primary);
+}
+
+/*
+ * Theme sombre — la meme grammaire, pas un autre design. Le fond tire vers le
+ * violet, les surfaces se detachent par un voile de lumiere plutot que par un
+ * trait, l'accent s'eclaircit pour tenir le contraste.
+ */
+[data-theme='dark'] {
   color-scheme: dark;
 
   /*
@@ -97,105 +186,13 @@
   --verre-reflet: rgb(255 255 255 / 0.22);
   --lentille: linear-gradient(180deg, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.08));
   --lentille-reflet: rgb(255 255 255 / 0.5);
+  --verre-ombre: rgb(0 0 0 / 0.45);
+  --onglet-actif: var(--text);
   --pastille-relief:
     inset 0 1px 0 rgb(255 255 255 / 0.16),
     inset 0 -1px 0 rgb(0 0 0 / 0.28),
     0 1px 2px rgb(0 0 0 / 0.35);
   --lueur-flottant: 0 10px 32px rgb(109 91 255 / 0.45);
-}
-
-/*
- * Thème clair — la même grammaire, pas un autre design. L'accent se fonce
- * pour tenir le contraste sur blanc, et l'action principale s'inverse :
- * blanche sur sombre, noire sur clair.
- */
-[data-theme='light'] {
-  color-scheme: light;
-
-  /* Fonds */
-  --bg: #f6f6f8;
-  --surface: #ffffff;
-  --surface-2: #f1f1f4;
-  --surface-hover: #efeff2;
-  --border: #ececef;
-
-  /* Texte */
-  --text: #0e0e12;
-  --text-muted: #71717a;
-  --text-subtle: #a1a1aa;
-
-  /* Marque — l'accent porte l'information, jamais le décor */
-  --primary: #4f3ff0;
-  --primary-hover: #3b2ed4;
-  --primary-soft: #eeebff;
-  --on-primary: #ffffff;
-
-  /*
-   * Second accent — la chaleur.
-   *
-   * Un accent unique produit une interface juste et froide : tout ce qui n'est
-   * pas violet devient gris, et l'écran se lit comme un tableur. L'ambre
-   * réchauffe ce que le violet ne peut pas porter — un état, une pastille, la
-   * fin d'un dégradé. Elle ne désigne pas une donnée : c'est la respiration.
-   */
-  --ambre: #e8963c;
-  --ambre-hover: #d4842c;
-  --ambre-soft: #fdf1de;
-  --on-ambre: #2a1a05;
-
-  /*
-   * Action principale. Distincte de la marque : le bouton qui engage est noir,
-   * l'accent reste réservé à ce qui doit être lu. Sans cette séparation, tout
-   * ce qui est violet devient du bouton et l'accent perd son sens.
-   */
-  --action: #101014;
-  --action-hover: #26262e;
-  --on-action: #ffffff;
-
-  /*
-   * Dégradés.
-   *
-   * Un aplat de couleur unie est plat, au sens propre : il n'a ni profondeur ni
-   * direction. Le dégradé donne à la carte principale un volume que l'œil lit
-   * avant de lire le chiffre, et il signe l'écran — c'est ce qui distingue une
-   * application d'un rapport imprimé.
-   */
-  --degrade-hero: linear-gradient(146deg, #6d5bff 0%, #4f3ff0 48%, #3a2bc4 100%);
-  --degrade-titre: linear-gradient(96deg, var(--text) 10%, var(--primary) 88%);
-  --degrade-chaud: linear-gradient(120deg, var(--ambre) 0%, #e2703f 100%);
-  /* La lueur du haut de page : elle colore le fond sans qu'on la remarque. */
-  --lueur-page: radial-gradient(125% 62% at 50% -12%, rgb(79 63 240 / 0.10), transparent 64%);
-
-  /* Sémantique */
-  --positive: #0fa968;
-  --negative: #e5484d;
-  --warning: #f5a524;
-  --info: #2563eb;
-
-  /* Palette de données — donut, Sankey, séries */
-  --data-1: #4f3ff0;
-  --data-2: #0fa968;
-  --data-3: #f5a524;
-  --data-4: #ec4899;
-  --data-5: #2563eb;
-  --data-6: #14b8a6;
-  --data-7: #f97316;
-  --data-8: #a1a1aa;
-
-  --shadow-card: 0 1px 2px rgb(14 14 18 / 0.04);
-  --glow-primary: 0 0 48px rgb(79 63 240 / 0.10);
-  --carte-lumiere: none;
-  --verre:
-    linear-gradient(180deg, rgb(255 255 255 / 0.78), rgb(255 255 255 / 0.6)),
-    color-mix(in oklab, var(--surface) 40%, transparent);
-  --verre-bord: rgb(14 14 18 / 0.08);
-  --verre-reflet: rgb(255 255 255 / 0.9);
-  --lentille: linear-gradient(180deg, rgb(79 63 240 / 0.18), rgb(79 63 240 / 0.08));
-  --lentille-reflet: rgb(255 255 255 / 0.85);
-  --pastille-relief:
-    inset 0 1px 0 rgb(255 255 255 / 0.8),
-    0 1px 2px rgb(14 14 18 / 0.08);
-  --lueur-flottant: 0 10px 28px rgb(79 63 240 / 0.35);
 }
 
 /* Rayons — la pilule pour l'action, l'arrondi généreux pour la carte. */
@@ -317,8 +314,8 @@
   .font-display {
     font-family: var(--font-titres), Georgia, serif;
     font-weight: 400;
-    letter-spacing: -0.01em;
-    line-height: 1.12;
+    letter-spacing: -0.005em;
+    line-height: 1.1;
   }
 
   h3 {
@@ -672,7 +669,7 @@
     backdrop-filter: blur(28px) saturate(1.8);
     border: 1px solid var(--verre-bord);
     box-shadow:
-      0 16px 48px rgb(0 0 0 / 0.45),
+      0 16px 48px var(--verre-ombre),
       inset 0 1px 0 var(--verre-reflet),
       inset 0 -1px 0 rgb(0 0 0 / 0.25);
     /* La barre se laisse glisser au doigt : le defilement de la page n'y
@@ -933,6 +930,46 @@
   input[type='range']:focus-visible::-webkit-slider-thumb {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+  }
+
+  /*
+   * Tuile d'action : un carre pastel a grand rayon, l'icone dans la couleur
+   * du sujet. La forme la distingue du jeton rond (un repere) : une tuile se
+   * touche, un jeton se lit.
+   */
+  .tuile {
+    --teinte: var(--primary);
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1.1rem;
+    background: color-mix(in oklab, var(--teinte) 14%, var(--surface));
+    color: var(--teinte);
+    box-shadow: var(--pastille-relief);
+    transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .group:active .tuile {
+    transform: scale(0.94);
+  }
+
+  /* La scene d'un objectif dans un medaillon rond, a droite de sa ligne. */
+  .vignette-scene {
+    --teinte: var(--primary);
+    display: grid;
+    align-items: end;
+    width: 4.25rem;
+    height: 4.25rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: radial-gradient(
+      110% 110% at 30% 22%,
+      color-mix(in oklab, var(--teinte) 30%, var(--surface)),
+      color-mix(in oklab, var(--teinte) 12%, var(--surface)) 72%
+    );
+    box-shadow: var(--pastille-relief);
   }
 
   /* Petite pastille : dans une frise, une rangee. */

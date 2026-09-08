@@ -83,6 +83,43 @@ export function CarteObjectif({
   // largeur minimale de son contenu, et la ligne d'en-tête — quatre éléments
   // dont trois refusent de se couper — vaut plus que 390 px moins les marges.
   // Sans lui, la carte déborde de l'écran de dix pixels.
+  if (compact) {
+    // La ligne du tableau de bord : le nom, la cible, la barre — et la scene
+    // dans un medaillon rond a droite, comme une photo d'objectif.
+    return (
+      <article id={objectif.id} className={cn('carte flex min-w-0 items-center gap-4 p-4', className)}>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-[15px] leading-snug">{objectif.nom}</h3>
+          <p className="mt-0.5 text-[13px] text-text-muted">
+            <Montant cents={objectif.cibleCents} decimals={0} className="font-semibold text-text" />
+          </p>
+          <div
+            className={cn('barre-segmentee mt-3', puce.barre)}
+            role="img"
+            aria-label={`${objectif.nom} : ${formatEUR(objectif.atteintCents, { decimals: 0 })} sur ${formatEUR(objectif.cibleCents, { decimals: 0 })}`}
+          >
+            <span style={{ width: `${Math.max(part > 0 ? 2 : 0, part * 100)}%` }} />
+          </div>
+          <p className="mt-1.5 flex items-baseline justify-between text-[12px] text-text-subtle">
+            <span>
+              <Montant cents={objectif.atteintCents} decimals={0} className="text-text" /> sur{' '}
+              <Montant cents={objectif.cibleCents} decimals={0} />
+            </span>
+            <span className="tabular-nums">{Math.round(part * 100)} %</span>
+          </p>
+        </div>
+        <div className={cn('vignette-scene', CLASSE_TEINTE_BANDE[objectif.teinte])} aria-hidden>
+          <SceneObjectif
+            icone={objectif.icone}
+            teinte={objectif.teinte}
+            progression={part}
+            className="h-auto w-full"
+          />
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article id={objectif.id} className={cn('carte min-w-0 p-4 sm:p-5', className)}>
       {/* La scène en tête : ce qui manque à la maison se voit avant que la

@@ -123,7 +123,7 @@ export default async function FiscalitePage() {
   return (
     <div className="mx-auto max-w-5xl">
       <header className="mb-8">
-        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Fiscalité</h1>
+        <h1 className="titre-degrade font-display text-[32px] tracking-tight">Fiscalité</h1>
         <p className="mt-1.5 text-[14px] text-text-muted">
           Ta position pour l’année {params.annee} — {PROFIL_DEMO.commune}, additionnels
           communaux de {PROFIL_DEMO.additionnelsCommunauxPourcent} %.

@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Plus } from 'lucide-react';
-import { Bank, ChartLineUp, Gauge, Target, Wallet } from '@phosphor-icons/react/dist/ssr';
+import { Bank, ChartLineUp, Gauge, PiggyBank, Target, TrendDown, TrendUp, Wallet } from '@phosphor-icons/react/dist/ssr';
 import { CarteObjectif } from '@/components/objectifs/carte-objectif';
+import { ActionsRapides } from '@/components/app/actions-rapides';
+import { PastilleIcone } from '@/components/ui/pastille-icone';
+import { chargerPrenom } from '@/lib/db/profil';
+import { salutation } from '@/lib/salutation';
 import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
 import { DonutAllocation } from '@/components/charts/donut-allocation';
 import { CarteHero } from '@/components/ui/carte-hero';
@@ -18,6 +22,7 @@ import {
   allocation,
   patrimoineNet,
   totalActifs,
+  pocheDe,
   totalPassifs,
   valeurQuotePart,
   variationJour,
@@ -41,6 +46,15 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const { actifs, passifs, historique, demo } = await chargerPatrimoine();
   const { objectifs } = await chargerObjectifs(actifs);
+  const prenom = await chargerPrenom();
+
+  // La vue rapide : quatre masses qui se lisent d'un coup.
+  const epargneLiquide = actifs
+    .filter((a) => a.classe === 'compte_courant' || a.classe === 'compte_epargne')
+    .reduce((somme, a) => somme + valeurQuotePart(a), 0);
+  const investi = actifs
+    .filter((a) => ['actions', 'crypto'].includes(pocheDe(a.classe)))
+    .reduce((somme, a) => somme + valeurQuotePart(a), 0);
 
   const net = patrimoineNet(actifs, passifs);
   const variation = variationJour(actifs);
@@ -83,6 +97,15 @@ export default async function DashboardPage() {
         <p className="mb-4 text-[13px] text-text-muted">Bonsoir {PROFIL_DEMO.prenom}</p>
       )}
 
+      {/* Le premier mot de l'ecran s'adresse a la personne, pas au patrimoine. */}
+      <header className="apparait">
+        <p className="text-[13px] text-text-muted">
+          {salutation()}
+          {prenom ? `, ${prenom}` : ''}
+        </p>
+        <h1 className="mt-0.5 font-display text-[32px] leading-tight">Voici où tu en es.</h1>
+      </header>
+
       <CarteHero
         label="Patrimoine net"
         valeurCents={net}
@@ -116,6 +139,8 @@ export default async function DashboardPage() {
           variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'
         }
       />
+
+      <ActionsRapides className="apparait mt-5" />
 
       {/*
         Les objectifs juste sous le chiffre principal : c'est la question qui
@@ -165,6 +190,21 @@ export default async function DashboardPage() {
         teinte="menthe"
         sousTitre="Les deux chiffres qui résument ta situation, au-delà du montant total."
       >
+      {/* Quatre masses, une ligne chacune, l'icone dans la couleur du sujet. */}
+      <ul className="carte mb-3 divide-y divide-border/60 px-4 sm:px-5">
+        {[
+          { libelle: 'Actifs', cents: totalActifs(actifs), icone: TrendUp, teinte: 'menthe' as const },
+          { libelle: 'Passifs', cents: -totalPassifs(passifs), icone: TrendDown, teinte: 'rose' as const },
+          { libelle: 'Épargne liquide', cents: epargneLiquide, icone: PiggyBank, teinte: 'violet' as const },
+          { libelle: 'Investissements', cents: investi, icone: ChartLineUp, teinte: 'azur' as const },
+        ].map((ligne) => (
+          <li key={ligne.libelle} className="flex items-center gap-3 py-3">
+            <PastilleIcone icone={ligne.icone} teinte={ligne.teinte} />
+            <span className="min-w-0 flex-1 text-[14px]">{ligne.libelle}</span>
+            <Montant cents={ligne.cents} decimals={0} className="font-semibold" />
+          </li>
+        ))}
+      </ul>
       <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
         <CarteKPITexte
           label="Taux d’épargne lissé"
@@ -346,7 +386,7 @@ function PremierEcran() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] tracking-tight">
+        <h1 className="titre-degrade font-display text-[32px] tracking-tight">
           Ton patrimoine est vide
         </h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">

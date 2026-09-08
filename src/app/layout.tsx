@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Schibsted_Grotesk, Young_Serif } from 'next/font/google';
+import { Instrument_Serif, Schibsted_Grotesk } from 'next/font/google';
 import { AppProviders } from '@/components/providers';
 import { siteUrl } from '@/lib/env';
 import './globals.css';
@@ -19,19 +19,19 @@ const ui = Schibsted_Grotesk({
 });
 
 /**
- * Les titres — Young Serif.
+ * Les titres — Instrument Serif.
  *
- * Nestor est un majordome : quelqu'un de fiable, un peu d'un autre temps, qui
- * dit les choses avec chaleur. Young Serif a exactement ce grain — des
- * empattements ronds, un dessin généreux, une seule graisse qui n'a pas besoin
- * d'être grasse pour porter. On ne la synthétise jamais en gras : elle n'en a
- * pas, et un gras de synthèse est ce qui trahit une maquette. Les titres
- * portent donc tous `font-weight: 400`, et c'est la taille qui hiérarchise.
+ * Un serif a fort contraste, etroit, presque calligraphique : c'est la voix
+ * des maquettes que Samuel a apportees — le « Good morning ! » en serif au-
+ * dessus d'une interface en grotesque. Une seule graisse, jamais synthetisee
+ * en gras ; la hierarchie vient de la taille. L'italique existe, pour un mot
+ * qu'on veut faire entendre.
  */
-const titres = Young_Serif({
+const titres = Instrument_Serif({
   variable: '--font-titres',
   subsets: ['latin'],
   weight: '400',
+  style: ['normal', 'italic'],
   display: 'swap',
 });
 
@@ -56,10 +56,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // Le sombre est le défaut quel que soit le réglage du système : la barre du
+  // Le clair est le défaut quel que soit le réglage du système : la barre du
   // navigateur suit donc le fond de l'application, pas la préférence du
-  // téléphone. Une barre blanche au-dessus d'un écran sombre trahit le thème.
-  themeColor: '#0B0A12',
+  // téléphone.
+  themeColor: '#F3F0FA',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

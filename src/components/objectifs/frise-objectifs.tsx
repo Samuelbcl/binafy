@@ -84,7 +84,7 @@ export function FriseObjectifs({ objectifs }: { objectifs: readonly Objectif[] }
         {/* Toujours nomme : un repere sans libelle oblige a deviner. Quand le
             premier janvier est proche, le mot monte au-dessus du fil. */}
         <span
-          className={cn('absolute left-0', (janviers[0]?.mois ?? total) / total <= 0.3 && '-top-[2.4rem]')}
+          className={cn('absolute left-0', (janviers[0]?.mois ?? total) / total <= 0.3 && '-top-[3.2rem]')}
         >
           aujourd’hui
         </span>

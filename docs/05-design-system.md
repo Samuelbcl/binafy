@@ -24,16 +24,27 @@ donut d'allocation, Sankey budgétaire, cartes bento), pas la charte d'un concur
 > racine. Le clair reste disponible et complet ; l'argument du plein soleil tient
 > toujours, il ne l'emporte plus.
 
-**Registre : « épuré, la nuit ».** Fond sombre teinté de violet, deux accents (le violet
-qui désigne, l'ambre qui réchauffe), titres en Fraunces, chiffres en Plus Jakarta,
-cartes très arrondies, peu d'éléments par écran.
+> **Révision du 08/09/2026, le soir — lavande.** Samuel a apporté trois maquettes et
+> dit : « je veux que mon application ressemble à ça, autant la police que les couleurs
+> et l'UX ». Elles sont claires : fond lavande, cartes blanches à ombre douce, un violet
+> franc, des pastels par catégorie, un serif à fort contraste pour le mot d'accueil au-
+> dessus d'une interface en grotesque. C'est la décision qui remplace celle de la veille
+> (le sombre par défaut) — pas un retour en arrière : le sombre construit hier reste
+> complet, un geste plus loin, et tout ce qu'on a appris entre-temps (jetons, barre en
+> verre liquide, scènes vivantes, « un designer enlève ») tient dans les deux thèmes.
+> Instrument Serif remplace Young Serif pour la même raison : c'est la voix des maquettes.
+
+**Registre : « lavande ».** Fond clair teinté de violet, cartes blanches qui flottent par
+une ombre douce, un violet franc qui désigne, des pastels qui classent (une couleur par
+sujet, partout la même), titres en Instrument Serif, interface et chiffres en Schibsted
+Grotesk, cartes très arrondies, peu d'éléments par écran.
 
 Trois mots directeurs : **clair, direct, honnête**. On manipule l'argent de gens qui n'en
 ont pas beaucoup ; l'interface ne doit ni gamifier ni dramatiser — mais elle n'a pas à
 être austère pour être sérieuse.
 
-Le sombre est le mode **par défaut**. Le clair reste disponible et complet, avec la
-même grammaire — on le garde pour qui lit ses comptes en plein soleil.
+Le clair lavande est le mode **par défaut**. Le sombre reste disponible et complet, avec
+la même grammaire.
 
 > **Révision du 08/09/2026 — sortir du gabarit.** Le verdict de Samuel sur la version
 > précédente : « ça se voit à dix kilomètres que c'est codé par un modèle ». Il avait
@@ -43,11 +54,10 @@ même grammaire — on le garde pour qui lit ses comptes en plein soleil.
 > une règle : **si un choix est celui qu'un générateur ferait spontanément, ce n'est pas
 > un choix.**
 
-**Deux polices.** **Young Serif** porte les `h1`, `h2` et tout ce qui demande
-`font-display` : une seule graisse, des empattements ronds, un grain de majordome —
-fiable, un peu d'un autre temps, chaleureux. On ne la synthétise jamais en gras (elle n'en
-a pas, et un gras de synthèse est ce qui trahit une maquette) : la hiérarchie vient de la
-taille. **Schibsted Grotesk** garde l'interface, les libellés et **tous les montants** —
+**Deux polices.** **Instrument Serif** porte les `h1`, `h2` et tout ce qui demande
+`font-display` : un serif à fort contraste, étroit, presque calligraphique — le mot
+d'accueil des maquettes. Une seule graisse, jamais synthétisée en gras (un gras de synthèse
+est ce qui trahit une maquette) : la hiérarchie vient de la taille. **Schibsted Grotesk** garde l'interface, les libellés et **tous les montants** —
 un grotesque dessiné pour la presse, dont le *a*, le *g* et le *y* ont une inflexion, avec
 des chiffres tabulaires. Les montants sont en graisse moyenne (500–600), grands plutôt
 que gros : un chiffre qui n'a pas besoin de crier.

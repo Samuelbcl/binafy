@@ -60,7 +60,7 @@ export default async function ObjectifsPage({
     <div className="mx-auto max-w-4xl">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="titre-degrade font-display text-[28px] tracking-tight">
+          <h1 className="titre-degrade font-display text-[32px] tracking-tight">
             Objectifs
           </h1>
           <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-text-muted">
