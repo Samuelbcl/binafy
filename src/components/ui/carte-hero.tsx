@@ -168,7 +168,12 @@ export function CarteHero({
 
       <div className="mt-2 sm:flex sm:items-end sm:justify-between sm:gap-8">
         <h1 className="chiffre-hero">
-          <Montant cents={montantCents} decimals={decimals} className="text-on-primary" />
+          <Montant
+            cents={montantCents}
+            decimals={decimals}
+            decimalesDiscretes
+            className="text-on-primary"
+          />
         </h1>
         {/* Sous 640px le chiffre secondaire passe sous le principal, sur une
             seule ligne libelle-valeur : empile a droite, il donnait deux blocs

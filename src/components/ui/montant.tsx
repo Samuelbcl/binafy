@@ -19,6 +19,11 @@ type MontantProps = FormatEURConfig & {
   colore?: boolean;
   /** Ne pas masquer en mode discrétion — réservé aux montants non personnels. */
   jamaisMasque?: boolean;
+  /**
+   * Les centimes en retrait. Sur un grand chiffre, « 13 349,88 € » se lit
+   * 13 349 ; les décimales sont là pour qui les cherche, pas pour peser.
+   */
+  decimalesDiscretes?: boolean;
 };
 
 export function Montant({
@@ -26,22 +31,38 @@ export function Montant({
   className,
   colore = false,
   jamaisMasque = false,
+  decimalesDiscretes = false,
   ...config
 }: MontantProps) {
   const { discret } = useDiscretion();
   const masque = discret && !jamaisMasque;
+  const texte = formatEUR(cents, { ...config, masked: masque });
+  // « 13 349,88 € » → entier, décimales, symbole. Si le format ne se découpe
+  // pas (masqué, sans décimales), on affiche tel quel.
+  const morceaux = decimalesDiscretes && !masque ? /^(.*?)(,\d+)(\s€)$/.exec(texte) : null;
 
   return (
     <span
       data-montant
       className={cn(
-        'font-mono tabular-nums',
+        // Un grand chiffre seul n'a rien à aligner : en chiffres proportionnels,
+        // la virgule retrouve sa largeur au lieu d'occuper une case de chiffre.
+        'font-mono',
+        decimalesDiscretes ? 'proportional-nums' : 'tabular-nums',
         colore && !masque && cents > 0 && 'text-positive',
         colore && !masque && cents < 0 && 'text-negative',
         className,
       )}
     >
-      {formatEUR(cents, { ...config, masked: masque })}
+      {morceaux ? (
+        <>
+          {morceaux[1]}
+          <span className="opacity-50">{morceaux[2]}</span>
+          {morceaux[3]}
+        </>
+      ) : (
+        texte
+      )}
     </span>
   );
 }

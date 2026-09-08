@@ -6,6 +6,7 @@ import { etatObjectif, mensualiser, type EtatObjectif } from '@/lib/finance/obje
 import { formatEUR } from '@/lib/money';
 import { libelleDans, libelleMois } from '@/lib/objectifs/dates';
 import { ICONES_OBJECTIF, type Objectif } from '@/lib/objectifs/types';
+import { SceneObjectif } from './scene-objectif';
 
 /**
  * Carte d'un objectif.
@@ -16,6 +17,17 @@ import { ICONES_OBJECTIF, type Objectif } from '@/lib/objectifs/types';
  * compte les traits comme on compte des mois, et un objectif à moitié fait se
  * *voit* à moitié fait.
  */
+
+/* La bande prend la teinte de l'objectif par la même variable que la pastille. */
+const CLASSE_TEINTE_BANDE: Record<Objectif['teinte'], string> = {
+  violet: 'pastille-violet',
+  menthe: 'pastille-menthe',
+  ambre: 'pastille-ambre',
+  rose: 'pastille-rose',
+  azur: 'pastille-azur',
+  lagune: 'pastille-lagune',
+  terre: 'pastille-terre',
+};
 
 const PUCE: Record<EtatObjectif, { libelle: string; classe: string; barre: string }> = {
   atteint: { libelle: 'Atteint', classe: 'bg-positive/15 text-positive', barre: 'text-positive' },
@@ -73,6 +85,18 @@ export function CarteObjectif({
   // Sans lui, la carte déborde de l'écran de dix pixels.
   return (
     <article id={objectif.id} className={cn('carte min-w-0 p-4 sm:p-5', className)}>
+      {/* La scène en tête : ce qui manque à la maison se voit avant que la
+          barre ne le chiffre. Sur le tableau de bord, une vignette suffit. */}
+      {!compact && (
+        <div className={cn('scene-bande mb-4', CLASSE_TEINTE_BANDE[objectif.teinte])}>
+          <SceneObjectif
+            icone={objectif.icone}
+            teinte={objectif.teinte}
+            progression={part}
+            className="absolute inset-x-6 bottom-0 h-full w-auto"
+          />
+        </div>
+      )}
       <div className="flex items-center gap-3">
         <PastilleIcone icone={ICONES_OBJECTIF[objectif.icone]} teinte={objectif.teinte} />
         <h3 className="min-w-0 flex-1 truncate text-[15px] font-bold">{objectif.nom}</h3>
@@ -80,15 +104,25 @@ export function CarteObjectif({
         {action}
       </div>
 
-      <div className="mt-4 flex items-baseline justify-between gap-3">
-        <Montant
-          cents={objectif.atteintCents}
-          decimals={0}
-          className="text-[17px] font-bold tracking-[-0.01em]"
-        />
-        <p className="text-[13px] text-text-muted">
-          sur <Montant cents={objectif.cibleCents} decimals={0} className="font-semibold text-text" />
-        </p>
+      <div className="mt-4 flex items-end justify-between gap-3">
+        <div className="flex items-baseline gap-2">
+          <Montant
+            cents={objectif.atteintCents}
+            decimals={0}
+            className="text-[17px] font-semibold tracking-[-0.01em]"
+          />
+          <p className="text-[13px] text-text-muted">
+            sur <Montant cents={objectif.cibleCents} decimals={0} className="font-semibold text-text" />
+          </p>
+        </div>
+        {compact && (
+          <SceneObjectif
+            icone={objectif.icone}
+            teinte={objectif.teinte}
+            progression={part}
+            className="h-10 w-16 shrink-0"
+          />
+        )}
       </div>
 
       <div

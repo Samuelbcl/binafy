@@ -15,7 +15,7 @@ import type { Icon } from '@phosphor-icons/react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { useDiscretion, useEstMonte } from '@/components/providers';
 import { cn } from '@/lib/cn';
 import { supabaseNavigateur } from '@/lib/db/client';
@@ -156,14 +156,30 @@ const ONGLETS = [
   { href: '/apprendre', libelle: 'Apprendre', icone: BookOpen },
 ] as const;
 
+/**
+ * La barre est detachee du bord et flotte en verre depoli. L'onglet actif
+ * remonte dans une bulle qui glisse d'un onglet a l'autre — et la barre se
+ * creuse autour d'elle : la position de la bulle est une variable CSS enregistree
+ * (`--bulle-x`), donc le masque qui decoupe l'encoche suit le meme mouvement
+ * que la bulle, avec la meme courbe. Un seul element bouge ; tout le reste
+ * en decoule.
+ */
 function BarreOnglets() {
   const pathname = usePathname();
+  const indexActif = ONGLETS.findIndex(
+    (o) => pathname === o.href || pathname.startsWith(`${o.href}/`),
+  );
+  const part = 100 / ONGLETS.length;
+  const bulleX = `${(indexActif < 0 ? 0 : indexActif) * part + part / 2}%`;
 
   return (
     <nav
       aria-label="Navigation principale"
-      className="barre-onglets fixed inset-x-0 bottom-0 z-30 flex items-center justify-around px-2 pt-1.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] lg:hidden"
+      className="barre-onglets fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 lg:hidden"
+      style={{ '--bulle-x': bulleX } as CSSProperties}
+      data-sans-bulle={indexActif < 0 ? '' : undefined}
     >
+      <span aria-hidden className="bulle-onglet" />
       {ONGLETS.map(({ href, libelle, icone: Icone }) => (
         <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
       ))}
@@ -189,7 +205,7 @@ function BoutonAjout() {
   return (
     <Link
       href={objectifs ? '/objectifs/nouveau' : '/patrimoine#ajouter'}
-      className="bouton-flottant fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-30 lg:hidden"
+      className="bouton-flottant fixed right-4 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] z-30 lg:hidden"
     >
       <Plus className="size-6" />
       <span className="sr-only">{objectifs ? 'Nouvel objectif' : 'Ajouter un actif'}</span>
@@ -215,21 +231,19 @@ function OngletLien({
       href={href}
       aria-current={actif ? 'page' : undefined}
       className={cn(
-        'flex w-[64px] flex-col items-center gap-0.5 py-1 transition-colors',
+        'onglet relative z-10 flex flex-col items-center justify-end gap-1 pb-2',
         actif ? 'text-primary' : 'text-text-subtle hover:text-text',
       )}
     >
-      {/* La gélule derrière l'icône dit « tu es ici » d'un coup d'œil ; la
-          couleur seule ne le faisait pas sur les petits pictogrammes. */}
+      {/* L'icone monte dans la bulle quand l'onglet est actif : pleine et
+          blanche sur le violet ; au trait sinon, a sa place dans la barre. */}
       <span
         className={cn(
-          'grid h-7 w-12 place-items-center rounded-full transition-colors',
-          actif && 'onglet-actif',
+          'grid size-11 place-items-center transition-[transform,color] duration-[480ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+          actif ? '-translate-y-8 text-white' : 'translate-y-0',
         )}
       >
-        {/* Pleine quand on y est, au trait sinon : l'onglet actif se
-            reconnait a la forme avant la couleur. */}
-        <Icone weight={actif ? 'fill' : 'regular'} className="size-[22px]" />
+        <Icone weight={actif ? 'fill' : 'regular'} className="size-6" />
       </span>
       <span className={cn('text-[10.5px]', actif ? 'font-bold' : 'font-medium')}>{libelle}</span>
     </Link>
@@ -370,7 +384,7 @@ export function AppShell({
           </div>
         </header>
 
-        <main className="flex-1 px-4 pt-6 pb-28 sm:px-6 lg:px-8 lg:pb-8">{children}</main>
+        <main className="flex-1 px-4 pt-6 pb-32 sm:px-6 lg:px-8 lg:pb-8">{children}</main>
         <BoutonAjout />
         <BarreOnglets />
       </div>

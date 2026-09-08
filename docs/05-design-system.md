@@ -63,6 +63,24 @@ carrés teintés. Chaque outil et chaque zone d'écran garde sa couleur d'une pa
 (`PastilleIcone`, sept teintes). C'est la version honnête des émoticônes : même fonction
 de repère, sans le registre enfantin ni le rendu qui varie selon le système.
 
+**La barre d'onglets est liquide.** Détachée du bord, en verre dépoli, elle porte une
+bulle qui glisse d'un onglet à l'autre avec un léger dépassement
+(`cubic-bezier(0.34, 1.56, 0.64, 1)`), et la barre se creuse autour d'elle : l'encoche
+est un masque radial positionné par `--bulle-x`, une propriété CSS **enregistrée**
+(`@property`) pour que le masque suive la bulle au lieu de sauter. L'icône active monte
+dans la bulle, pleine et blanche. Un seul élément bouge ; tout le reste en découle.
+
+**Les scènes vivantes.** Un objectif a une progression et un sujet ; la scène
+(`SceneObjectif`) est une illustration SVG dont l'état dépend de la progression — la
+maison se monte brique par brique, l'avion avance d'escale en escale, le soleil se lève.
+La progression pilote des **étapes discrètes**, jamais un morphing : on doit pouvoir dire
+« il manque le toit ». La dernière étape est la récompense et n'apparaît qu'à 100 %. Une
+seule règle CSS (`.scene-etape`) porte le mouvement, au montage comme sous un curseur.
+Décorative (`aria-hidden`) : la progression est déjà dite en texte et en barre.
+
+**Les grands chiffres effacent leurs décimales** (`decimalesDiscretes` sur `Montant`) :
+« 13 349,88 € » se lit 13 349, les centimes sont là pour qui les cherche.
+
 **Les cartes sombres n'ont presque plus de trait** (`--border` à 6 % de blanc) : elles se
 détachent par leur surface et le voile de lumière du haut. Le contour net sur fond sombre
 est un autre tic de gabarit.

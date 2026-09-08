@@ -24,6 +24,7 @@ import {
   type Inspiration,
   type TypeObjectif,
 } from '@/lib/objectifs/types';
+import { SceneObjectif } from './scene-objectif';
 import { calculerCashNecessaire } from '@/lib/tax/enregistrement';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
 import type { RegionFiscale } from '@/lib/tax/types';
@@ -299,6 +300,30 @@ export function CreationObjectif({
             </h1>
           </div>
 
+          {/*
+            La scène se construit au rythme des curseurs : elle montre où on
+            en serait à l'échéance avec ce qu'on verse. Bouger le montant ou
+            la date pose ou retire des briques — l'écart devient visible avant
+            d'être chiffré.
+          */}
+          <div className="carte mt-5 overflow-hidden p-4 sm:p-5">
+            <div className={cn('scene-bande', 'pastille-' + teinte)}>
+              <SceneObjectif
+                icone={icone}
+                teinte={teinte}
+                progression={cibleEuros > 0 ? projection.result.atteintAHorizonCents / euros(cibleEuros) : 0}
+                className="absolute inset-x-6 bottom-0 h-full w-auto"
+              />
+            </div>
+            <p className="mt-3 text-[12.5px] leading-snug text-text-muted">
+              {cibleEuros <= 0
+                ? 'Indique une cible : la scène se construira à mesure.'
+                : projection.result.ecartAHorizonCents === 0
+                  ? 'À ce rythme, tout est là à l’échéance.'
+                  : `À ce rythme, il manquera ${formatEUR(projection.result.ecartAHorizonCents, { decimals: 0 })} à l’échéance.`}
+            </p>
+          </div>
+
           {inspiration?.special === 'matelas' && (
             <div className="carte mt-5 p-4 sm:p-5">
               <p className="text-[13.5px] font-semibold">Nestor calcule la cible depuis ton budget</p>
@@ -537,7 +562,15 @@ export function CreationObjectif({
             </h1>
           </div>
 
-          <div className="carte mt-5 p-4 sm:p-5">
+          <div className="carte mt-5 overflow-hidden p-4 sm:p-5">
+            <div className={cn('scene-bande mb-4', 'pastille-' + teinte)}>
+              <SceneObjectif
+                icone={icone}
+                teinte={teinte}
+                progression={cibleEuros > 0 ? projection.result.atteintAHorizonCents / euros(cibleEuros) : 0}
+                className="absolute inset-x-6 bottom-0 h-full w-auto"
+              />
+            </div>
             <p className="text-[13.5px] font-semibold">Trajectoire projetée</p>
             <div className="mt-3 flex gap-6 text-[12.5px]">
               <div>
