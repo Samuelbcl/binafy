@@ -89,6 +89,14 @@
    * qu'un rectangle un peu moins noir.
    */
   --carte-lumiere: linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 42%);
+  /* Le verre de la barre d'onglets et sa lentille. */
+  --verre:
+    linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03)),
+    color-mix(in oklab, var(--surface) 55%, transparent);
+  --verre-bord: rgb(255 255 255 / 0.12);
+  --verre-reflet: rgb(255 255 255 / 0.22);
+  --lentille: linear-gradient(180deg, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.08));
+  --lentille-reflet: rgb(255 255 255 / 0.5);
   --pastille-relief:
     inset 0 1px 0 rgb(255 255 255 / 0.16),
     inset 0 -1px 0 rgb(0 0 0 / 0.28),
@@ -177,6 +185,13 @@
   --shadow-card: 0 1px 2px rgb(14 14 18 / 0.04);
   --glow-primary: 0 0 48px rgb(79 63 240 / 0.10);
   --carte-lumiere: none;
+  --verre:
+    linear-gradient(180deg, rgb(255 255 255 / 0.78), rgb(255 255 255 / 0.6)),
+    color-mix(in oklab, var(--surface) 40%, transparent);
+  --verre-bord: rgb(14 14 18 / 0.08);
+  --verre-reflet: rgb(255 255 255 / 0.9);
+  --lentille: linear-gradient(180deg, rgb(79 63 240 / 0.18), rgb(79 63 240 / 0.08));
+  --lentille-reflet: rgb(255 255 255 / 0.85);
   --pastille-relief:
     inset 0 1px 0 rgb(255 255 255 / 0.8),
     0 1px 2px rgb(14 14 18 / 0.08);
@@ -247,15 +262,6 @@
   --radius-xl: var(--radius-xl);
 
   --shadow-card: var(--shadow-card);
-}
-
-/* Une variable de position animable : sans enregistrement, un changement de
-   valeur est instantane et l'encoche de la barre d'onglets sauterait. */
-@property --bulle-x {
-  syntax: '<length-percentage>';
-  /* Heritee : la bulle et l'encoche sont des enfants de la barre qui la porte. */
-  inherits: true;
-  initial-value: 10%;
 }
 
 @layer base {
@@ -640,86 +646,97 @@
    * Barre d'onglets. Translucide et floutée : le contenu passe dessous et
    * on le devine, ce qui donne à la barre une épaisseur qu'un aplat n'a pas.
    */
+  /*
+   * La barre d'onglets, en verre liquide.
+   *
+   * Deux couches de verre : la barre, depolie et sombre, et la lentille qui
+   * marque l'onglet actif — plus claire, moins floue, avec un reflet net sur
+   * son bord haut, comme une goutte posee sur la barre. Le liquide vient de
+   * deux mouvements et d'un seul : la lentille glisse (translation, sur
+   * `.lentille`) et son verre s'etire au passage (`scaleX`, sur
+   * `.lentille-verre`, rejoue a chaque changement). Chaque element porte une
+   * seule propriete animee : c'est la condition pour que ca reste fluide.
+   *
+   * Pas de masque : Safari combine mal `mask-image` et `backdrop-filter`, et
+   * c'etait la source des artefacts de la version precedente.
+   */
   .barre-onglets {
-    --bulle-x: 10%;
     position: relative;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    align-items: end;
     height: 4.25rem;
-    padding: 0 0.25rem;
+    padding: 0.375rem;
     border-radius: 9999px;
-    transition: --bulle-x 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: var(--verre);
+    -webkit-backdrop-filter: blur(28px) saturate(1.8);
+    backdrop-filter: blur(28px) saturate(1.8);
+    border: 1px solid var(--verre-bord);
+    box-shadow:
+      0 16px 48px rgb(0 0 0 / 0.45),
+      inset 0 1px 0 var(--verre-reflet),
+      inset 0 -1px 0 rgb(0 0 0 / 0.25);
+    /* La barre se laisse glisser au doigt : le defilement de la page n'y
+       commence donc jamais. */
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
-  /*
-   * Le verre est une couche a part, sous la bulle et les onglets : c'est elle
-   * qui porte le fond, le flou et l'encoche. Si le masque etait sur la barre
-   * elle-meme, il rognerait aussi la bulle, qui doit deborder par le haut.
-   *
-   * L'encoche est un disque transparent decoupe dans le haut, centre sur la
-   * bulle et un peu plus large qu'elle : la barre se creuse autour, comme une
-   * surface liquide. Sa position suit `--bulle-x`, enregistree pour etre
-   * animee — sans ca, l'encoche sauterait d'un onglet a l'autre pendant que
-   * la bulle glisse.
-   */
-  .barre-onglets::before {
-    content: '';
+  .lentille {
+    position: absolute;
+    top: 0.375rem;
+    bottom: 0.375rem;
+    left: 0.375rem;
+    width: calc((100% - 0.75rem) / 5);
+    border-radius: 9999px;
+    will-change: transform;
+    transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Sous le doigt, la lentille suit sans retard. */
+  .barre-onglets[data-glisse] .lentille {
+    transition: none;
+  }
+
+  .lentille-verre {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: color-mix(in oklab, var(--surface) 74%, transparent);
-    -webkit-backdrop-filter: blur(24px) saturate(1.6);
-    backdrop-filter: blur(24px) saturate(1.6);
-    border: 1px solid rgb(255 255 255 / 0.08);
+    background: var(--lentille);
+    -webkit-backdrop-filter: blur(6px) saturate(1.6) brightness(1.08);
+    backdrop-filter: blur(6px) saturate(1.6) brightness(1.08);
     box-shadow:
-      0 14px 40px rgb(0 0 0 / 0.45),
-      inset 0 1px 0 rgb(255 255 255 / 0.08);
-    -webkit-mask-image: radial-gradient(circle 30px at var(--bulle-x) 6px, transparent 97%, #000 100%);
-    mask-image: radial-gradient(circle 30px at var(--bulle-x) 6px, transparent 97%, #000 100%);
+      inset 0 1px 0 var(--lentille-reflet),
+      inset 0 -1px 0 rgb(0 0 0 / 0.18),
+      0 6px 18px rgb(0 0 0 / 0.22);
+    animation: etirement 460ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .barre-onglets[data-sans-bulle]::before {
-    -webkit-mask-image: none;
-    mask-image: none;
+  /* L'etirement : la goutte s'allonge dans le sens du mouvement, puis se pose. */
+  @keyframes etirement {
+    0% {
+      transform: scaleX(1);
+    }
+    40% {
+      transform: scaleX(1.22) scaleY(0.94);
+    }
+    100% {
+      transform: scaleX(1);
+    }
   }
 
-  /*
-   * La bulle. Un seul element, place par la meme variable que l'encoche, qui
-   * glisse avec un leger depassement — c'est la courbe qui donne le liquide.
-   * Elle vit hors du masque (la barre est masquee, pas elle) : c'est ce qui
-   * lui permet de deborder par le haut.
-   */
-  .bulle-onglet {
-    position: absolute;
-    top: -1.25rem;
-    left: var(--bulle-x);
-    width: 3.25rem;
-    height: 3.25rem;
-    border-radius: 9999px;
-    transform: translateX(-50%);
-    background-image: var(--degrade-hero);
-    box-shadow:
-      0 10px 28px rgb(109 91 255 / 0.5),
-      inset 0 1px 0 rgb(255 255 255 / 0.28);
-    transition:
-      left 480ms cubic-bezier(0.34, 1.56, 0.64, 1),
-      opacity 200ms;
-  }
-
-  .barre-onglets[data-sans-bulle] .bulle-onglet {
-    opacity: 0;
-  }
-
-  .onglet span:last-child {
-    font-size: 10.5px;
+  .onglet:active {
+    transform: scale(0.94);
+    transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .barre-onglets,
-    .bulle-onglet,
-    .onglet > span {
+    .lentille,
+    .onglet {
       transition: none;
+    }
+    .lentille-verre {
+      animation: none;
     }
   }
 

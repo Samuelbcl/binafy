@@ -63,12 +63,16 @@ carrés teintés. Chaque outil et chaque zone d'écran garde sa couleur d'une pa
 (`PastilleIcone`, sept teintes). C'est la version honnête des émoticônes : même fonction
 de repère, sans le registre enfantin ni le rendu qui varie selon le système.
 
-**La barre d'onglets est liquide.** Détachée du bord, en verre dépoli, elle porte une
-bulle qui glisse d'un onglet à l'autre avec un léger dépassement
-(`cubic-bezier(0.34, 1.56, 0.64, 1)`), et la barre se creuse autour d'elle : l'encoche
-est un masque radial positionné par `--bulle-x`, une propriété CSS **enregistrée**
-(`@property`) pour que le masque suive la bulle au lieu de sauter. L'icône active monte
-dans la bulle, pleine et blanche. Un seul élément bouge ; tout le reste en découle.
+**La barre d'onglets est en verre liquide.** Détachée du bord, en verre dépoli, elle
+porte une **lentille** — une capsule de verre plus clair, moins floue, avec un reflet net
+sur son bord haut — qui marque l'onglet actif et glisse d'un onglet à l'autre en
+**s'étirant** au passage (`scaleX` 1 → 1,22 → 1 sur 460 ms, `cubic-bezier(0.22, 1, 0.36,
+1)`) : c'est l'étirement qui fait le liquide, pas un rebond. Elle **suit le doigt** le long
+de la barre et se pose sur l'onglet lâché. Elle part dès le tap, sans attendre la page
+(`vise`, caduc dès que l'URL change). Deux règles techniques, apprises d'une première
+version qui traînait et laissait des artefacts sur Safari : **pas de `mask-image` avec
+`backdrop-filter`**, et **une seule propriété animée par élément** — la translation sur la
+lentille, l'étirement sur son verre intérieur.
 
 **Les scènes vivantes.** Un objectif a une progression et un sujet ; la scène
 (`SceneObjectif`) est une illustration SVG dont l'état dépend de la progression — la

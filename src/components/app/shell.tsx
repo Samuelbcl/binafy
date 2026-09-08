@@ -15,7 +15,7 @@ import type { Icon } from '@phosphor-icons/react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState, type CSSProperties } from 'react';
+import { useRef, useState, type PointerEvent as PointerEventReact } from 'react';
 import { useDiscretion, useEstMonte } from '@/components/providers';
 import { cn } from '@/lib/cn';
 import { supabaseNavigateur } from '@/lib/db/client';
@@ -159,31 +159,120 @@ const ONGLETS = [
 ] as const;
 
 /**
- * La barre est detachee du bord et flotte en verre depoli. L'onglet actif
- * remonte dans une bulle qui glisse d'un onglet a l'autre — et la barre se
- * creuse autour d'elle : la position de la bulle est une variable CSS enregistree
- * (`--bulle-x`), donc le masque qui decoupe l'encoche suit le meme mouvement
- * que la bulle, avec la meme courbe. Un seul element bouge ; tout le reste
- * en decoule.
+ * La barre d'onglets, en verre liquide.
+ *
+ * Detachee du bord, elle flotte en verre depoli, et l'onglet actif est sous
+ * une lentille : une capsule de verre plus clair qui glisse d'un onglet a
+ * l'autre en s'etirant au passage — c'est l'etirement qui fait le liquide,
+ * pas un rebond. La lentille suit aussi le doigt : on peut la faire glisser
+ * le long de la barre et la lacher sur un onglet.
+ *
+ * Deux choix techniques qui evitent les bugs de la version precedente : plus
+ * de masque radial (Safari le combine mal avec le flou d'arriere-plan), et un
+ * seul mouvement par element — la translation sur la lentille, l'etirement
+ * sur son verre interieur. Deux courbes superposees sur le meme element, et
+ * ca traine.
+ *
+ * La lentille se deplace des qu'on touche un onglet, sans attendre que la
+ * page arrive : `vise` porte l'onglet choisi jusqu'a ce que l'URL le
+ * confirme. Sinon la barre semble hesiter pendant le chargement.
  */
 function BarreOnglets() {
   const pathname = usePathname();
+  const router = useRouter();
+  const nav = useRef<HTMLElement>(null);
+  const n = ONGLETS.length;
   const indexActif = ONGLETS.findIndex(
     (o) => pathname === o.href || pathname.startsWith(`${o.href}/`),
   );
-  const part = 100 / ONGLETS.length;
-  const bulleX = `${(indexActif < 0 ? 0 : indexActif) * part + part / 2}%`;
+
+  // L'onglet vise porte l'URL depuis laquelle on l'a choisi : des que l'URL
+  // change, il ne compte plus et l'onglet reel reprend la main. Pas d'effet
+  // pour le remettre a zero — il devient caduc de lui-meme.
+  const [vise, setVise] = useState<{ idx: number; depuis: string } | null>(null);
+  const [glisse, setGlisse] = useState<number | null>(null);
+  const aGlisse = useRef(false);
+  const departX = useRef(0);
+
+  const index = vise && vise.depuis === pathname ? vise.idx : indexActif;
+
+  /** Largeur d'une case, en pixels — la barre a 6 px de marge interieure. */
+  function largeurCase(el: HTMLElement) {
+    return (el.clientWidth - 12) / n;
+  }
+
+  function surPointerDown(e: PointerEventReact<HTMLElement>) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    departX.current = e.clientX;
+    aGlisse.current = false;
+  }
+
+  function surPointerMove(e: PointerEventReact<HTMLElement>) {
+    if (e.buttons === 0) return;
+    if (!aGlisse.current && Math.abs(e.clientX - departX.current) < 8) return;
+    aGlisse.current = true;
+    const el = nav.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const l = largeurCase(el);
+    // La lentille se centre sous le doigt, sans sortir de la barre.
+    setGlisse(Math.max(0, Math.min(el.clientWidth - 12 - l, e.clientX - r.left - 6 - l / 2)));
+  }
+
+  function surPointerFin(e: PointerEventReact<HTMLElement>) {
+    if (!aGlisse.current) return;
+    const el = nav.current;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const idx = Math.max(0, Math.min(n - 1, Math.floor((e.clientX - r.left - 6) / largeurCase(el))));
+      const cible = ONGLETS[idx];
+      if (cible && idx !== indexActif) {
+        setVise({ idx, depuis: pathname });
+        router.push(cible.href);
+      }
+    }
+    setGlisse(null);
+    // Le clic qui suit un glissement ne doit pas naviguer une deuxieme fois.
+    window.setTimeout(() => {
+      aGlisse.current = false;
+    }, 0);
+  }
+
+  const transform =
+    glisse !== null ? `translateX(${glisse}px)` : `translateX(${Math.max(0, index) * 100}%)`;
 
   return (
     <nav
+      ref={nav}
       aria-label="Navigation principale"
       className="barre-onglets fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 lg:hidden"
-      style={{ '--bulle-x': bulleX } as CSSProperties}
-      data-sans-bulle={indexActif < 0 ? '' : undefined}
+      data-glisse={glisse !== null ? '' : undefined}
+      onPointerDown={surPointerDown}
+      onPointerMove={surPointerMove}
+      onPointerUp={surPointerFin}
+      onPointerCancel={surPointerFin}
     >
-      <span aria-hidden className="bulle-onglet" />
-      {ONGLETS.map(({ href, libelle, icone: Icone }) => (
-        <OngletLien key={href} href={href} libelle={libelle} Icone={Icone} pathname={pathname} />
+      {index >= 0 && (
+        <span aria-hidden className="lentille" style={{ transform }}>
+          {/* Remontee a chaque changement d'onglet : c'est ce qui rejoue l'etirement. */}
+          <span key={index} className="lentille-verre" />
+        </span>
+      )}
+      {ONGLETS.map(({ href, libelle, icone }, i) => (
+        <OngletLien
+          key={href}
+          href={href}
+          libelle={libelle}
+          Icone={icone}
+          actif={i === index}
+          onClick={(e) => {
+            if (aGlisse.current) {
+              e.preventDefault();
+              return;
+            }
+            setVise({ idx: i, depuis: pathname });
+          }}
+        />
       ))}
     </nav>
   );
@@ -219,34 +308,29 @@ function OngletLien({
   href,
   libelle,
   Icone,
-  pathname,
+  actif,
+  onClick,
 }: {
   href: string;
   libelle: string;
   Icone: Icon;
-  pathname: string;
+  actif: boolean;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
-  const actif = pathname === href || pathname.startsWith(`${href}/`);
-
   return (
     <Link
       href={href}
       aria-current={actif ? 'page' : undefined}
+      onClick={onClick}
+      draggable={false}
       className={cn(
-        'onglet relative z-10 flex flex-col items-center justify-end gap-1 pb-2',
-        actif ? 'text-primary' : 'text-text-subtle hover:text-text',
+        'onglet relative z-10 flex h-full flex-col items-center justify-center gap-0.5 rounded-full transition-colors duration-300',
+        actif ? 'text-text' : 'text-text-muted',
       )}
     >
-      {/* L'icone monte dans la bulle quand l'onglet est actif : pleine et
-          blanche sur le violet ; au trait sinon, a sa place dans la barre. */}
-      <span
-        className={cn(
-          'grid size-11 place-items-center transition-[transform,color] duration-[480ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-          actif ? '-translate-y-8 text-white' : 'translate-y-0',
-        )}
-      >
-        <Icone weight={actif ? 'fill' : 'regular'} className="size-6" />
-      </span>
+      {/* Pleine quand on y est, au trait sinon : l'onglet actif se reconnait
+          a la forme avant la couleur — et la lentille fait le reste. */}
+      <Icone weight={actif ? 'fill' : 'regular'} className="size-[22px]" />
       <span className="text-[10.5px] font-medium">{libelle}</span>
     </Link>
   );

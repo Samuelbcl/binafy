@@ -234,6 +234,22 @@ try {
     console.log(`  ${nom} <- ${chemin}`);
   }
 
+  // TRANSITION=1 : trois images de la lentille en mouvement, apres un tap
+  // sur Patrimoine depuis la vue d'ensemble. Une animation ne se juge pas sur
+  // une image fixe ; trois suffisent a voir si elle glisse ou si elle saute.
+  if (process.env.TRANSITION) {
+    await page.goto(`${BASE}/dashboard`, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(800);
+    const zone = { x: 0, y: 730, width: 390, height: 114 };
+    await page.screenshot({ path: `${SORTIE}/barre-t0.png`, clip: zone });
+    await page.click('nav[aria-label="Navigation principale"] a[href="/patrimoine"]', { noWaitAfter: true });
+    for (const [i, delai] of [[1, 90], [2, 200], [3, 700]]) {
+      await page.waitForTimeout(delai - (i === 1 ? 0 : [0, 90, 200, 700][i - 1]));
+      await page.screenshot({ path: `${SORTIE}/barre-t${i}.png`, clip: zone });
+    }
+    console.log('  transition : barre-t0..t3');
+  }
+
   await navigateur.close();
 
   console.log('');
