@@ -1,24 +1,17 @@
 'use client';
 
+import { Eye, EyeOff, LogOut, Menu, Moon, Plus, Settings, Sun, X } from 'lucide-react';
 import {
   BookOpen,
-  Building2,
+  Buildings,
   Calculator,
-  Eye,
-  EyeOff,
-  LayoutDashboard,
-  Menu,
-  Moon,
-  Plus,
   Receipt,
-  LogOut,
-  Settings,
-  Sun,
+  SquaresFour,
   Target,
-  TrendingUp,
+  TrendUp,
   Wallet,
-  X,
-} from 'lucide-react';
+} from '@phosphor-icons/react/dist/ssr';
+import type { Icon } from '@phosphor-icons/react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -41,12 +34,12 @@ const NAVIGATION = [
   {
     titre: 'Mon patrimoine',
     liens: [
-      { href: '/dashboard', libelle: 'Vue d’ensemble', icone: LayoutDashboard },
+      { href: '/dashboard', libelle: 'Vue d’ensemble', icone: SquaresFour },
       { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
       { href: '/budget', libelle: 'Budget', icone: Receipt },
-      { href: '/projections', libelle: 'Projections', icone: TrendingUp },
+      { href: '/projections', libelle: 'Projections', icone: TrendUp },
       { href: '/objectifs', libelle: 'Objectifs', icone: Target },
-      { href: '/fiscalite', libelle: 'Fiscalité', icone: Building2 },
+      { href: '/fiscalite', libelle: 'Fiscalité', icone: Buildings },
     ],
   },
   {
@@ -135,7 +128,7 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
                     : 'text-text-muted hover:bg-surface-hover hover:text-text',
                 )}
               >
-                <Icone className="size-[18px] shrink-0" />
+                <Icone weight={actif ? 'fill' : 'regular'} className="size-5 shrink-0" />
                 {libelle}
               </Link>
             );
@@ -156,10 +149,10 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
  * objectifs, paramètres.
  */
 const ONGLETS = [
-  { href: '/dashboard', libelle: 'Accueil', icone: LayoutDashboard },
+  { href: '/dashboard', libelle: 'Accueil', icone: SquaresFour },
   { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
   { href: '/budget', libelle: 'Budget', icone: Receipt },
-  { href: '/fiscalite', libelle: 'Fiscalité', icone: Building2 },
+  { href: '/fiscalite', libelle: 'Fiscalité', icone: Buildings },
   { href: '/apprendre', libelle: 'Apprendre', icone: BookOpen },
 ] as const;
 
@@ -212,7 +205,7 @@ function OngletLien({
 }: {
   href: string;
   libelle: string;
-  Icone: typeof LayoutDashboard;
+  Icone: Icon;
   pathname: string;
 }) {
   const actif = pathname === href || pathname.startsWith(`${href}/`);
@@ -234,7 +227,9 @@ function OngletLien({
           actif && 'onglet-actif',
         )}
       >
-        <Icone className="size-[20px]" />
+        {/* Pleine quand on y est, au trait sinon : l'onglet actif se
+            reconnait a la forme avant la couleur. */}
+        <Icone weight={actif ? 'fill' : 'regular'} className="size-[22px]" />
       </span>
       <span className={cn('text-[10.5px]', actif ? 'font-bold' : 'font-medium')}>{libelle}</span>
     </Link>

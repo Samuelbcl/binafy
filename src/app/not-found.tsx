@@ -4,7 +4,7 @@ export default function PageIntrouvable() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5 py-12 text-center">
       <p className="font-mono text-[13px] tabular-nums text-text-subtle">404</p>
-      <h1 className="mt-3 font-display text-[clamp(1.5rem,4vw,2rem)] font-semibold tracking-tight">
+      <h1 className="mt-3 font-display text-[clamp(1.5rem,4vw,2rem)] tracking-tight">
         Cette page n’existe pas
       </h1>
       <p className="mt-3 max-w-md text-[14px] leading-relaxed text-text-muted">

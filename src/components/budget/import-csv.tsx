@@ -79,7 +79,7 @@ export function ImportCSV() {
     >
       <div className="carte w-full max-w-2xl">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
-          <h2 id={idTitre} className="font-display text-[17px] font-semibold">
+          <h2 id={idTitre} className="font-display text-[17px]">
             {etape.nom === 'termine' ? 'Import terminé' : 'Importer un extrait bancaire'}
           </h2>
           <button

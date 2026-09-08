@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
-import { AlertTriangle, Bell, Building2, Coins, Info, Landmark, PiggyBank } from 'lucide-react';
+import { AlertTriangle, Info } from 'lucide-react';
+import { Bank, Bell, Buildings, Coins, PiggyBank } from '@phosphor-icons/react/dist/ssr';
 import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
 import { Jauge } from '@/components/ui/jauge';
@@ -122,7 +123,7 @@ export default async function FiscalitePage() {
   return (
     <div className="mx-auto max-w-5xl">
       <header className="mb-8">
-        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Fiscalité</h1>
+        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Fiscalité</h1>
         <p className="mt-1.5 text-[14px] text-text-muted">
           Ta position pour l’année {params.annee} — {PROFIL_DEMO.commune}, additionnels
           communaux de {PROFIL_DEMO.additionnelsCommunauxPourcent} %.
@@ -132,9 +133,9 @@ export default async function FiscalitePage() {
       {/* 1 — Position fiscale de l'année */}
       <section className="space-y-4 apparait" style={{ '--delai': '70ms' } as CSSProperties}>
         <div className="flex gap-3">
-          <PastilleIcone icone={Building2} teinte="violet" className="mt-0.5" />
+          <PastilleIcone icone={Buildings} teinte="violet" className="mt-0.5" />
           <div className="min-w-0">
-            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Ma position fiscale</h2>
+            <h2 className="text-[17px] tracking-[-0.01em]">Ma position fiscale</h2>
             <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
               Ce que l’État prélèvera sur tes revenus de cette année, et ce qu’il te laisse.
             </p>
@@ -177,9 +178,9 @@ export default async function FiscalitePage() {
       {/* 2 — Impôt latent */}
       <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '140ms' } as CSSProperties}>
         <div className="flex gap-3">
-          <PastilleIcone icone={Landmark} teinte="ambre" className="mt-0.5" />
+          <PastilleIcone icone={Bank} teinte="ambre" className="mt-0.5" />
           <div className="min-w-0">
-            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Impôt latent</h2>
+            <h2 className="text-[17px] tracking-[-0.01em]">Impôt latent</h2>
             <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
               L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà.
             </p>
@@ -257,7 +258,7 @@ export default async function FiscalitePage() {
         <div className="flex gap-3">
           <PastilleIcone icone={Bell} teinte="rose" className="mt-0.5" />
           <div className="min-w-0">
-            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Alertes</h2>
+            <h2 className="text-[17px] tracking-[-0.01em]">Alertes</h2>
             <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
               Ce qui mérite ton attention avant la fin de l’année.
             </p>
@@ -286,7 +287,7 @@ export default async function FiscalitePage() {
           <div className="flex gap-3">
           <PastilleIcone icone={Coins} teinte="menthe" className="mt-0.5" />
           <div className="min-w-0">
-            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Revenus mobiliers</h2>
+            <h2 className="text-[17px] tracking-[-0.01em]">Revenus mobiliers</h2>
             <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
               Intérêts et dividendes encaissés, et ce que tu peux récupérer.
             </p>
@@ -305,7 +306,7 @@ export default async function FiscalitePage() {
         <div className="flex gap-3">
           <PastilleIcone icone={PiggyBank} teinte="lagune" className="mt-0.5" />
           <div className="min-w-0">
-            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">Enveloppes d’épargne</h2>
+            <h2 className="text-[17px] tracking-[-0.01em]">Enveloppes d’épargne</h2>
             <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
               Les dispositifs qui réduisent ton impôt, et jusqu’où tu peux les remplir.
             </p>
@@ -313,7 +314,7 @@ export default async function FiscalitePage() {
         </div>
 
         <div className="carte p-5 sm:p-6">
-          <h3 className="font-display text-[17px] font-semibold">Épargne-pension</h3>
+          <h3 className="font-display text-[17px]">Épargne-pension</h3>
           <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-text-muted">
             Deux plafonds coexistent, et le plus élevé n’est pas mécaniquement le meilleur :
             au-delà du plafond bas, le taux réduit s’applique à la totalité du versement, pas
@@ -328,7 +329,7 @@ export default async function FiscalitePage() {
         </div>
 
         <div className="carte p-5 sm:p-6">
-          <h3 className="font-display text-[17px] font-semibold">Épargne à long terme</h3>
+          <h3 className="font-display text-[17px]">Épargne à long terme</h3>
           <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-text-muted">
             Son plafond dépend de tes revenus et se partage avec les réductions liées à un
             crédit hypothécaire. En Wallonie, les crédits conclus depuis 2025 n’ouvrent plus
@@ -371,7 +372,7 @@ export default async function FiscalitePage() {
 
       {/* Transparence sur l'état des paramètres fiscaux */}
       <section className="carte mt-10 p-5 sm:p-6">
-        <h2 className="text-[17px] font-bold tracking-[-0.01em]">État des paramètres fiscaux</h2>
+        <h2 className="text-[17px] tracking-[-0.01em]">État des paramètres fiscaux</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           {params.parametres.length} paramètres chargés pour {params.annee}, dont{' '}
           <span className="font-medium text-warning">{nonVerifies.length}</span> encore à

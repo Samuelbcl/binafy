@@ -55,7 +55,7 @@ export default function AccueilPage() {
           ligne se lise même si le navigateur ne sait pas découper un fond sur
           du texte.
         */}
-        <h1 className="mt-10 font-display text-[clamp(2.25rem,6vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em]">
+        <h1 className="mt-10 font-display text-[clamp(2.25rem,6vw,3.5rem)] leading-[1.05] tracking-[-0.03em]">
           Le patrimoine,
           <br />
           <span className="titre-degrade">version belge.</span>
@@ -94,7 +94,7 @@ export default function AccueilPage() {
               className="carte carte-interactive group flex flex-col p-5"
             >
               <PastilleIcone icone={icone} teinte={teinte} />
-              <h3 className="mt-4 font-display text-[16px] font-semibold">{titre}</h3>
+              <h3 className="mt-4 font-display text-[16px]">{titre}</h3>
               <p className="mt-2 flex-1 text-[13px] leading-relaxed text-text-muted">
                 {description}
               </p>
@@ -126,7 +126,7 @@ export default function AccueilPage() {
           },
         ].map((bloc) => (
           <div key={bloc.titre} className="border-t border-border pt-4">
-            <h3 className="font-display text-[15px] font-semibold">{bloc.titre}</h3>
+            <h3 className="font-display text-[15px]">{bloc.titre}</h3>
             <p className="mt-2 text-[13px] leading-relaxed text-text-muted">{bloc.texte}</p>
           </div>
         ))}

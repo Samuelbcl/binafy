@@ -37,7 +37,7 @@ export default async function BudgetPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Budget</h1>
+          <h1 className="titre-degrade font-display text-[28px] tracking-tight">Budget</h1>
           <p className="mt-1.5 text-[14px] text-text-muted">
             Une seule question : combien tu épargnes réellement chaque mois.
           </p>
@@ -96,7 +96,7 @@ export default async function BudgetPage() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px] font-semibold">Dépenses par catégorie</h2>
+          <h2 className="font-display text-[17px]">Dépenses par catégorie</h2>
           <p className="mt-1 text-[12px] text-text-subtle">
             {budget.mois[budget.mois.length - 1]?.mois ?? 'Dernier mois'}
           </p>
@@ -143,7 +143,7 @@ export default async function BudgetPage() {
         </section>
 
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px] font-semibold">Abonnements détectés</h2>
+          <h2 className="font-display text-[17px]">Abonnements détectés</h2>
           <p className="mt-1 text-[12px] text-text-subtle">
             Regroupés par libellé et périodicité, avec le coût annualisé
           </p>
@@ -177,7 +177,7 @@ export default async function BudgetPage() {
 
       <section className="carte overflow-hidden">
         <div className="px-5 py-4 sm:px-6">
-          <h2 className="font-display text-[17px] font-semibold">Historique mensuel</h2>
+          <h2 className="font-display text-[17px]">Historique mensuel</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] text-[14px]">
@@ -222,7 +222,7 @@ export default async function BudgetPage() {
 
       {budget.imports.length > 0 && (
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px] font-semibold">Imports récents</h2>
+          <h2 className="font-display text-[17px]">Imports récents</h2>
           <ul className="mt-4 divide-y divide-border/50 text-[13px]">
             {budget.imports.map((i) => (
               <li key={i.id} className="flex items-center justify-between gap-4 py-2.5">
@@ -247,7 +247,7 @@ function PremierImport() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Budget</h1>
+        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Budget</h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">
           Importe un extrait bancaire et tu sauras ton taux d’épargne réel des douze derniers
           mois, sans le calculer à la main.
@@ -265,7 +265,7 @@ function PremierImport() {
       </section>
 
       <section className="carte p-5 sm:p-6">
-        <h2 className="font-display text-[16px] font-semibold">Pourquoi le CSV d’abord</h2>
+        <h2 className="font-display text-[16px]">Pourquoi le CSV d’abord</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           La connexion bancaire automatique viendra, mais elle casse : un consentement PSD2
           expire tous les 90 jours, c’est structurel. L’import CSV fonctionne toujours, avec

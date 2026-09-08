@@ -85,13 +85,13 @@ export function SimulateurEpargnePension() {
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="label-kpi">Tu verses</p>
-          <p className="mt-1 text-[26px] font-extrabold tracking-[-0.02em]">
+          <p className="mt-1 text-[26px] font-semibold tracking-[-0.02em]">
             <Montant cents={versementCents} decimals={0} jamaisMasque />
           </p>
         </div>
         <div className="text-right">
           <p className="label-kpi">L’État te rend</p>
-          <p className="mt-1 text-[26px] font-extrabold tracking-[-0.02em] text-primary">
+          <p className="mt-1 text-[26px] font-semibold tracking-[-0.02em] text-primary">
             <Montant cents={calcul.result.reductionCents} decimals={0} jamaisMasque />
           </p>
         </div>

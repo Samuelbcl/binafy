@@ -54,7 +54,7 @@ export function DonneesPersonnelles({ resume }: { resume: Record<string, number>
   return (
     <div className="space-y-4">
       <section className="carte p-5 sm:p-6">
-        <h2 className="font-display text-[17px] font-semibold">Exporter mes données</h2>
+        <h2 className="font-display text-[17px]">Exporter mes données</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           Récupère l’intégralité de ce que Nestor conserve sur toi, au format JSON : profil,
           actifs, passifs, transactions, objectifs et historique. C’est ton droit à la
@@ -85,7 +85,7 @@ export function DonneesPersonnelles({ resume }: { resume: Record<string, number>
       </section>
 
       <section className="carte border-negative/25 p-5 sm:p-6">
-        <h2 className="font-display text-[17px] font-semibold">Supprimer mon compte</h2>
+        <h2 className="font-display text-[17px]">Supprimer mon compte</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           Efface définitivement ton compte et {total > 0 ? `les ${total} enregistrements` : 'les données'}{' '}
           qui s’y rattachent. L’opération est immédiate et irréversible : aucune sauvegarde

@@ -37,7 +37,7 @@ export default async function PatrimoinePage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Patrimoine</h1>
+          <h1 className="titre-degrade font-display text-[28px] tracking-tight">Patrimoine</h1>
           <p className="mt-1.5 text-[14px] text-text-muted">
             Ta quote-part de détention, actifs et passifs confondus.
           </p>
@@ -56,7 +56,7 @@ export default async function PatrimoinePage() {
 
       <section className="carte overflow-hidden">
         <div className="flex items-baseline justify-between gap-3 px-5 py-4 sm:px-6">
-          <h2 className="font-display text-[17px] font-semibold">Actifs</h2>
+          <h2 className="font-display text-[17px]">Actifs</h2>
           <span className="text-[12px] text-text-muted">
             {actifs.length} ligne{actifs.length > 1 ? 's' : ''}
           </span>
@@ -78,7 +78,7 @@ export default async function PatrimoinePage() {
       {passifs.length > 0 && (
         <section className="carte overflow-hidden">
           <div className="px-5 py-4 sm:px-6">
-            <h2 className="font-display text-[17px] font-semibold">Passifs</h2>
+            <h2 className="font-display text-[17px]">Passifs</h2>
           </div>
 
           <div className="overflow-x-auto">
@@ -123,7 +123,7 @@ export default async function PatrimoinePage() {
       {actifs.length > 0 && (
         <>
           <section className="carte p-5 sm:p-6">
-            <h2 className="font-display text-[17px] font-semibold">
+            <h2 className="font-display text-[17px]">
               Base fiscale des positions
             </h2>
             <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-text-muted">
@@ -176,7 +176,7 @@ export default async function PatrimoinePage() {
           </section>
 
           <section className="carte p-5 sm:p-6">
-            <h2 className="font-display text-[17px] font-semibold">Répartition par poche</h2>
+            <h2 className="font-display text-[17px]">Répartition par poche</h2>
             <ul className="mt-4 space-y-2 text-[14px]">
               {allocation(actifs).map((poche) => (
                 <li key={poche.poche} className="flex items-center justify-between">

@@ -18,7 +18,7 @@ function Bloc({ bloc }: { bloc: BlocGuide }) {
   switch (bloc.type) {
     case 'titre':
       return (
-        <h2 className="mt-12 scroll-mt-24 text-[22px] font-bold tracking-[-0.02em] first:mt-0">
+        <h2 className="mt-12 scroll-mt-24 text-[22px] tracking-[-0.02em] first:mt-0">
           {bloc.texte}
         </h2>
       );

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import type { Icon } from '@phosphor-icons/react';
 import { cn } from '@/lib/cn';
 import { PastilleIcone, type Teinte } from './pastille-icone';
 
@@ -39,7 +39,7 @@ export function SectionEcran({
   /** À quoi répond cette zone, en une phrase. */
   sousTitre?: string;
   /** Icône de la zone. Décorative : elle double le titre, elle ne le remplace pas. */
-  icone?: LucideIcon;
+  icone?: Icon;
   teinte?: Teinte;
   /** Lien secondaire aligné à droite du titre. */
   action?: ReactNode;
@@ -66,7 +66,7 @@ export function SectionEcran({
         <div className="flex min-w-0 gap-3">
           {icone && <PastilleIcone icone={icone} teinte={teinte} className="mt-0.5" />}
           <div className="min-w-0">
-            <h2 className="text-[17px] font-semibold tracking-[-0.01em]">{titre}</h2>
+            <h2 className="text-[20px]">{titre}</h2>
             {sousTitre && (
               <p className="mt-1 text-[13px] leading-relaxed text-text-muted">{sousTitre}</p>
             )}

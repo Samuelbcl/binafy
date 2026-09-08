@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Gauge, Landmark, LineChart, Plus, Target, Wallet } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
+import { Bank, ChartLineUp, Gauge, Target, Wallet } from '@phosphor-icons/react/dist/ssr';
 import { CarteObjectif } from '@/components/objectifs/carte-objectif';
 import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
 import { DonutAllocation } from '@/components/charts/donut-allocation';
@@ -182,7 +183,7 @@ export default async function DashboardPage() {
       <SectionEcran
         titre="Comment ça évolue"
         ordre={3}
-        icone={LineChart}
+        icone={ChartLineUp}
         teinte="azur"
         sousTitre="Ce qui a changé depuis hier, et la trajectoire des derniers mois."
       >
@@ -190,7 +191,7 @@ export default async function DashboardPage() {
         <CourbePatrimoine historique={historique} />
       ) : (
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px] font-semibold">Évolution du patrimoine net</h2>
+          <h2 className="font-display text-[17px]">Évolution du patrimoine net</h2>
           <EtatVide
             titre="Ta courbe commence demain"
             texte="Nestor photographie ton patrimoine une fois par jour. Il faut deux points pour tracer une ligne : reviens dans quelques jours, elle sera là — et elle n’aura plus jamais de trou."
@@ -278,7 +279,7 @@ export default async function DashboardPage() {
       <SectionEcran
         titre="Ce que ça me coûterait"
         ordre={5}
-        icone={Landmark}
+        icone={Bank}
         teinte="ambre"
         sousTitre="L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà."
       >
@@ -337,7 +338,7 @@ function PremierEcran() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">
+        <h1 className="titre-degrade font-display text-[28px] tracking-tight">
           Ton patrimoine est vide
         </h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">
@@ -350,7 +351,7 @@ function PremierEcran() {
         {etapes.map((etape, i) => (
           <div key={etape.titre} className="carte flex flex-col p-5">
             <span className="label-kpi">Étape {i + 1}</span>
-            <h2 className="mt-3 font-display text-[16px] font-semibold">{etape.titre}</h2>
+            <h2 className="mt-3 font-display text-[16px]">{etape.titre}</h2>
             <p className="mt-2 flex-1 text-[13px] leading-relaxed text-text-muted">
               {etape.texte}
             </p>

@@ -1,13 +1,13 @@
 import {
-  Building2,
+  Bank,
+  Buildings,
   Calculator,
-  FileCheck2,
-  Landmark,
+  FileText,
   PiggyBank,
-  TrendingUp,
+  TrendUp,
   Wallet,
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+} from '@phosphor-icons/react/dist/ssr';
+import type { Icon } from '@phosphor-icons/react';
 import type { Teinte } from '@/components/ui/pastille-icone';
 
 /**
@@ -23,7 +23,7 @@ export type Outil = {
   titre: string;
   /** Ce que l'outil répond, en une phrase — pas ce qu'il contient. */
   description: string;
-  icone: LucideIcon;
+  icone: Icon;
   /**
    * Couleur de la pastille. Elle suit le sujet, pas l'ordre de la liste :
    * l'immobilier reste ambre partout, la bourse reste violette. On retrouve un
@@ -40,7 +40,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Frais d’acquisition immobilière',
     description:
       'Le cash réel à sortir le jour de l’acte, par Région, et ce que coûte un locatif acheté avant sa résidence principale.',
-    icone: Landmark,
+    icone: Bank,
     teinte: 'ambre',
     vedette: true,
   },
@@ -49,7 +49,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Capacité d’emprunt',
     description:
       'Combien tu peux emprunter, et surtout ce qu’il te resterait pour vivre — le chiffre que les banques ne montrent pas.',
-    icone: Building2,
+    icone: Buildings,
     teinte: 'terre',
     vedette: true,
   },
@@ -75,7 +75,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Rendement locatif belge',
     description:
       'Tu n’es pas taxé sur les loyers mais sur le revenu cadastral indexé. Voici ton cash-flow réel après impôt.',
-    icone: FileCheck2,
+    icone: FileText,
     teinte: 'azur',
   },
   {
@@ -91,7 +91,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Simulateur de patrimoine',
     description:
       'Où mène ton rythme d’épargne actuel, sur dix ou trente ans, taxe sur les plus-values comprise.',
-    icone: TrendingUp,
+    icone: TrendUp,
     teinte: 'lagune',
   },
 ];

@@ -77,7 +77,7 @@ export function AjoutActif() {
     >
       <div className="carte w-full max-w-lg">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
-          <h2 id={`${idFormulaire}-titre`} className="font-display text-[17px] font-semibold">
+          <h2 id={`${idFormulaire}-titre`} className="font-display text-[17px]">
             Ajouter un actif
           </h2>
           <button

@@ -37,14 +37,14 @@ export default async function ParametresPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Paramètres</h1>
+        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Paramètres</h1>
         <p className="mt-1.5 text-[14px] text-text-muted">
           Ton profil détermine les taux appliqués dans tous les calculs.
         </p>
       </header>
 
       <section className="carte overflow-hidden">
-        <h2 className="px-5 py-4 font-display text-[17px] font-semibold sm:px-6">Profil</h2>
+        <h2 className="px-5 py-4 font-display text-[17px] sm:px-6">Profil</h2>
         <dl className="border-t border-border">
           {lignes.map((ligne) => (
             <div
@@ -64,7 +64,7 @@ export default async function ParametresPage() {
       </section>
 
       <section className="carte p-5 sm:p-6">
-        <h2 className="font-display text-[17px] font-semibold">Données fiscales</h2>
+        <h2 className="font-display text-[17px]">Données fiscales</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           {params.parametres.length} paramètres chargés pour l’année {params.annee}. Chacun porte
           sa source officielle et sa date de vérification : mettre à jour un taux est une
@@ -81,7 +81,7 @@ export default async function ParametresPage() {
         <DonneesPersonnelles resume={resume} />
       ) : (
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px] font-semibold">Données personnelles</h2>
+          <h2 className="font-display text-[17px]">Données personnelles</h2>
           <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
             Cette instance tourne en mode démo sur des données fictives. Aucune donnée réelle
             n’est stockée. L’export complet et la suppression du compte sont disponibles dès
@@ -91,7 +91,7 @@ export default async function ParametresPage() {
       )}
 
       <section className="carte p-5 sm:p-6">
-        <h2 className="font-display text-[17px] font-semibold">Documents</h2>
+        <h2 className="font-display text-[17px]">Documents</h2>
         <ul className="mt-3 space-y-2 text-[14px]">
           {[
             { href: '/confidentialite', libelle: 'Politique de confidentialité' },

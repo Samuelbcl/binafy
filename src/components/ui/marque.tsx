@@ -62,8 +62,8 @@ export function MarqueNestor({
       </span>
       <span
         className={cn(
-          'font-extrabold tracking-[-0.025em]',
-          grande ? 'text-[20px]' : 'text-[17px]',
+          'font-display tracking-[-0.005em]',
+          grande ? 'text-[22px]' : 'text-[19px]',
         )}
       >
         Nestor

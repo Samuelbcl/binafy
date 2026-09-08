@@ -47,7 +47,7 @@ export default function ProjectionsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">Projections</h1>
+        <h1 className="titre-degrade font-display text-[28px] tracking-tight">Projections</h1>
         <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-text-muted">
           Chaque simulateur encode son état dans l’URL : un lien partagé rejoue exactement la
           simulation. Et chacun affiche d’où viennent ses chiffres.
@@ -66,7 +66,7 @@ export default function ProjectionsPage() {
                   </span>
                 )}
               </div>
-              <h2 className="mt-4 font-display text-[16px] font-semibold">{titre}</h2>
+              <h2 className="mt-4 font-display text-[16px]">{titre}</h2>
               <p className="mt-2 flex-1 text-[13px] leading-relaxed text-text-muted">
                 {description}
               </p>

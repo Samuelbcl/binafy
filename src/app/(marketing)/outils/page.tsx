@@ -20,7 +20,7 @@ export default function OutilsPage() {
     <div className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
       <header className="max-w-2xl">
         <p className="label-kpi">Sans compte, sans e-mail</p>
-        <h1 className="titre-degrade mt-3 font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-[-0.02em]">
+        <h1 className="titre-degrade mt-3 font-display text-[clamp(1.75rem,4vw,2.5rem)] leading-tight tracking-[-0.02em]">
           Les outils
         </h1>
         <p className="mt-4 text-[16px] leading-relaxed text-text-muted">
@@ -35,7 +35,7 @@ export default function OutilsPage() {
           <li key={href}>
             <Link href={href} className="carte carte-interactive group flex h-full flex-col p-5">
               <PastilleIcone icone={icone} teinte={teinte} />
-              <h2 className="mt-4 text-[16px] font-bold">{titre}</h2>
+              <h2 className="mt-4 text-[16px]">{titre}</h2>
               <p className="mt-2 flex-1 text-[13.5px] leading-relaxed text-text-muted">
                 {description}
               </p>
@@ -49,7 +49,7 @@ export default function OutilsPage() {
       </ul>
 
       <section className="carte mt-12 p-6 sm:p-8">
-        <h2 className="text-[18px] font-bold tracking-[-0.01em]">
+        <h2 className="text-[18px] tracking-[-0.01em]">
           Pourquoi ils sont gratuits et sans compte
         </h2>
         <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-text-muted">

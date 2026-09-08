@@ -1,16 +1,16 @@
 import {
+  Airplane,
   Baby,
   Car,
   Compass,
-  Gem,
+  Diamond,
   GraduationCap,
-  Home,
+  House,
   PiggyBank,
-  Plane,
   ShieldCheck,
-  Sunrise,
-  type LucideIcon,
-} from 'lucide-react';
+  SunHorizon,
+} from '@phosphor-icons/react/dist/ssr';
+import type { Icon } from '@phosphor-icons/react';
 import { z } from 'zod';
 import { TEINTES, type Teinte } from '@/components/ui/pastille-icone';
 
@@ -49,16 +49,16 @@ export const VERSEMENTS_PAR_AN: Record<FrequenceContribution, number> = {
  */
 export const ICONES_OBJECTIF = {
   bouclier: ShieldCheck,
-  maison: Home,
-  soleil: Sunrise,
+  maison: House,
+  soleil: SunHorizon,
   diplome: GraduationCap,
   voiture: Car,
-  bague: Gem,
-  avion: Plane,
+  bague: Diamond,
+  avion: Airplane,
   boussole: Compass,
   tirelire: PiggyBank,
   bebe: Baby,
-} satisfies Record<string, LucideIcon>;
+} satisfies Record<string, Icon>;
 
 export type IconeObjectif = keyof typeof ICONES_OBJECTIF;
 export const CLES_ICONE = Object.keys(ICONES_OBJECTIF) as [IconeObjectif, ...IconeObjectif[]];

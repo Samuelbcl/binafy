@@ -35,15 +35,37 @@ ont pas beaucoup ; l'interface ne doit ni gamifier ni dramatiser — mais elle n
 Le sombre est le mode **par défaut**. Le clair reste disponible et complet, avec la
 même grammaire — on le garde pour qui lit ses comptes en plein soleil.
 
-**Deux polices.** Fraunces porte les `h1`, `h2` et tout ce qui demande `font-display`,
-avec ses axes SOFT et WONK activés : c'est là qu'elle cesse d'être un serif de journal.
-Plus Jakarta Sans garde l'interface, les libellés et **tous les montants** — Fraunces
-n'aligne pas les colonnes de chiffres, et la lisibilité d'un montant ne se négocie pas.
+> **Révision du 08/09/2026 — sortir du gabarit.** Le verdict de Samuel sur la version
+> précédente : « ça se voit à dix kilomètres que c'est codé par un modèle ». Il avait
+> raison, et la cause est nommable : Plus Jakarta Sans, Fraunces et des icônes Lucide au
+> trait dans des carrés arrondis teintés sont précisément la panoplie que les modèles
+> sortent par défaut. Ce n'est pas un choix, c'est un réflexe. Trois remplacements, et
+> une règle : **si un choix est celui qu'un générateur ferait spontanément, ce n'est pas
+> un choix.**
 
-**Les pastilles teintées.** Chaque outil et chaque zone d'écran porte une couleur qui ne
-change pas d'une page à l'autre (`PastilleIcone`, sept teintes). C'est la version honnête
-des émoticônes : même fonction de repère, sans le registre enfantin ni le rendu qui varie
-selon le système.
+**Deux polices.** **Young Serif** porte les `h1`, `h2` et tout ce qui demande
+`font-display` : une seule graisse, des empattements ronds, un grain de majordome —
+fiable, un peu d'un autre temps, chaleureux. On ne la synthétise jamais en gras (elle n'en
+a pas, et un gras de synthèse est ce qui trahit une maquette) : la hiérarchie vient de la
+taille. **Schibsted Grotesk** garde l'interface, les libellés et **tous les montants** —
+un grotesque dessiné pour la presse, dont le *a*, le *g* et le *y* ont une inflexion, avec
+des chiffres tabulaires. Les montants sont en graisse moyenne (500–600), grands plutôt
+que gros : un chiffre qui n'a pas besoin de crier.
+
+**Les icônes.** Phosphor, en deux tons (`duotone`) dans les pastilles — la forme pleine
+en transparence sous le trait, ce qui fait qu'une icône ressemble à un objet, pas à un
+schéma — et en plein (`fill`) pour l'onglet actif de la barre, au trait sinon : on
+reconnaît où l'on est à la forme avant la couleur. Lucide reste pour les glyphes
+utilitaires (flèches, chevrons, croix, corbeille), où la neutralité est la qualité.
+
+**Les pastilles.** Rondes, éclairées par le haut, avec un liseré : des jetons, pas des
+carrés teintés. Chaque outil et chaque zone d'écran garde sa couleur d'une page à l'autre
+(`PastilleIcone`, sept teintes). C'est la version honnête des émoticônes : même fonction
+de repère, sans le registre enfantin ni le rendu qui varie selon le système.
+
+**Les cartes sombres n'ont presque plus de trait** (`--border` à 6 % de blanc) : elles se
+détachent par leur surface et le voile de lumière du haut. Le contour net sur fond sombre
+est un autre tic de gabarit.
 
 Une règle porte l'essentiel du registre : **l'accent ne décore jamais, il désigne.** La
 seule surface colorée d'un écran est la carte du chiffre principal. Partout ailleurs, le

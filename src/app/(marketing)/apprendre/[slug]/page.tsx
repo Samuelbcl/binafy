@@ -90,7 +90,7 @@ export default async function GuidePage({ params }: PageProps<'/apprendre/[slug]
           </span>
         </div>
 
-        <h1 className="mt-4 text-[clamp(1.85rem,4.5vw,2.6rem)] font-extrabold leading-[1.1] tracking-[-0.03em]">
+        <h1 className="mt-4 text-[clamp(1.85rem,4.5vw,2.6rem)] leading-[1.1] tracking-[-0.03em]">
           {guide.titre}
         </h1>
         <p className="mt-4 text-[17px] leading-relaxed text-text-muted">{guide.resume}</p>
@@ -127,7 +127,7 @@ export default async function GuidePage({ params }: PageProps<'/apprendre/[slug]
       )}
 
       <section className="mt-12 border-t border-border pt-8">
-        <h2 className="text-[15px] font-bold">Sources</h2>
+        <h2 className="text-[15px]">Sources</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           Ce guide n’avance aucun chiffre qui ne vienne de ces sources. Les montants sont
           exprimés en année de revenus, pas en exercice d’imposition — c’est la confusion
@@ -157,7 +157,7 @@ export default async function GuidePage({ params }: PageProps<'/apprendre/[slug]
 
       {suite.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-[15px] font-bold">À lire ensuite</h2>
+          <h2 className="text-[15px]">À lire ensuite</h2>
           <ul className="mt-4 space-y-3">
             {suite.map((g) => (
               <li key={g.slug}>

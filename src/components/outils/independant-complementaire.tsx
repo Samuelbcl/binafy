@@ -147,7 +147,7 @@ export function OutilIndependantComplementaire({
 
       <section className="carte overflow-hidden">
         <div className="border-b border-border px-5 py-4 sm:px-6">
-          <h2 className="text-[16px] font-bold">Du chiffre facturé à ce qui reste</h2>
+          <h2 className="text-[16px]">Du chiffre facturé à ce qui reste</h2>
         </div>
         <dl className="divide-y divide-border text-[14px]">
           <div className="flex items-baseline justify-between px-5 py-3.5 sm:px-6">
@@ -186,7 +186,7 @@ export function OutilIndependantComplementaire({
           </div>
           <div className="flex items-baseline justify-between bg-surface-2 px-5 py-4 sm:px-6">
             <dt className="font-bold">Net dans ta poche</dt>
-            <dd className="text-[18px] font-extrabold">
+            <dd className="text-[18px] font-semibold">
               <Montant cents={netCents} decimals={0} />
             </dd>
           </div>
@@ -195,7 +195,7 @@ export function OutilIndependantComplementaire({
 
       {cotisations.result.sousLeSeuil && (
         <section className="carte p-5">
-          <h2 className="text-[15px] font-bold">Sous le seuil de cotisation</h2>
+          <h2 className="text-[15px]">Sous le seuil de cotisation</h2>
           <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
             À ce niveau de revenu, l’activité reste sous le seuil d’exemption du statut
             complémentaire (
@@ -210,7 +210,7 @@ export function OutilIndependantComplementaire({
       <PanneauExplication calcul={impot} titre="D’où vient l’impôt supplémentaire" />
 
       <section className="carte p-5 sm:p-6">
-        <h2 className="text-[16px] font-bold">Ce que ça coûte de se lancer</h2>
+        <h2 className="text-[16px]">Ce que ça coûte de se lancer</h2>
         <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
           Les frais de démarrage, une fois, avant le premier euro facturé.
         </p>
@@ -222,7 +222,7 @@ export function OutilIndependantComplementaire({
             aide="Obligatoire au-delà du seuil de franchise, ou par choix si tu factures des professionnels."
           />
         </div>
-        <p className="mt-5 text-[26px] font-extrabold tracking-[-0.025em]">
+        <p className="mt-5 text-[26px] font-semibold tracking-[-0.025em]">
           <Montant cents={demarrage.result.totalCents} decimals={0} />
         </p>
         <PanneauExplication calcul={demarrage} className="mt-4" />

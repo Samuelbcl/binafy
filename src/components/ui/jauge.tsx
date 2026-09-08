@@ -55,7 +55,7 @@ export function Jauge({
         </p>
       </div>
 
-      <p className="mt-2 text-[20px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
+      <p className="mt-2 text-[20px] font-semibold tracking-[-0.02em] sm:text-[22px]">
         <span data-montant>{formatEUR(valeur, { decimals: 0 })}</span>
         <span className="ml-1.5 text-[13px] font-medium text-text-muted">
           sur {formatEUR(cible, { decimals: 0 })}

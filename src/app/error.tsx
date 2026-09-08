@@ -24,7 +24,7 @@ export default function Erreur({
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5 py-12 text-center">
-      <h1 className="font-display text-[clamp(1.5rem,4vw,2rem)] font-semibold tracking-tight">
+      <h1 className="font-display text-[clamp(1.5rem,4vw,2rem)] tracking-tight">
         Quelque chose s’est mal passé
       </h1>
       <p className="mt-3 max-w-md text-[14px] leading-relaxed text-text-muted">

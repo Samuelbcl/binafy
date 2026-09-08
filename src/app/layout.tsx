@@ -1,42 +1,37 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google';
+import { Schibsted_Grotesk, Young_Serif } from 'next/font/google';
 import { AppProviders } from '@/components/providers';
 import { siteUrl } from '@/lib/env';
 import './globals.css';
 
 /**
- * L'interface et les chiffres — Plus Jakarta Sans (docs/05 § typographie).
+ * L'interface et les chiffres — Schibsted Grotesk.
  *
- * Elle tient le corps de texte, les libellés et les montants : ses chiffres
- * tabulaires alignent les colonnes sans qu'on charge une monospace pour ça.
+ * Un grotesque dessiné pour la presse, pas pour les maquettes : le a, le g et
+ * le y ont une inflexion qu'on ne trouve pas dans les sans « neutres » que tout
+ * le monde emploie, et ses chiffres tiennent une colonne. C'est ce qui manquait
+ * à l'ancienne police : elle ne disait rien, et on le voyait.
  */
-const jakarta = Plus_Jakarta_Sans({
-  variable: '--font-jakarta',
+const ui = Schibsted_Grotesk({
+  variable: '--font-ui',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
 /**
- * Les titres — Fraunces.
+ * Les titres — Young Serif.
  *
- * Une famille unique pour tout un écran le rend uniforme au mauvais sens : rien
- * ne distingue un titre d'un libellé, et la page se lit comme un formulaire.
- * Fraunces répond à Jakarta au lieu de la répéter — empattements taillés, axe
- * optique qui affine les grandes tailles, et l'axe WONK qui donne aux lettres
- * leur inflexion. Elle porte les h1 et h2, rien d'autre : au-delà, ce
- * caractère fatigue la lecture.
- *
- * Chargée en variable : `axes` et un poids fixe s'excluent chez next/font, et
- * les axes sont justement ce qu'on vient chercher. L'axe optique agit seul —
- * les navigateurs appliquent `font-optical-sizing: auto` par défaut, donc un
- * titre de 40 px reçoit un dessin plus fin qu'un titre de 17 px, sans une
- * ligne de code. Un seul fichier, en `swap` : le texte s'affiche avant.
+ * Nestor est un majordome : quelqu'un de fiable, un peu d'un autre temps, qui
+ * dit les choses avec chaleur. Young Serif a exactement ce grain — des
+ * empattements ronds, un dessin généreux, une seule graisse qui n'a pas besoin
+ * d'être grasse pour porter. On ne la synthétise jamais en gras : elle n'en a
+ * pas, et un gras de synthèse est ce qui trahit une maquette. Les titres
+ * portent donc tous `font-weight: 400`, et c'est la taille qui hiérarchise.
  */
-const fraunces = Fraunces({
-  variable: '--font-fraunces',
+const titres = Young_Serif({
+  variable: '--font-titres',
   subsets: ['latin'],
-  axes: ['SOFT', 'WONK', 'opsz'],
+  weight: '400',
   display: 'swap',
 });
 
@@ -72,7 +67,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang="fr-BE"
       suppressHydrationWarning
-      className={`${jakarta.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${ui.variable} ${titres.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <AppProviders>{children}</AppProviders>

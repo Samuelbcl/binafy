@@ -39,7 +39,7 @@ export default async function ConnexionPage({ searchParams }: PageProps<'/connex
           <MarqueNestor taille="grande" />
         </Link>
 
-        <h1 className="titre-degrade mx-auto mt-8 text-center font-display text-[24px] font-semibold tracking-tight">
+        <h1 className="titre-degrade mx-auto mt-8 text-center font-display text-[24px] tracking-tight">
           Connexion
         </h1>
         <p className="mt-2 text-center text-[14px] leading-relaxed text-text-muted">

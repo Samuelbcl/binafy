@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import type { Icon } from '@phosphor-icons/react';
 import { cn } from '@/lib/cn';
 
 /**
@@ -36,7 +36,7 @@ export function PastilleIcone({
   libelle,
   className,
 }: {
-  icone: LucideIcon;
+  icone: Icon;
   teinte?: Teinte;
   taille?: 'normale' | 'grande';
   /** À ne fournir que si l'icône n'est pas redondante avec le texte voisin. */
@@ -53,7 +53,9 @@ export function PastilleIcone({
         className,
       )}
     >
-      <Icone className={taille === 'grande' ? 'size-6' : 'size-5'} />
+      {/* Deux tons : la forme pleine en transparence, le trait par-dessus.
+          C'est ce qui fait qu'une icône ressemble à un objet, pas à un schéma. */}
+      <Icone weight="duotone" className={taille === 'grande' ? 'size-7' : 'size-[22px]'} />
     </span>
   );
 }

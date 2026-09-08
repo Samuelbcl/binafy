@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Check, Plus, ShieldCheck, Upload } from 'lucide-react';
+import { ArrowRight, BookOpen, Check, Plus, Upload } from 'lucide-react';
+import { ShieldCheck } from '@phosphor-icons/react/dist/ssr';
 import { BoutonSupprimer } from '@/components/objectifs/bouton-supprimer';
 import { CarteObjectif } from '@/components/objectifs/carte-objectif';
 import { FriseObjectifs } from '@/components/objectifs/frise-objectifs';
@@ -59,7 +60,7 @@ export default async function ObjectifsPage({
     <div className="mx-auto max-w-4xl">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="titre-degrade font-display text-[28px] font-semibold tracking-tight">
+          <h1 className="titre-degrade font-display text-[28px] tracking-tight">
             Objectifs
           </h1>
           <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-text-muted">
@@ -156,7 +157,7 @@ export default async function ObjectifsPage({
             <div className="flex items-start gap-3">
               <PastilleIcone icone={ShieldCheck} teinte="menthe" taille="grande" />
               <div className="min-w-0">
-                <h2 className="text-[17px] font-semibold tracking-[-0.01em]">
+                <h2 className="text-[17px] tracking-[-0.01em]">
                   Le premier objectif, avant tout le reste
                 </h2>
                 <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">

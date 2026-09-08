@@ -208,7 +208,7 @@ export function CreationObjectif({
 
       {etape === 1 && (
         <section className="apparait mt-6">
-          <h1 className="titre-degrade font-display text-[26px] font-semibold tracking-tight">
+          <h1 className="titre-degrade font-display text-[26px] tracking-tight">
             Quel objectif ?
           </h1>
           <p className="mt-1.5 text-[14px] leading-relaxed text-text-muted">
@@ -294,7 +294,7 @@ export function CreationObjectif({
         <section className="apparait mt-6">
           <div className="flex items-center gap-3">
             <PastilleIcone icone={Icone} teinte={teinte} taille="grande" />
-            <h1 className="min-w-0 truncate font-display text-[22px] font-semibold tracking-tight">
+            <h1 className="min-w-0 truncate font-display text-[22px] tracking-tight">
               {nom}
             </h1>
           </div>
@@ -532,7 +532,7 @@ export function CreationObjectif({
         <section className="apparait mt-6">
           <div className="flex items-center gap-3">
             <PastilleIcone icone={Icone} teinte={teinte} taille="grande" />
-            <h1 className="min-w-0 truncate font-display text-[22px] font-semibold tracking-tight">
+            <h1 className="min-w-0 truncate font-display text-[22px] tracking-tight">
               {nom}
             </h1>
           </div>

@@ -25,7 +25,7 @@ export function PageLegale({
   return (
     <div className="mx-auto max-w-2xl px-5 py-12 sm:px-6 sm:py-16">
       <header>
-        <h1 className="font-display text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-tight tracking-[-0.02em]">
+        <h1 className="font-display text-[clamp(1.75rem,4vw,2.25rem)] leading-tight tracking-[-0.02em]">
           {titre}
         </h1>
         <p className="mt-3 text-[13px] text-text-subtle">Dernière mise à jour : {miseAJour}</p>
@@ -50,7 +50,7 @@ export function PageLegale({
 export function Section({ titre, children }: { titre: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="font-display text-[18px] font-semibold tracking-tight">{titre}</h2>
+      <h2 className="font-display text-[18px] tracking-tight">{titre}</h2>
       <div className="mt-3 space-y-3 text-[14px] leading-relaxed text-text-muted [&_a]:break-words [&_code]:rounded [&_code]:bg-surface-2 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[13px] [&_li]:pl-1 [&_strong]:text-text [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5">
         {children}
       </div>

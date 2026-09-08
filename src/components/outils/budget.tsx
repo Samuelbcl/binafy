@@ -128,7 +128,7 @@ export function OutilBudget({ initiales }: { initiales: ValeursBudget }) {
 
       {deficit && (
         <section className="carte p-5">
-          <h2 className="text-[15px] font-bold">Les dépenses dépassent les revenus</h2>
+          <h2 className="text-[15px]">Les dépenses dépassent les revenus</h2>
           <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
             Le taux d’épargne est négatif : le budget se creuse de{' '}
             <Montant cents={-result.nonDepenseCents} decimals={0} className="font-semibold" /> par
@@ -141,7 +141,7 @@ export function OutilBudget({ initiales }: { initiales: ValeursBudget }) {
       <PanneauExplication calcul={calcul} />
 
       <section className="carte p-5 sm:p-6">
-        <h2 className="text-[16px] font-bold">Épargne de précaution</h2>
+        <h2 className="text-[16px]">Épargne de précaution</h2>
         <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
           La cible se calcule, elle ne se décide pas : c’est le nombre de mois de charges fixes que
           tu veux pouvoir absorber sans revenu.
@@ -177,19 +177,19 @@ export function OutilBudget({ initiales }: { initiales: ValeursBudget }) {
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
             <p className="label-kpi">Cible</p>
-            <p className="mt-1.5 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
+            <p className="mt-1.5 text-[19px] font-semibold tracking-[-0.02em] sm:text-[22px]">
               <Montant cents={precaution.result.cibleCents} decimals={0} />
             </p>
           </div>
           <div>
             <p className="label-kpi">Reste à constituer</p>
-            <p className="mt-1.5 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
+            <p className="mt-1.5 text-[19px] font-semibold tracking-[-0.02em] sm:text-[22px]">
               <Montant cents={precaution.result.resteAConstituerCents} decimals={0} />
             </p>
           </div>
           <div>
             <p className="label-kpi">À ce rythme</p>
-            <p className="mt-1.5 text-[19px] font-extrabold tabular-nums tracking-[-0.02em] sm:text-[22px]">
+            <p className="mt-1.5 text-[19px] font-semibold tabular-nums tracking-[-0.02em] sm:text-[22px]">
               {precaution.result.moisRestants === null
                 ? '—'
                 : precaution.result.moisRestants === 0

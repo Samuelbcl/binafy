@@ -83,7 +83,7 @@ export function SankeyBudget({
   if (flux.length === 0) {
     return (
       <div className={cn('carte p-5 sm:p-6', className)}>
-        <h2 className="font-display text-[17px] font-semibold">Flux du mois</h2>
+        <h2 className="font-display text-[17px]">Flux du mois</h2>
         <p className="mt-2 text-[13px] leading-relaxed text-text-muted">
           Le diagramme apparaîtra dès qu’un mois complet de transactions sera importé.
         </p>
@@ -94,7 +94,7 @@ export function SankeyBudget({
   return (
     <div className={cn('carte p-5 sm:p-6', className)}>
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 className="font-display text-[17px] font-semibold">Flux du mois</h2>
+        <h2 className="font-display text-[17px]">Flux du mois</h2>
         {selection && (
           <button
             type="button"

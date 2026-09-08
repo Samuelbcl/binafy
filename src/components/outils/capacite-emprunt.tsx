@@ -142,7 +142,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
         <section className="carte flex gap-3 p-5">
           <AlertTriangle className="size-5 shrink-0 text-warning" />
           <div>
-            <h2 className="text-[15px] font-bold">Le reste à vivre passe sous le plancher</h2>
+            <h2 className="text-[15px]">Le reste à vivre passe sous le plancher</h2>
             <p className="mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
               Avec cette mensualité, il te resterait{' '}
               <Montant cents={result.resteAVivreCents} decimals={0} className="font-semibold" /> par
@@ -156,7 +156,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
       <section className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
         <div className="carte p-4 sm:p-5">
           <p className="label-kpi">Reste à vivre</p>
-          <p className="mt-2 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
+          <p className="mt-2 text-[19px] font-semibold tracking-[-0.02em] sm:text-[22px]">
             <Montant cents={result.resteAVivreCents} decimals={0} />
           </p>
           <p className="mt-2 text-[12.5px] leading-snug text-text-subtle">
@@ -165,7 +165,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
         </div>
         <div className="carte p-4 sm:p-5">
           <p className="label-kpi">Intérêts payés en tout</p>
-          <p className="mt-2 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
+          <p className="mt-2 text-[19px] font-semibold tracking-[-0.02em] sm:text-[22px]">
             <Montant cents={result.interetsTotauxCents} decimals={0} />
           </p>
           <p className="mt-2 text-[12.5px] leading-snug text-text-subtle">
@@ -174,7 +174,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
         </div>
         <div className="carte p-4 sm:p-5">
           <p className="label-kpi">Coût total du crédit</p>
-          <p className="mt-2 text-[19px] font-extrabold tracking-[-0.02em] sm:text-[22px]">
+          <p className="mt-2 text-[19px] font-semibold tracking-[-0.02em] sm:text-[22px]">
             <Montant cents={result.coutTotalCreditCents} decimals={0} />
           </p>
           <p className="mt-2 text-[12.5px] leading-snug text-text-subtle">
@@ -186,7 +186,7 @@ export function OutilCapaciteEmprunt({ initiales }: { initiales: ValeursCapacite
       <PanneauExplication calcul={calcul} />
 
       <section className="carte p-5 sm:p-6">
-        <h2 className="text-[16px] font-bold">Ce que ce calcul ne dit pas</h2>
+        <h2 className="text-[16px]">Ce que ce calcul ne dit pas</h2>
         <ul className="mt-3 list-disc space-y-2 pl-4 text-[13.5px] leading-relaxed text-text-muted marker:text-text-subtle">
           <li>
             Emprunter ne suffit pas : il faut aussi le cash de l’acte — droits d’enregistrement,

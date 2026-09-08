@@ -16,7 +16,7 @@ export default function ApprendrePage() {
   return (
     <div className="mx-auto max-w-5xl px-5 py-14 sm:px-6 sm:py-20">
       <header className="max-w-2xl">
-        <h1 className="text-[clamp(2rem,5vw,3rem)] font-extrabold leading-[1.08] tracking-[-0.03em]">
+        <h1 className="text-[clamp(2rem,5vw,3rem)] leading-[1.08] tracking-[-0.03em]">
           Apprendre
         </h1>
         <p className="mt-5 text-[17px] leading-relaxed text-text-muted">
@@ -72,7 +72,7 @@ export default function ApprendrePage() {
       </section>
 
       <section className="mt-14">
-        <h2 className="text-[18px] font-bold tracking-[-0.015em]">Ce qui arrive</h2>
+        <h2 className="text-[18px] tracking-[-0.015em]">Ce qui arrive</h2>
         <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-text-muted">
           Les sept sujets les plus mal traités ailleurs sont couverts. Les prochains guides
           suivront les questions que les lecteurs posent le plus — dis-nous laquelle te manque.
