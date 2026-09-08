@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import {
   CartesianGrid,
   Line,
@@ -105,8 +105,9 @@ export function SimulateurEpargnePension() {
           max={plafondHautCents}
           step={1_000}
           value={versementCents}
+          style={{ '--part': `${(versementCents / plafondHautCents) * 100}%` } as CSSProperties}
           onChange={(e) => setVersementCents(Number(e.target.value))}
-          className="h-11 w-full cursor-pointer accent-[var(--primary)]"
+          className="w-full"
         />
       </label>
 

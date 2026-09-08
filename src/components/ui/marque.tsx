@@ -53,7 +53,8 @@ export function MarqueNestor({
       <span
         aria-hidden
         className={cn(
-          'grid place-items-center rounded-[var(--radius-sm)]',
+          // Rond, en relief : la marque parle la langue de forme des jetons.
+          'grid place-items-center rounded-full shadow-[var(--pastille-relief)]',
           grande ? 'size-10' : 'size-8',
           ton === 'accent' ? 'bg-primary text-on-primary' : 'bg-surface-2 text-primary',
         )}

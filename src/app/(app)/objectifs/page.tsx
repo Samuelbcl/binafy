@@ -68,14 +68,18 @@ export default async function ObjectifsPage({
             te sépare de la cible — une date ou un montant par mois, jamais un jugement.
           </p>
         </div>
-        <Link href="/objectifs/nouveau" className="bouton-chaud">
+        {/* Sur telephone, le bouton flottant suffit : deux boutons pour un
+            geste disent qu'on n'a pas choisi. */}
+        <Link href="/objectifs/nouveau" className="bouton-chaud hidden sm:inline-flex">
           <Plus className="size-4" />
           Nouvel objectif
         </Link>
       </header>
 
-      {/* Deux onglets, dans l'URL : un lien se partage et revient au bon endroit. */}
-      <nav aria-label="Sections" className="mt-6 flex gap-6 border-b border-text-subtle/25">
+      {/* Deux onglets, dans l'URL : un lien se partage et revient au bon endroit.
+          Un controle segmente, comme a l'etape 2 de la creation : une seule
+          facon de basculer entre deux vues dans l'app. */}
+      <nav aria-label="Sections" className="mt-6 inline-flex rounded-full bg-surface-2 p-1">
         <Onglet href="/objectifs" actif={ongletActif === 'objectifs'}>
           Objectifs
         </Onglet>
@@ -231,8 +235,8 @@ function Onglet({ href, actif, children }: { href: string; actif: boolean; child
       href={href}
       aria-current={actif ? 'page' : undefined}
       className={cn(
-        '-mb-px border-b-2 pb-3 text-[14px] font-semibold transition-colors',
-        actif ? 'border-ambre text-text' : 'border-transparent text-text-muted hover:text-text',
+        'rounded-full px-4 py-2 text-[13px] font-semibold transition-colors',
+        actif ? 'bg-surface text-text shadow-[var(--shadow-card)]' : 'text-text-muted hover:text-text',
       )}
     >
       {children}

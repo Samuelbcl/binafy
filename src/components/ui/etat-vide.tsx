@@ -99,7 +99,7 @@ export function EtatVide({
       )}
     >
       <MotifVide className={dense ? 'h-10' : 'h-16'} />
-      <p className={cn('font-bold', dense ? 'text-[14px]' : 'mt-1 text-[16px]')}>{titre}</p>
+      <p className={cn('font-semibold', dense ? 'text-[14px]' : 'mt-1 text-[16px]')}>{titre}</p>
       <p
         className={cn(
           'max-w-sm leading-relaxed text-text-muted',

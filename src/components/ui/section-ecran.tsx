@@ -64,7 +64,7 @@ export function SectionEcran({
     >
       <div className="mb-4 flex items-start justify-between gap-4">
         <div className="flex min-w-0 gap-3">
-          {icone && <PastilleIcone icone={icone} teinte={teinte} className="mt-0.5" />}
+          {icone && <PastilleIcone icone={icone} teinte={teinte} taille="petite" className="mt-0.5" />}
           <div className="min-w-0">
             <h2 className="text-[20px]">{titre}</h2>
             {sousTitre && (

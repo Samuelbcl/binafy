@@ -29,7 +29,7 @@ export function DonutAllocation({
 
   return (
     <div className={cn('carte p-5 sm:p-6', className)}>
-      <h2 className="font-display text-[17px]">Allocation</h2>
+      <h3 className="text-[15px]">Allocation</h3>
 
       <div className="mt-4 flex flex-col gap-6 sm:flex-row sm:items-center">
         <div className="relative mx-auto size-[180px] shrink-0">

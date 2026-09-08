@@ -109,7 +109,8 @@ export default async function DashboardPage() {
               'Ce qu’il te resterait après taxe si tu vendais tout aujourd’hui. Personne d’autre ne te le montre.',
           },
         ]}
-        variationCents={variation}
+        // Un zero en pastille est un emplacement rempli, pas une information.
+        variationCents={variation === 0 ? undefined : variation}
         ratioVariation={variation === 0 ? undefined : ratioVariation}
         mentionVariation={
           variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'
@@ -162,7 +163,7 @@ export default async function DashboardPage() {
         ordre={2}
         icone={Gauge}
         teinte="menthe"
-        sousTitre="Les trois chiffres qui résument ta situation, au-delà du montant total."
+        sousTitre="Les deux chiffres qui résument ta situation, au-delà du montant total."
       >
       <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
         <CarteKPITexte
@@ -191,17 +192,21 @@ export default async function DashboardPage() {
         <CourbePatrimoine historique={historique} />
       ) : (
         <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px]">Évolution du patrimoine net</h2>
+          <h3 className="text-[15px]">Évolution du patrimoine net</h3>
           <EtatVide
             titre="Ta courbe commence demain"
-            texte="Nestor photographie ton patrimoine une fois par jour. Il faut deux points pour tracer une ligne : reviens dans quelques jours, elle sera là — et elle n’aura plus jamais de trou."
+            texte="Nestor photographie ton patrimoine une fois par jour. Il faut deux points pour tracer une ligne : reviens dans quelques jours, elle sera là — et les mouvements de la journée s’afficheront ici avec elle."
           />
         </section>
       )}
 
+      {/* La liste des mouvements n'a de sens qu'avec une courbe ou des donnees
+          de demo : deux etats vides a trois cents pixels d'ecart se lisent
+          « remplissage », un seul se lit « dessin ». */}
+      {(demo || historique.length > 1) && (
       <section className="carte mt-4 p-5 sm:p-6">
           <div className="flex items-baseline justify-between gap-3">
-            <h3 className="text-[15px] font-bold">Ce qui a bougé aujourd’hui</h3>
+            <h3 className="text-[15px]">Ce qui a bougé aujourd’hui</h3>
             <Link
               href="/patrimoine"
               className="inline-flex items-center gap-1 text-[12px] text-text-muted transition-colors hover:text-primary"
@@ -237,6 +242,7 @@ export default async function DashboardPage() {
             />
           )}
       </section>
+      )}
       </SectionEcran>
 
       <SectionEcran
@@ -249,29 +255,31 @@ export default async function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
         <DonutAllocation allocation={allocation(actifs)} totalCents={totalActifs(actifs)} />
 
-        <section className="carte p-5 sm:p-6">
-          <h3 className="text-[15px] font-bold">Actifs et passifs</h3>
-          <dl className="mt-4 space-y-3 text-[14px]">
-            <div className="flex items-center justify-between">
-              <dt className="text-text-muted">Total des actifs</dt>
-              <dd>
-                <Montant cents={totalActifs(actifs)} />
-              </dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-text-muted">Total des passifs</dt>
-              <dd>
-                <Montant cents={-totalPassifs(passifs)} />
-              </dd>
-            </div>
-            <div className="flex items-center justify-between border-t border-border pt-3 font-medium">
-              <dt>Patrimoine net</dt>
-              <dd>
-                <Montant cents={net} />
-              </dd>
-            </div>
-          </dl>
-        </section>
+        {passifs.length > 0 && (
+          <section className="carte p-5 sm:p-6">
+            <h3 className="text-[15px]">Actifs et passifs</h3>
+            <dl className="mt-4 space-y-3 text-[14px]">
+              <div className="flex items-center justify-between">
+                <dt className="text-text-muted">Total des actifs</dt>
+                <dd>
+                  <Montant cents={totalActifs(actifs)} decimals={0} />
+                </dd>
+              </div>
+              <div className="flex items-center justify-between">
+                <dt className="text-text-muted">Total des passifs</dt>
+                <dd>
+                  <Montant cents={-totalPassifs(passifs)} decimals={0} />
+                </dd>
+              </div>
+              <div className="flex items-center justify-between border-t border-border pt-3 font-medium">
+                <dt>Patrimoine net</dt>
+                <dd>
+                  <Montant cents={net} decimals={0} />
+                </dd>
+              </div>
+            </dl>
+          </section>
+        )}
 
       </div>
       </SectionEcran>

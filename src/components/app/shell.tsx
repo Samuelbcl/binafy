@@ -98,7 +98,9 @@ function BoutonTheme() {
 function Logo() {
   return (
     <Link href="/dashboard" className="flex items-center gap-2.5">
-      <MarqueNestor />
+      {/* Sobre : la carte d'accent est a soixante pixels, et deux surfaces
+          violettes sur le meme ecran ne designent plus rien. */}
+      <MarqueNestor ton="sobre" />
     </Link>
   );
 }
@@ -245,7 +247,7 @@ function OngletLien({
       >
         <Icone weight={actif ? 'fill' : 'regular'} className="size-6" />
       </span>
-      <span className={cn('text-[10.5px]', actif ? 'font-bold' : 'font-medium')}>{libelle}</span>
+      <span className="text-[10.5px] font-medium">{libelle}</span>
     </Link>
   );
 }

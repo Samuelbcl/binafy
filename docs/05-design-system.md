@@ -81,6 +81,15 @@ Décorative (`aria-hidden`) : la progression est déjà dite en texte et en barr
 **Les grands chiffres effacent leurs décimales** (`decimalesDiscretes` sur `Montant`) :
 « 13 349,88 € » se lit 13 349, les centimes sont là pour qui les cherche.
 
+**Un designer enlève ; un générateur remplit.** Verdict du premier passage du
+`directeur-artistique` (08/09/2026) : la panoplie avait disparu, le remplissage restait
+— un `+0,00 €` en pastille, le même total lu quatre fois, deux boutons pour un geste,
+deux états vides côte à côte, huit cartes identiques, un graphique d'une droite. Règle :
+un élément qui ne dit rien que l'écran ne dise déjà s'enlève. Et **l'ambre est la couleur
+de l'engagement** — créer un compte, un objectif, un actif, le bouton flottant — là où le
+violet est celle du repère (la bulle de la barre, les liens, l'onglet actif) ; les deux
+dans la même robe, l'œil les lit comme une paire.
+
 **Les cartes sombres n'ont presque plus de trait** (`--border` à 6 % de blanc) : elles se
 détachent par leur surface et le voile de lumière du haut. Le contour net sur fond sombre
 est un autre tic de gabarit.

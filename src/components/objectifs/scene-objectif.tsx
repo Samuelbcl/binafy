@@ -121,32 +121,41 @@ function Maison({ progression }: { progression: number }) {
 }
 
 // ── Le matelas ────────────────────────────────────────────────────────────
-// Six couches qui s'empilent, l'oreiller, puis l'écusson quand il est complet.
+// L'oreiller d'abord — c'est lui qui fait lire « lit » —, puis six couches
+// qui s'empilent, éclairées par le haut comme les jetons, et l'écusson quand
+// il est complet.
 function Matelas({ progression }: { progression: number }) {
   const etapes: Etape[] = [];
   const couches = 6;
+  etapes.push({
+    rang: 0,
+    enfant: (
+      <rect x={48} y={22} width={30} height={8} rx={4} fill="var(--surface)" stroke="var(--teinte)" strokeOpacity={0.7} strokeWidth={1.4} />
+    ),
+  });
   for (let i = 0; i < couches; i++) {
     const h = 9;
     const y = 86 - (i + 1) * h;
+    const x = 30 + i * 1.5;
+    const w = 100 - i * 3;
     etapes.push({
-      rang: i,
+      rang: i + 1,
       enfant: (
-        <rect
-          x={30 + i * 1.5}
-          y={y}
-          width={100 - i * 3}
-          height={h - 1.5}
-          rx={3.5}
-          fill="var(--teinte)"
-          opacity={i % 2 === 0 ? 1 : 0.62}
-        />
+        <g>
+          <rect
+            x={x}
+            y={y}
+            width={w}
+            height={h - 1.5}
+            rx={3.5}
+            fill="var(--teinte)"
+            opacity={i % 2 === 0 ? 0.72 : 0.5}
+          />
+          <rect x={x + 3} y={y} width={w - 6} height={1.8} rx={0.9} fill="var(--teinte)" />
+        </g>
       ),
     });
   }
-  etapes.push({
-    rang: couches,
-    enfant: <rect x={44} y={22} width={34} height={9} rx={4.5} fill="var(--surface)" stroke="var(--teinte)" strokeOpacity={0.6} />,
-  });
   etapes.push({
     rang: couches + 1,
     enfant: (

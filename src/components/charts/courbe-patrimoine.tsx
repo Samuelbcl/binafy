@@ -96,7 +96,7 @@ export function CourbePatrimoine({
   return (
     <div className={cn('carte p-5 sm:p-6', className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-display text-[17px]">Évolution du patrimoine net</h2>
+        <h3 className="text-[15px]">Évolution du patrimoine net</h3>
 
         <div
           role="tablist"

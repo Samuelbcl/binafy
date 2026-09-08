@@ -457,7 +457,7 @@
     background: var(--action);
     color: var(--on-action);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     transition: background-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
@@ -481,7 +481,7 @@
     background: var(--primary);
     color: var(--on-primary);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     transition: background-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
@@ -592,7 +592,7 @@
     background: var(--degrade-chaud);
     color: var(--on-ambre);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     white-space: nowrap;
     transition: filter 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
@@ -612,9 +612,17 @@
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 9999px;
-    background-image: var(--degrade-hero);
-    color: #ffffff;
-    box-shadow: var(--lueur-flottant);
+    /*
+     * Ambre, pas violet : la bulle de la barre dit « ou je suis », le bouton
+     * dit « faire ». Dans la meme robe, l'oeil les lit comme une paire et
+     * l'accent cesse de designer. L'ambre est la couleur de l'engagement
+     * partout dans l'app — creer un compte, un objectif, un actif.
+     */
+    background-image: var(--degrade-chaud);
+    color: var(--on-ambre);
+    box-shadow:
+      0 10px 28px rgb(232 150 60 / 0.38),
+      inset 0 1px 0 rgb(255 255 255 / 0.3);
     transition:
       transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
       box-shadow 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -842,6 +850,78 @@
     .scene-soleil {
       transition: none;
     }
+  }
+
+  /*
+   * Curseur. Le pouce natif de Chrome sur fond sombre se reconnait entre
+   * mille, et c'est la piece que l'utilisateur touche le plus. Piste fine,
+   * remplissage jusqu'a la valeur (`--part`, posee en style par le composant),
+   * pouce rond en relief comme les jetons.
+   */
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2.75rem;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--primary) var(--part, 0%), var(--surface-2) 0);
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: -9px;
+    border: none;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow:
+      var(--pastille-relief),
+      0 2px 8px rgb(0 0 0 / 0.4);
+  }
+
+  input[type='range']::-moz-range-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--surface-2);
+  }
+
+  input[type='range']::-moz-range-progress {
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--primary);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow:
+      var(--pastille-relief),
+      0 2px 8px rgb(0 0 0 / 0.4);
+  }
+
+  input[type='range']:focus-visible {
+    outline: none;
+  }
+
+  input[type='range']:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Petite pastille : dans une frise, une rangee. */
+  .pastille-icone-sm {
+    width: 2rem;
+    height: 2rem;
   }
 
   /* Pastille d'état : vérifié, hypothèse, période active. */

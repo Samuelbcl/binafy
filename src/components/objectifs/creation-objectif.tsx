@@ -3,15 +3,14 @@
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState, useTransition } from 'react';
-import { Area, AreaChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { useMemo, useState, useTransition, type CSSProperties } from 'react';
 import { creerObjectif } from '@/app/(app)/objectifs/actions';
 import { ChampNombre, ChampSelect } from '@/components/ui/champs';
 import { Montant } from '@/components/ui/montant';
 import { PastilleIcone, type Teinte } from '@/components/ui/pastille-icone';
 import { cn } from '@/lib/cn';
 import { echeanceDans, projeterObjectif } from '@/lib/finance/objectifs';
-import { euros, formatEUR, formatEURCompact, formatPercent } from '@/lib/money';
+import { euros, formatEUR, formatPercent } from '@/lib/money';
 import { libelleDans } from '@/lib/objectifs/dates';
 import {
   CLES_ICONE,
@@ -130,6 +129,11 @@ export function CreationObjectif({
     if (i.special === 'apport') setCibleEuros(Math.round(cibleApport / 100));
   }
 
+  function choisirEtAvancer(i: Inspiration) {
+    choisirInspiration(i);
+    setEtape(2);
+  }
+
   function basculerLie(id: string) {
     setLies((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
   }
@@ -213,36 +217,53 @@ export function CreationObjectif({
             Quel objectif ?
           </h1>
           <p className="mt-1.5 text-[14px] leading-relaxed text-text-muted">
-            Choisis une piste, ou nomme le tien. Le matelas de sécurité passe avant tout le
-            reste : c’est lui qui évite de casser les autres.
+            Le matelas de sécurité passe avant tout le reste : c’est lui qui évite de casser
+            les autres.
           </p>
 
-          <ul className="mt-5 grid grid-cols-2 gap-2.5">
-            {INSPIRATIONS.map((i) => {
-              const choisi = inspiration?.cle === i.cle;
-              return (
-                <li key={i.cle}>
-                  <button
-                    type="button"
-                    onClick={() => choisirInspiration(i)}
-                    aria-pressed={choisi}
-                    className={cn(
-                      'carte carte-interactive flex h-full w-full flex-col items-start gap-2.5 p-3.5 text-left transition-colors',
-                      choisi && 'border-primary ring-2 ring-primary/30',
-                    )}
-                  >
-                    <PastilleIcone icone={ICONES_OBJECTIF[i.icone]} teinte={i.teinte} />
-                    <span className="text-[13.5px] font-semibold leading-snug">{i.nom}</span>
-                    {i.special && (
-                      <span className="puce bg-primary-soft text-primary">cible calculée</span>
-                    )}
-                  </button>
-                </li>
-              );
-            })}
+          {/*
+            Les deux cibles calculées, en grand : c'est la partie belge du
+            parcours, celle qu'aucun concurrent n'a. Choisir avance directement
+            — le choix est la réponse, on ne demande pas de le confirmer.
+          */}
+          <ul className="mt-5 space-y-3">
+            {INSPIRATIONS.filter((i) => i.special).map((i) => (
+              <li key={i.cle}>
+                <button
+                  type="button"
+                  onClick={() => choisirEtAvancer(i)}
+                  className="carte carte-interactive flex w-full items-center gap-4 p-4 text-left"
+                >
+                  <PastilleIcone icone={ICONES_OBJECTIF[i.icone]} teinte={i.teinte} taille="grande" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[15px] font-semibold">{i.nom}</span>
+                    <span className="mt-0.5 block text-[12.5px] leading-snug text-text-muted">
+                      {i.aide}
+                    </span>
+                  </span>
+                  <ArrowRight className="size-4 shrink-0 text-text-subtle" />
+                </button>
+              </li>
+            ))}
           </ul>
 
-          <div className="carte mt-5 p-4 sm:p-5">
+          <p className="label-kpi mt-6">Ou une autre piste</p>
+          <ul className="-mx-4 mt-3 flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+            {INSPIRATIONS.filter((i) => !i.special).map((i) => (
+              <li key={i.cle} className="shrink-0">
+                <button
+                  type="button"
+                  onClick={() => choisirEtAvancer(i)}
+                  className="flex w-[78px] flex-col items-center gap-2 text-center"
+                >
+                  <PastilleIcone icone={ICONES_OBJECTIF[i.icone]} teinte={i.teinte} taille="grande" />
+                  <span className="text-[11.5px] leading-tight text-text-muted">{i.nom}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div className="carte mt-6 p-4 sm:p-5">
             <label className="label-kpi block" htmlFor="nom-objectif">
               Ou nomme-le toi-même
             </label>
@@ -269,25 +290,28 @@ export function CreationObjectif({
                   aria-pressed={icone === cle}
                   aria-label={cle}
                   className={cn(
-                    'rounded-[var(--radius-sm)] ring-offset-2 ring-offset-surface transition-shadow',
-                    icone === cle && 'ring-2 ring-primary',
+                    'rounded-full transition-transform duration-200',
+                    icone === cle && 'scale-110',
                   )}
                 >
-                  <PastilleIcone icone={ICONES_OBJECTIF[cle]} teinte={teinte} />
+                  {/* L'icone choisie passe en plein : la forme dit le choix,
+                      pas un anneau autour. */}
+                  <PastilleIcone
+                    icone={ICONES_OBJECTIF[cle]}
+                    teinte={teinte}
+                    poids={icone === cle ? 'fill' : 'duotone'}
+                  />
                 </button>
               ))}
             </div>
-          </div>
 
-          <button
-            type="button"
-            disabled={nom.trim().length === 0}
-            onClick={() => setEtape(2)}
-            className="bouton-principal mt-6 w-full disabled:opacity-50"
-          >
-            Suivant
-            <ArrowRight className="size-4" />
-          </button>
+            {nom.trim().length > 0 && (
+              <button type="button" onClick={() => setEtape(2)} className="bouton-principal mt-5 w-full">
+                Suivant
+                <ArrowRight className="size-4" />
+              </button>
+            )}
+          </div>
         </section>
       )}
 
@@ -345,17 +369,18 @@ export function CreationObjectif({
                       max={6}
                       step={1}
                       value={moisCouverture}
+                      style={{ '--part': `${((moisCouverture - 3) / 3) * 100}%` } as CSSProperties}
                       onChange={(e) => {
                         const m = Number(e.target.value);
                         setMoisCouverture(m);
                         setCibleEuros(Math.round((chargesFixesCents * m) / 100));
                       }}
-                      className="mt-2 h-11 w-full cursor-pointer accent-[var(--primary)]"
+                      className="mt-2 w-full"
                     />
                   </label>
                   <p className="text-[13px]">
                     Cible :{' '}
-                    <Montant cents={cibleMatelas} decimals={0} className="font-bold text-primary" />
+                    <Montant cents={cibleMatelas} decimals={0} className="font-semibold text-primary" />
                   </p>
                 </>
               ) : (
@@ -407,7 +432,7 @@ export function CreationObjectif({
                 aide="Droits d’enregistrement, honoraires et frais d’acte, plus la part que la banque ne prête pas."
               />
               <p className="text-[13px]">
-                Cible : <Montant cents={cibleApport} decimals={0} className="font-bold text-primary" />
+                Cible : <Montant cents={cibleApport} decimals={0} className="font-semibold text-primary" />
               </p>
             </div>
           )}
@@ -457,9 +482,10 @@ export function CreationObjectif({
                 max={maxHorizon}
                 step={1}
                 value={horizon}
+                style={{ '--part': `${((horizon - 1) / (maxHorizon - 1)) * 100}%` } as CSSProperties}
                 aria-label="Échéance"
                 onChange={(e) => setHorizon(Number(e.target.value))}
-                className="mt-1 h-11 w-full cursor-pointer accent-[var(--primary)]"
+                className="mt-1 w-full"
               />
               <div className="relative h-4 text-[11px] text-text-subtle">
                 {reperes.map((r) => (
@@ -535,7 +561,7 @@ export function CreationObjectif({
               </ul>
               {atteintCents > 0 && (
                 <p className="mt-3 text-[13px]">
-                  Déjà là : <Montant cents={atteintCents} decimals={0} className="font-bold" />
+                  Déjà là : <Montant cents={atteintCents} decimals={0} className="font-semibold" />
                 </p>
               )}
             </div>
@@ -563,6 +589,11 @@ export function CreationObjectif({
           </div>
 
           <div className="carte mt-5 overflow-hidden p-4 sm:p-5">
+            {/*
+              La scène est la projection : ce qui sera construit à l'échéance,
+              à ce rythme. Un graphique d'une droite en dessous ne montrait rien
+              que les chiffres ne disent déjà.
+            */}
             <div className={cn('scene-bande mb-4', 'pastille-' + teinte)}>
               <SceneObjectif
                 icone={icone}
@@ -571,78 +602,7 @@ export function CreationObjectif({
                 className="absolute inset-x-6 bottom-0 h-full w-auto"
               />
             </div>
-            <p className="text-[13.5px] font-semibold">Trajectoire projetée</p>
-            <div className="mt-3 flex gap-6 text-[12.5px]">
-              <div>
-                <span className="flex items-center gap-1.5 text-text-muted">
-                  <span className="size-2 rounded-[2px] bg-primary" /> Versements cumulés
-                </span>
-                <Montant
-                  cents={projection.result.atteintAHorizonCents}
-                  decimals={0}
-                  className="mt-0.5 block text-[17px] font-bold"
-                />
-              </div>
-              <div>
-                <span className="flex items-center gap-1.5 text-text-muted">
-                  <span className="size-2 rounded-[2px] bg-positive" /> Cible
-                </span>
-                <Montant
-                  cents={euros(cibleEuros)}
-                  decimals={0}
-                  className="mt-0.5 block text-[17px] font-bold"
-                />
-              </div>
-            </div>
-
-            <div className="mt-3 h-44" aria-hidden>
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={projection.result.trajectoire.map((p) => ({ mois: p.mois, verse: p.verseCents / 100 }))}
-                  margin={{ top: 12, right: 12, bottom: 0, left: 0 }}
-                >
-                  <defs>
-                    <linearGradient id="degradeObjectif" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis
-                    dataKey="mois"
-                    type="number"
-                    domain={[0, horizonMois]}
-                    ticks={[0, horizonMois]}
-                    interval={0}
-                    tickFormatter={(m: number) => libelleDans(m, aujourdhui)}
-                    tick={{ fill: 'var(--text-subtle)', fontSize: 11 }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    domain={[0, (d: number) => Math.max(d, cibleEuros) * 1.1]}
-                    tickFormatter={(v: number) => formatEURCompact(v * 100)}
-                    tick={{ fill: 'var(--text-subtle)', fontSize: 11 }}
-                    axisLine={false}
-                    tickLine={false}
-                    width={56}
-                    tickCount={3}
-                  />
-                  <ReferenceLine
-                    y={cibleEuros}
-                    stroke="var(--positive)"
-                    strokeDasharray="4 4"
-                  />
-                  <Area
-                    type="linear"
-                    dataKey="verse"
-                    stroke="var(--primary)"
-                    strokeWidth={2}
-                    fill="url(#degradeObjectif)"
-                    isAnimationActive={false}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+            <p className="text-[13.5px] font-semibold">Ce que ça donne</p>
 
             <dl className="mt-3 divide-y divide-border/60 text-[14px]">
               <div className="flex items-center justify-between py-2.5">
@@ -655,6 +615,16 @@ export function CreationObjectif({
                 <dt className="text-text-muted">Déjà là</dt>
                 <dd>
                   <Montant cents={atteintCents} decimals={0} className="font-semibold" />
+                </dd>
+              </div>
+              <div className="flex items-center justify-between py-2.5">
+                <dt className="text-text-muted">Projeté à l’échéance</dt>
+                <dd>
+                  <Montant
+                    cents={projection.result.atteintAHorizonCents}
+                    decimals={0}
+                    className="font-semibold"
+                  />
                 </dd>
               </div>
               <div className="flex items-start justify-between gap-4 py-2.5">

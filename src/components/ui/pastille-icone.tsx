@@ -33,12 +33,15 @@ export function PastilleIcone({
   icone: Icone,
   teinte = 'violet',
   taille = 'normale',
+  poids = 'duotone',
   libelle,
   className,
 }: {
   icone: Icon;
   teinte?: Teinte;
-  taille?: 'normale' | 'grande';
+  taille?: 'petite' | 'normale' | 'grande';
+  /** `fill` pour l'element choisi : on reconnait un choix a la forme avant la couleur. */
+  poids?: 'duotone' | 'fill';
   /** À ne fournir que si l'icône n'est pas redondante avec le texte voisin. */
   libelle?: string;
   className?: string;
@@ -50,12 +53,16 @@ export function PastilleIcone({
         'pastille-icone',
         CLASSE[teinte],
         taille === 'grande' && 'pastille-icone-lg',
+        taille === 'petite' && 'pastille-icone-sm',
         className,
       )}
     >
       {/* Deux tons : la forme pleine en transparence, le trait par-dessus.
           C'est ce qui fait qu'une icône ressemble à un objet, pas à un schéma. */}
-      <Icone weight="duotone" className={taille === 'grande' ? 'size-7' : 'size-[22px]'} />
+      <Icone
+        weight={poids}
+        className={taille === 'grande' ? 'size-7' : taille === 'petite' ? 'size-4' : 'size-[22px]'}
+      />
     </span>
   );
 }

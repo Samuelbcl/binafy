@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { cn } from '@/lib/cn';
 import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { moisJusqua } from '@/lib/finance/objectifs';
 import { libelleMois } from '@/lib/objectifs/dates';
@@ -66,7 +67,7 @@ export function FriseObjectifs({ objectifs }: { objectifs: readonly Objectif[] }
                   icone={ICONES_OBJECTIF[objectif.icone]}
                   teinte={objectif.teinte}
                   libelle={`${objectif.nom}, ${libelleMois(objectif.echeance)}`}
-                  className="!size-8 rounded-full"
+                  taille="petite"
                 />
                 {atteint && (
                   <span className="absolute -right-1 -bottom-1 grid size-4 place-items-center rounded-full bg-positive text-white ring-2 ring-surface">
@@ -80,11 +81,13 @@ export function FriseObjectifs({ objectifs }: { objectifs: readonly Objectif[] }
       </div>
 
       <div className="relative mt-1 h-4 text-[11px] text-text-subtle">
-        {/* Le mot chevaucherait le premier repere d'annee s'il tombe dans les
-            premiers mois : le point blanc suffit alors a dire ou est aujourd'hui. */}
-        {(janviers[0]?.mois ?? total) / total > 0.3 && (
-          <span className="absolute left-0">aujourd’hui</span>
-        )}
+        {/* Toujours nomme : un repere sans libelle oblige a deviner. Quand le
+            premier janvier est proche, le mot monte au-dessus du fil. */}
+        <span
+          className={cn('absolute left-0', (janviers[0]?.mois ?? total) / total <= 0.3 && '-top-[2.4rem]')}
+        >
+          aujourd’hui
+        </span>
         {janviers.map((j) => (
           <span
             key={j.annee}

@@ -97,14 +97,17 @@ export function CarteObjectif({
           />
         </div>
       )}
-      <div className="flex items-center gap-3">
+      {/* Le nom est la seule chose que l'utilisateur a ecrite : c'est la
+          derniere a couper. Il a sa ligne ; l'etat descend pres du chiffre. */}
+      <div className="flex items-start gap-3">
         <PastilleIcone icone={ICONES_OBJECTIF[objectif.icone]} teinte={objectif.teinte} />
-        <h3 className="min-w-0 flex-1 truncate text-[15px] font-bold">{objectif.nom}</h3>
-        <span className={cn('puce shrink-0', puce.classe)}>{puce.libelle}</span>
+        <h3 className="min-w-0 flex-1 pt-2 text-[15px] leading-snug [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] overflow-hidden">
+          {objectif.nom}
+        </h3>
         {action}
       </div>
 
-      <div className="mt-4 flex items-end justify-between gap-3">
+      <div className="mt-4 flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2">
           <Montant
             cents={objectif.atteintCents}
@@ -115,14 +118,7 @@ export function CarteObjectif({
             sur <Montant cents={objectif.cibleCents} decimals={0} className="font-semibold text-text" />
           </p>
         </div>
-        {compact && (
-          <SceneObjectif
-            icone={objectif.icone}
-            teinte={objectif.teinte}
-            progression={part}
-            className="h-10 w-16 shrink-0"
-          />
-        )}
+        <span className={cn('puce shrink-0', puce.classe)}>{puce.libelle}</span>
       </div>
 
       <div
