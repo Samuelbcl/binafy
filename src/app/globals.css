@@ -249,7 +249,7 @@
    * continuent de rendre des chiffres alignés sans qu'on charge une troisième
    * police pour ça.
    */
-  --font-display: var(--font-titres), Georgia, serif;
+  --font-display: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
 
@@ -309,13 +309,18 @@
    * l'interface et les chiffres, avec des graisses moyennes : le très gras
    * partout est l'autre signature des gabarits, et il fatigue.
    */
+  /*
+   * Une seule famille. Les titres se distinguent par la taille et le gras,
+   * pas par une autre voix : c'est une chose de moins a lire. `--graisse-titre`
+   * permet a une famille qui n'a qu'une graisse de rester correcte.
+   */
   h1,
   h2,
   .font-display {
-    font-family: var(--font-titres), Georgia, serif;
-    font-weight: 400;
-    letter-spacing: -0.005em;
-    line-height: 1.1;
+    font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+    font-weight: var(--graisse-titre, 700);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
   }
 
   h3 {

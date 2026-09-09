@@ -34,6 +34,18 @@ donut d'allocation, Sankey budgétaire, cartes bento), pas la charte d'un concur
 > verre liquide, scènes vivantes, « un designer enlève ») tient dans les deux thèmes.
 > Instrument Serif remplace Young Serif pour la même raison : c'est la voix des maquettes.
 
+> **Révision du 09/09/2026 — le test de la mère.** Samuel a montré l'application à sa
+> mère : « on ne comprend rien ». Trop d'éléments sur chaque page, une police qu'il n'aime
+> toujours pas, et « ça fait encore trop Claude ». Il est bloqué sur le contenu tant que
+> ça ne passe pas. Deux réponses. **La police** : une seule famille, choisie pour être
+> lue par quelqu'un qui a du mal à lire — Atkinson Hyperlegible Next, dessinée par le
+> Braille Institute, republiée en 2025 avec sept graisses ; les titres par la taille et
+> le gras, pas par une seconde voix. **Le nombre d'éléments** : un écran = une question,
+> cinq blocs au plus sur téléphone, pas de sous-titre de zone, pas de jeton de zone, pas
+> de phrase de plus de douze mots hors des guides. L'accueil n'est plus un résumé de
+> l'application ; c'est sa porte : bonjour, le chiffre, quatre gestes, les objectifs, un
+> guide. La courbe, la répartition, l'impôt latent vivent sur leur page.
+
 **Registre : « lavande ».** Fond clair teinté de violet, cartes blanches qui flottent par
 une ombre douce, un violet franc qui désigne, des pastels qui classent (une couleur par
 sujet, partout la même), titres en Instrument Serif, interface et chiffres en Schibsted

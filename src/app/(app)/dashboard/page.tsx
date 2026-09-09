@@ -1,66 +1,48 @@
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Plus } from 'lucide-react';
-import { Bank, ChartLineUp, Gauge, PiggyBank, Target, TrendDown, TrendUp, Wallet } from '@phosphor-icons/react/dist/ssr';
-import { CarteObjectif } from '@/components/objectifs/carte-objectif';
+import { BookOpen } from '@phosphor-icons/react/dist/ssr';
 import { ActionsRapides } from '@/components/app/actions-rapides';
-import { PastilleIcone } from '@/components/ui/pastille-icone';
-import { chargerPrenom } from '@/lib/db/profil';
-import { salutation } from '@/lib/salutation';
-import { CourbePatrimoine } from '@/components/charts/courbe-patrimoine';
-import { DonutAllocation } from '@/components/charts/donut-allocation';
+import { CarteObjectif } from '@/components/objectifs/carte-objectif';
 import { CarteHero } from '@/components/ui/carte-hero';
-import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
-import { Montant } from '@/components/ui/montant';
-import { PanneauExplication } from '@/components/ui/panneau-explication';
+import { EtatVide } from '@/components/ui/etat-vide';
+import { PastilleIcone } from '@/components/ui/pastille-icone';
+import { CATEGORIES } from '@/lib/apprendre/types';
+import { guideParSlug } from '@/lib/apprendre/guides';
 import { chargerObjectifs } from '@/lib/db/objectifs';
 import { chargerPatrimoine } from '@/lib/db/patrimoine';
-import { budgetDemo, MOUVEMENTS_DEMO, PROFIL_DEMO } from '@/lib/demo/donnees';
-import { calculerTauxEpargneCompare } from '@/lib/finance/epargne';
-import { formatPercent } from '@/lib/money';
-import {
-  allocation,
-  patrimoineNet,
-  totalActifs,
-  pocheDe,
-  totalPassifs,
-  valeurQuotePart,
-  variationJour,
-} from '@/lib/patrimoine/types';
+import { chargerPrenom } from '@/lib/db/profil';
+import { patrimoineNet, totalActifs, valeurQuotePart, variationJour } from '@/lib/patrimoine/types';
+import { salutation } from '@/lib/salutation';
 import { TAX_PARAMS_2026 } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
-import { EtatVide } from '@/components/ui/etat-vide';
-import { SectionEcran } from '@/components/ui/section-ecran';
 
 export const metadata: Metadata = {
   title: 'Vue d’ensemble',
-  description: 'Ton patrimoine net, son évolution et sa répartition.',
+  description: 'Ton patrimoine, tes objectifs, et de quoi apprendre.',
 };
 
 /**
- * Dashboard (doc 02 § module 1).
+ * Vue d'ensemble (doc 02 § module 1).
  *
- * Objectif : en 5 secondes, savoir si ça monte ou si ça descend, et pourquoi.
- * Server Component, avec des îlots clients pour les graphiques (doc 03 § performance).
+ * Le test qui gouverne cet écran : quelqu'un qui n'y connaît rien doit
+ * comprendre chaque bloc sans qu'on lui explique. Donc cinq blocs, et pas un
+ * de plus : un bonjour, le chiffre, quatre gestes, les objectifs, un guide.
+ * Tout le reste — la courbe, la répartition, l'impôt latent, les masses —
+ * vit sur la page qui lui correspond. Un écran d'accueil n'est pas un
+ * résumé de l'application ; c'est sa porte.
  */
 export default async function DashboardPage() {
   const { actifs, passifs, historique, demo } = await chargerPatrimoine();
   const { objectifs } = await chargerObjectifs(actifs);
   const prenom = await chargerPrenom();
 
-  // La vue rapide : quatre masses qui se lisent d'un coup.
-  const epargneLiquide = actifs
-    .filter((a) => a.classe === 'compte_courant' || a.classe === 'compte_epargne')
-    .reduce((somme, a) => somme + valeurQuotePart(a), 0);
-  const investi = actifs
-    .filter((a) => ['actions', 'crypto'].includes(pocheDe(a.classe)))
-    .reduce((somme, a) => somme + valeurQuotePart(a), 0);
-
   const net = patrimoineNet(actifs, passifs);
   const variation = variationJour(actifs);
   const ratioVariation = net > 0 ? variation / net : 0;
 
-  // Le KPI signature : patrimoine net d'impôt latent. Personne d'autre ne le fait.
+  // Le chiffre signature : patrimoine net d'impôt latent. Personne d'autre ne le fait.
   const impotLatent = calculerImpotLatent(
     {
       positions: actifs.map((a) => ({
@@ -76,276 +58,105 @@ export default async function DashboardPage() {
     TAX_PARAMS_2026,
   );
 
-  // Intérêts d'épargne attendus sur 12 mois, avant précompte.
-  const revenusPassifs12Mois = actifs.reduce((somme, a) => {
-    if (a.classe !== 'compte_epargne' || a.tauxBase == null) return somme;
-    const taux = (a.tauxBase + (a.primeFidelite ?? 0)) / 100;
-    return somme + Math.round(valeurQuotePart(a) * taux);
-  }, 0);
-
-  // Le budget n'est pas encore persisté : il reste sur le jeu de démo.
-  const epargne = calculerTauxEpargneCompare(budgetDemo());
+  // Un guide a lire : le premier, tant qu'il n'y a pas d'historique de lecture.
+  const guide = guideParSlug('matelas-de-securite-belgique');
+  const categorie = guide ? CATEGORIES.find((c) => c.cle === guide.categorie) : undefined;
 
   // Premier écran après inscription : pas de graphique vide et triste (doc 02).
   if (actifs.length === 0 && passifs.length === 0) {
     return <PremierEcran />;
   }
 
-  return (
-    <div className="mx-auto max-w-6xl">
-      {demo && (
-        <p className="mb-4 text-[13px] text-text-muted">Bonsoir {PROFIL_DEMO.prenom}</p>
-      )}
+  void historique;
+  void demo;
 
-      {/* Le premier mot de l'ecran s'adresse a la personne, pas au patrimoine. */}
-      <header className="apparait">
-        <p className="text-[13px] text-text-muted">
-          {salutation()}
-          {prenom ? `, ${prenom}` : ''}
-        </p>
-        <h1 className="mt-0.5 font-display text-[32px] leading-tight">Voici où tu en es.</h1>
-      </header>
+  return (
+    <div className="mx-auto max-w-6xl space-y-6">
+      <h1 className="apparait text-[30px] font-bold tracking-tight">
+        {salutation()}
+        {prenom ? `, ${prenom}` : ''}
+      </h1>
 
       <CarteHero
-        label="Patrimoine net"
+        label="Ton patrimoine"
         valeurCents={net}
         metriques={[
           {
             cle: 'net',
-            label: 'Patrimoine net',
+            label: 'Ton patrimoine',
             valeurCents: net,
-            precision:
-              'Ce que tu possèdes moins ce que tu dois. C’est le chiffre qui compte au quotidien.',
+            precision: 'Ce que tu as, dettes déduites.',
           },
           {
             cle: 'brut',
-            label: 'Patrimoine brut',
+            label: 'Sans déduire les dettes',
             valeurCents: totalActifs(actifs),
-            precision:
-              'Tes actifs seuls, dettes non déduites. C’est ce que la plupart des applications affichent sans le dire.',
+            precision: 'Tout ce que tu as, dettes comprises.',
           },
           {
             cle: 'net_impot',
-            label: 'Net d’impôt latent',
+            label: 'Après impôt',
             valeurCents: net - impotLatent.result.impotLatentCents,
-            precision:
-              'Ce qu’il te resterait après taxe si tu vendais tout aujourd’hui. Personne d’autre ne te le montre.',
+            precision: 'Ce qui resterait si tu vendais tout aujourd’hui.',
           },
         ]}
         // Un zero en pastille est un emplacement rempli, pas une information.
         variationCents={variation === 0 ? undefined : variation}
         ratioVariation={variation === 0 ? undefined : ratioVariation}
-        mentionVariation={
-          variation === 0 ? 'aucune cotation depuis la dernière clôture' : 'sur la journée'
-        }
+        mentionVariation={variation === 0 ? undefined : 'aujourd’hui'}
       />
 
-      <ActionsRapides className="apparait mt-5" />
+      <ActionsRapides className="apparait" />
 
-      {/*
-        Les objectifs juste sous le chiffre principal : c'est la question qui
-        suit « combien j'ai » — « et par rapport à ce que je vise ? ». Compacts,
-        quatre au plus ; la page dediee a le reste.
-      */}
-      <SectionEcran
-        titre="Mes objectifs"
-        sousTitre="Ce que tu vises, et où tu en es pour chacun."
-        icone={Target}
-        teinte="rose"
-        ordre={1}
-        premiere
-        className="mt-8"
-        action={
-          <Link
-            href="/objectifs"
-            className="inline-flex shrink-0 items-center gap-1 text-[12px] text-text-muted transition-colors hover:text-primary"
-          >
-            Tout voir
-            <ArrowRight className="size-3.5" />
-          </Link>
-        }
-      >
-        {objectifs.length > 0 ? (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {objectifs.slice(0, 4).map((o) => (
-              <CarteObjectif key={o.id} objectif={o} compact />
-            ))}
-          </div>
-        ) : (
-          <section className="carte p-5 sm:p-6">
-            <EtatVide
-              dense
-              titre="Commence par le matelas de sécurité"
-              texte="Trois à six mois de charges fixes, disponibles tout de suite. C’est l’objectif qui protège tous les autres."
-              action={{ href: '/objectifs/nouveau?inspiration=matelas', libelle: 'Créer cet objectif' }}
-            />
-          </section>
-        )}
-      </SectionEcran>
-
-      <SectionEcran
-        titre="Où j’en suis"
-        ordre={2}
-        icone={Gauge}
-        teinte="menthe"
-        sousTitre="Les deux chiffres qui résument ta situation, au-delà du montant total."
-      >
-      {/* Quatre masses, une ligne chacune, l'icone dans la couleur du sujet. */}
-      <ul className="carte mb-3 divide-y divide-border/60 px-4 sm:px-5">
-        {[
-          { libelle: 'Actifs', cents: totalActifs(actifs), icone: TrendUp, teinte: 'menthe' as const },
-          { libelle: 'Passifs', cents: -totalPassifs(passifs), icone: TrendDown, teinte: 'rose' as const },
-          { libelle: 'Épargne liquide', cents: epargneLiquide, icone: PiggyBank, teinte: 'violet' as const },
-          { libelle: 'Investissements', cents: investi, icone: ChartLineUp, teinte: 'azur' as const },
-        ].map((ligne) => (
-          <li key={ligne.libelle} className="flex items-center gap-3 py-3">
-            <PastilleIcone icone={ligne.icone} teinte={ligne.teinte} />
-            <span className="min-w-0 flex-1 text-[14px]">{ligne.libelle}</span>
-            <Montant cents={ligne.cents} decimals={0} className="font-semibold" />
-          </li>
-        ))}
-      </ul>
-      <div className="grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1 sm:gap-4 lg:grid-cols-3">
-        <CarteKPITexte
-          label="Taux d’épargne lissé"
-          valeur={formatPercent(epargne.result.lisse12Mois.tauxEpargne)}
-          precision={`Sur 12 mois. Le mois seul afficherait ${formatPercent(
-            epargne.result.mensuel.tauxEpargne,
-          )}.`}
-        />
-        <CarteKPI
-          label="Revenus passifs projetés"
-          valeurCents={revenusPassifs12Mois}
-          precision="Intérêts d’épargne attendus sur 12 mois, avant précompte"
-        />
-      </div>
-      </SectionEcran>
-
-      <SectionEcran
-        titre="Comment ça évolue"
-        ordre={3}
-        icone={ChartLineUp}
-        teinte="azur"
-        sousTitre="Ce qui a changé depuis hier, et la trajectoire des derniers mois."
-      >
-      {historique.length > 1 ? (
-        <CourbePatrimoine historique={historique} />
-      ) : (
-        <section className="carte p-5 sm:p-6">
-          <h3 className="text-[15px]">Évolution du patrimoine net</h3>
-          <EtatVide
-            titre="Ta courbe commence demain"
-            texte="Nestor photographie ton patrimoine une fois par jour. Il faut deux points pour tracer une ligne : reviens dans quelques jours, elle sera là — et les mouvements de la journée s’afficheront ici avec elle."
-          />
-        </section>
-      )}
-
-      {/* La liste des mouvements n'a de sens qu'avec une courbe ou des donnees
-          de demo : deux etats vides a trois cents pixels d'ecart se lisent
-          « remplissage », un seul se lit « dessin ». */}
-      {(demo || historique.length > 1) && (
-      <section className="carte mt-4 p-5 sm:p-6">
-          <div className="flex items-baseline justify-between gap-3">
-            <h3 className="text-[15px]">Ce qui a bougé aujourd’hui</h3>
+      <section className="apparait" style={{ '--delai': '70ms' } as CSSProperties}>
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <h2 className="text-[20px] font-bold">Tes objectifs</h2>
+          {objectifs.length > 0 && (
             <Link
-              href="/patrimoine"
-              className="inline-flex items-center gap-1 text-[12px] text-text-muted transition-colors hover:text-primary"
+              href="/objectifs"
+              className="inline-flex items-center gap-1 text-[13px] font-medium text-primary"
             >
               Tout voir
               <ArrowRight className="size-3.5" />
             </Link>
+          )}
+        </div>
+        {objectifs.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {objectifs.slice(0, 2).map((o) => (
+              <CarteObjectif key={o.id} objectif={o} compact />
+            ))}
           </div>
-
-          {demo ? (
-            <ul className="mt-4 divide-y divide-border/50">
-              {MOUVEMENTS_DEMO.map((m) => (
-                <li key={m.id} className="flex items-center justify-between gap-4 py-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-[14px]">{m.libelle}</p>
-                    <p className="text-[12px] text-text-subtle">{m.detail}</p>
-                  </div>
-                  <Montant
-                    cents={m.montantCents}
-                    sign="always"
-                    decimals={2}
-                    colore
-                    className="shrink-0 text-[14px]"
-                  />
-                </li>
-              ))}
-            </ul>
-          ) : (
+        ) : (
+          <section className="carte p-5">
             <EtatVide
               dense
-              titre="Rien n’a encore bougé"
-              texte="Dès qu’une cotation change ou qu’un import de transactions arrive, les variations de la journée s’affichent ici — la plus forte en premier."
+              titre="Commence par le matelas de sécurité"
+              texte="Trois à six mois de charges, de côté, avant tout le reste."
+              action={{ href: '/objectifs/nouveau?inspiration=matelas', libelle: 'Commencer' }}
             />
-          )}
-      </section>
-      )}
-      </SectionEcran>
-
-      <SectionEcran
-        titre="Ce que je possède"
-        ordre={4}
-        icone={Wallet}
-        teinte="violet"
-        sousTitre="La répartition de tes actifs, et le détail de ce qui compose le total."
-      >
-      <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
-        <DonutAllocation allocation={allocation(actifs)} totalCents={totalActifs(actifs)} />
-
-        {passifs.length > 0 && (
-          <section className="carte p-5 sm:p-6">
-            <h3 className="text-[15px]">Actifs et passifs</h3>
-            <dl className="mt-4 space-y-3 text-[14px]">
-              <div className="flex items-center justify-between">
-                <dt className="text-text-muted">Total des actifs</dt>
-                <dd>
-                  <Montant cents={totalActifs(actifs)} decimals={0} />
-                </dd>
-              </div>
-              <div className="flex items-center justify-between">
-                <dt className="text-text-muted">Total des passifs</dt>
-                <dd>
-                  <Montant cents={-totalPassifs(passifs)} decimals={0} />
-                </dd>
-              </div>
-              <div className="flex items-center justify-between border-t border-border pt-3 font-medium">
-                <dt>Patrimoine net</dt>
-                <dd>
-                  <Montant cents={net} decimals={0} />
-                </dd>
-              </div>
-            </dl>
           </section>
         )}
+      </section>
 
-      </div>
-      </SectionEcran>
-
-      <SectionEcran
-        titre="Ce que ça me coûterait"
-        ordre={5}
-        icone={Bank}
-        teinte="ambre"
-        sousTitre="L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà."
-      >
-        <div className="grid gap-4 sm:grid-cols-[minmax(0,14rem)_1fr]">
-          <CarteKPI
-            label="Impôt latent"
-            valeurCents={impotLatent.result.impotLatentCents}
-            precision={`${formatPercent(
-              net > 0 ? impotLatent.result.impotLatentCents / net : 0,
-            )} de ton patrimoine, sur ${impotLatent.result.lignes.length} positions`}
-          />
-          <PanneauExplication
-            calcul={impotLatent}
-            titre="Voir le calcul, ligne par ligne"
-            className="self-start"
-          />
-        </div>
-      </SectionEcran>
+      {guide && (
+        <section className="apparait" style={{ '--delai': '140ms' } as CSSProperties}>
+          <h2 className="mb-3 text-[20px] font-bold">Apprendre</h2>
+          <Link
+            href={`/apprendre/${guide.slug}`}
+            className="carte carte-interactive flex items-center gap-4 p-4"
+          >
+            <PastilleIcone icone={BookOpen} teinte="azur" taille="grande" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[15px] font-semibold leading-snug">{guide.titre}</span>
+              <span className="mt-0.5 block text-[12.5px] text-text-muted">
+                {guide.dureeMinutes} min{categorie ? ` · ${categorie.libelle}` : ''}
+              </span>
+            </span>
+            <ArrowRight className="size-4 shrink-0 text-text-subtle" />
+          </Link>
+        </section>
+      )}
     </div>
   );
 }
@@ -386,7 +197,7 @@ function PremierEcran() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header>
-        <h1 className="titre-degrade font-display text-[32px] tracking-tight">
+        <h1 className="titre-degrade text-[30px] font-bold tracking-tight">
           Ton patrimoine est vide
         </h1>
         <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-text-muted">

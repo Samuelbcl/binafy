@@ -1,37 +1,23 @@
 import type { Metadata, Viewport } from 'next';
-import { Instrument_Serif, Schibsted_Grotesk } from 'next/font/google';
+import { Atkinson_Hyperlegible_Next } from 'next/font/google';
 import { AppProviders } from '@/components/providers';
 import { siteUrl } from '@/lib/env';
 import './globals.css';
 
 /**
- * L'interface et les chiffres — Schibsted Grotesk.
+ * Une seule famille — Atkinson Hyperlegible Next.
  *
- * Un grotesque dessiné pour la presse, pas pour les maquettes : le a, le g et
- * le y ont une inflexion qu'on ne trouve pas dans les sans « neutres » que tout
- * le monde emploie, et ses chiffres tiennent une colonne. C'est ce qui manquait
- * à l'ancienne police : elle ne disait rien, et on le voyait.
+ * Dessinee par le Braille Institute pour des gens qui ont du mal a lire :
+ * chaque lettre est faite pour ne pas etre confondue avec une autre (le l, le
+ * I et le 1 ; le b et le d ; le O et le 0). C'est le test qu'on a rate — la
+ * mere de Samuel n'a rien compris — et c'est la police qui a ete faite pour
+ * le passer. Sept graisses, variable, republiee sur Google Fonts en 2025.
+ * Une seule famille pour tout, titres compris : les titres se distinguent par
+ * la taille et le gras, pas par une autre voix. Moins de choses a lire.
  */
-const ui = Schibsted_Grotesk({
+const ui = Atkinson_Hyperlegible_Next({
   variable: '--font-ui',
   subsets: ['latin'],
-  display: 'swap',
-});
-
-/**
- * Les titres — Instrument Serif.
- *
- * Un serif a fort contraste, etroit, presque calligraphique : c'est la voix
- * des maquettes que Samuel a apportees — le « Good morning ! » en serif au-
- * dessus d'une interface en grotesque. Une seule graisse, jamais synthetisee
- * en gras ; la hierarchie vient de la taille. L'italique existe, pour un mot
- * qu'on veut faire entendre.
- */
-const titres = Instrument_Serif({
-  variable: '--font-titres',
-  subsets: ['latin'],
-  weight: '400',
-  style: ['normal', 'italic'],
   display: 'swap',
 });
 
@@ -67,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang="fr-BE"
       suppressHydrationWarning
-      className={`${ui.variable} ${titres.variable} h-full antialiased`}
+      className={`${ui.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <AppProviders>{children}</AppProviders>

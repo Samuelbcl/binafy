@@ -64,11 +64,15 @@ export function SectionEcran({
     >
       <div className="mb-4 flex items-start justify-between gap-4">
         <div className="flex min-w-0 gap-3">
-          {icone && <PastilleIcone icone={icone} teinte={teinte} taille="petite" className="mt-0.5" />}
+          {/* Sur telephone, le titre seul : chaque element de plus est un
+              element que quelqu'un qui decouvre l'ecran doit ignorer. */}
+          {icone && (
+            <PastilleIcone icone={icone} teinte={teinte} taille="petite" className="mt-0.5 hidden sm:grid" />
+          )}
           <div className="min-w-0">
-            <h2 className="text-[22px]">{titre}</h2>
+            <h2 className="text-[20px] font-bold">{titre}</h2>
             {sousTitre && (
-              <p className="mt-1 text-[13px] leading-relaxed text-text-muted">{sousTitre}</p>
+              <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">{sousTitre}</p>
             )}
           </div>
         </div>

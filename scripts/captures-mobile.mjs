@@ -166,7 +166,11 @@ try {
 
   const debordements = [];
 
+  // PAGES_SEULES=app-dashboard,app-objectifs : ne capturer que celles-la —
+  // pour comparer une variante (une police, une couleur) sans tout refaire.
+  const seules = process.env.PAGES_SEULES ? new Set(process.env.PAGES_SEULES.split(',')) : null;
   for (const [nom, chemin] of PAGES) {
+    if (seules && !seules.has(nom)) continue;
     await page.goto(`${BASE}${chemin}`, { waitUntil: 'networkidle', timeout: 30_000 });
     await page.waitForTimeout(400);
 
