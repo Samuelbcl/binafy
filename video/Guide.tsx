@@ -28,8 +28,10 @@ export type Scene = {
   texte: string;
   motsCles: string[];
   audio: string;
-  /** `scene-N.mp4` ou `scene-N.jpg`, déposé par chercher-images ; absent → fond de couleur. */
+  /** `scene-N.mp4` ou `scene-N.jpg`, déposé par chercher-images ou generer-fonds ; absent → fond de couleur. */
   fond?: string;
+  /** Durée du clip de fond, s'il est plus court que la scène : il sera ralenti pour la couvrir. */
+  fondDureeSecondes?: number;
   dureeSecondes: number;
   mots: Mot[];
 };
@@ -67,6 +69,11 @@ function SceneVue({ scene }: { scene: Scene }) {
   const zoom = interpolate(t, [0, scene.dureeSecondes], [1, 1.08]);
 
   const estVideo = scene.fond?.endsWith('.mp4');
+  // Un clip de cinq secondes couvre une scène de dix en jouant à mi-vitesse :
+  // au ralenti, un mouvement de caméra lent reste un mouvement de caméra lent.
+  const ralenti = scene.fondDureeSecondes
+    ? Math.max(0.35, Math.min(1, scene.fondDureeSecondes / scene.dureeSecondes))
+    : 1;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#0b0a12' }}>
@@ -77,6 +84,7 @@ function SceneVue({ scene }: { scene: Scene }) {
             <OffthreadVideo
               src={staticFile(scene.fond)}
               muted
+              playbackRate={ralenti}
               style={{ width, height, objectFit: 'cover' }}
             />
           ) : (

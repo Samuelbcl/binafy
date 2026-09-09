@@ -6,37 +6,51 @@
     {
       "texte": "Avant d'investir, avant d'épargner pour un projet, il y a une chose à mettre en place : un matelas de sécurité.",
       "motsCles": ["matelas", "sécurité"],
-      "requete": "calm person relaxing home morning light"
+      "requete": "calm person relaxing home morning light",
+      "image": "A person in their thirties sitting calmly at a kitchen table by a window in a Belgian townhouse, morning light, a cup of coffee, relaxed and confident",
+      "mouvement": "slow cinematic push-in towards the person, steam rising from the cup, light breathing motion"
     },
     {
       "texte": "Trois à six mois de charges fixes — loyer, énergie, assurances, abonnements — de côté, et disponibles tout de suite.",
       "motsCles": ["Trois", "six", "mois", "charges", "fixes"],
-      "requete": "paying bills calculator table"
+      "requete": "paying bills calculator table",
+      "image": "Close-up of a wooden table with a few paper bills, a calculator and a pen, neatly arranged, warm lamp light, top-down angle",
+      "mouvement": "gentle slow slide across the table, a hand enters and taps the calculator"
     },
     {
       "texte": "Pas sur ton compte à vue : sur un compte d'épargne réglementé. Les intérêts y sont exonérés jusqu'à un plafond, et l'argent reste accessible en un jour.",
       "motsCles": ["épargne", "réglementé", "exonérés"],
-      "requete": "coins jar savings close up"
+      "requete": "coins jar savings close up",
+      "image": "A glass jar half full of euro coins on a shelf, soft window light, a small green plant beside it, macro photograph",
+      "mouvement": "a hand drops one coin into the jar, coins settle, slow push-in"
     },
     {
       "texte": "Pourquoi trois à six ? Parce qu'en Belgique, la mutuelle et le chômage prennent le relais — mais pas tout de suite, et pas en entier. Le matelas couvre le délai, et l'écart.",
       "motsCles": ["Belgique", "délai", "écart"],
-      "requete": "brussels street morning people walking"
+      "requete": "brussels street morning people walking",
+      "image": "A quiet Brussels street early in the morning, art nouveau facades, a tram passing in the distance, a person walking with a bag, soft overcast light",
+      "mouvement": "slow tracking shot following the walker, tram passes, gentle motion"
     },
     {
       "texte": "Le piège classique : compter le même argent deux fois. Ton matelas n'est pas ton apport pour la maison. Le jour de l'acte, il part chez le notaire — et il ne reste rien pour l'imprévu.",
       "motsCles": ["piège", "apport", "notaire"],
-      "requete": "house keys handover new home"
+      "requete": "house keys handover new home",
+      "image": "A set of house keys being handed over on a notary's desk, documents and a fountain pen, a brick house visible through the window, warm afternoon light",
+      "mouvement": "the keys are placed on the desk, slow push-in on the keys"
     },
     {
       "texte": "Autre piège : un compte à taux boosté qui n'est pas réglementé. Le taux fait envie, mais chaque euro d'intérêt est taxé dès le premier.",
       "motsCles": ["boosté", "réglementé", "taxé"],
-      "requete": "reading contract fine print magnifier"
+      "requete": "reading contract fine print magnifier",
+      "image": "A person reading the fine print of a bank contract with a magnifying glass, desk lamp, evening, focused expression, close-up on the hands and paper",
+      "mouvement": "the magnifying glass moves slowly over the lines, subtle head movement"
     },
     {
       "texte": "Nestor calcule ta cible depuis tes vraies charges, et te dit où tu en es. Commence par ça. Le reste vient après.",
       "motsCles": ["Nestor", "cible", "Commence"],
-      "requete": "smartphone finance app smiling person"
+      "requete": "smartphone finance app smiling person",
+      "image": "A smiling person holding a smartphone in a bright living room, lavender-tinted screen glow on their face, plants and a sofa in the background, relaxed",
+      "mouvement": "the person looks up from the phone and smiles, slow push-in"
     }
   ]
 }
