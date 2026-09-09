@@ -1,0 +1,42 @@
+{
+  "slug": "matelas-de-securite-belgique",
+  "titre": "Le matelas de sécurité",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "Avant d'investir, avant d'épargner pour un projet, il y a une chose à mettre en place : un matelas de sécurité.",
+      "motsCles": ["matelas", "sécurité"],
+      "requete": "calm person relaxing home morning light"
+    },
+    {
+      "texte": "Trois à six mois de charges fixes — loyer, énergie, assurances, abonnements — de côté, et disponibles tout de suite.",
+      "motsCles": ["Trois", "six", "mois", "charges", "fixes"],
+      "requete": "paying bills calculator table"
+    },
+    {
+      "texte": "Pas sur ton compte à vue : sur un compte d'épargne réglementé. Les intérêts y sont exonérés jusqu'à un plafond, et l'argent reste accessible en un jour.",
+      "motsCles": ["épargne", "réglementé", "exonérés"],
+      "requete": "coins jar savings close up"
+    },
+    {
+      "texte": "Pourquoi trois à six ? Parce qu'en Belgique, la mutuelle et le chômage prennent le relais — mais pas tout de suite, et pas en entier. Le matelas couvre le délai, et l'écart.",
+      "motsCles": ["Belgique", "délai", "écart"],
+      "requete": "brussels street morning people walking"
+    },
+    {
+      "texte": "Le piège classique : compter le même argent deux fois. Ton matelas n'est pas ton apport pour la maison. Le jour de l'acte, il part chez le notaire — et il ne reste rien pour l'imprévu.",
+      "motsCles": ["piège", "apport", "notaire"],
+      "requete": "house keys handover new home"
+    },
+    {
+      "texte": "Autre piège : un compte à taux boosté qui n'est pas réglementé. Le taux fait envie, mais chaque euro d'intérêt est taxé dès le premier.",
+      "motsCles": ["boosté", "réglementé", "taxé"],
+      "requete": "reading contract fine print magnifier"
+    },
+    {
+      "texte": "Nestor calcule ta cible depuis tes vraies charges, et te dit où tu en es. Commence par ça. Le reste vient après.",
+      "motsCles": ["Nestor", "cible", "Commence"],
+      "requete": "smartphone finance app smiling person"
+    }
+  ]
+}

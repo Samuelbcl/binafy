@@ -21,6 +21,8 @@
     "fiscal:audit": "vitest run src/lib/tax/catalogue.test.ts"
   },
   "dependencies": {
+    "@remotion/cli": "^4.0.522",
+    "@remotion/renderer": "^4.0.522",
     "@solar-icons/react": "^2.1.0",
     "@supabase/ssr": "^0.12.5",
     "@supabase/supabase-js": "^2.112.4",
@@ -37,6 +39,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
+    "remotion": "^4.0.522",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.5.4"

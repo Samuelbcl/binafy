@@ -54,3 +54,8 @@ design/*.html
 
 # captures de QA mobile, regenerables
 captures/
+
+# Videos des guides : generees (narration, fonds de banque libre, rendu)
+video/public/
+public/videos/
+.remotion/
