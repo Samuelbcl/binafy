@@ -2,15 +2,11 @@ import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Plus } from 'lucide-react';
-import { BookOpen } from '@phosphor-icons/react/dist/ssr';
 import { ActionsRapides } from '@/components/app/actions-rapides';
-import { CarteObjectif } from '@/components/objectifs/carte-objectif';
 import { CarteHero } from '@/components/ui/carte-hero';
-import { EtatVide } from '@/components/ui/etat-vide';
 import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { CATEGORIES } from '@/lib/apprendre/types';
 import { guideParSlug } from '@/lib/apprendre/guides';
-import { chargerObjectifs } from '@/lib/db/objectifs';
 import { chargerPatrimoine } from '@/lib/db/patrimoine';
 import { chargerPrenom } from '@/lib/db/profil';
 import { patrimoineNet, totalActifs, valeurQuotePart, variationJour } from '@/lib/patrimoine/types';
@@ -27,15 +23,16 @@ export const metadata: Metadata = {
  * Vue d'ensemble (doc 02 § module 1).
  *
  * Le test qui gouverne cet écran : quelqu'un qui n'y connaît rien doit
- * comprendre chaque bloc sans qu'on lui explique. Donc cinq blocs, et pas un
- * de plus : un bonjour, le chiffre, quatre gestes, les objectifs, un guide.
+ * comprendre chaque bloc sans qu'on lui explique. Donc quatre blocs, et pas
+ * un de plus : un bonjour, le chiffre, trois gestes, un guide. Les objectifs
+ * sont mis de côté pour le moment (trop de choses à la fois) ; le module
+ * reste dans le code, sans lien vers lui.
  * Tout le reste — la courbe, la répartition, l'impôt latent, les masses —
  * vit sur la page qui lui correspond. Un écran d'accueil n'est pas un
  * résumé de l'application ; c'est sa porte.
  */
 export default async function DashboardPage() {
   const { actifs, passifs, historique, demo } = await chargerPatrimoine();
-  const { objectifs } = await chargerObjectifs(actifs);
   const prenom = await chargerPrenom();
 
   const net = patrimoineNet(actifs, passifs);
@@ -108,45 +105,14 @@ export default async function DashboardPage() {
 
       <ActionsRapides className="apparait" />
 
-      <section className="apparait" style={{ '--delai': '70ms' } as CSSProperties}>
-        <div className="mb-3 flex items-baseline justify-between gap-3">
-          <h2 className="text-[20px] font-bold">Tes objectifs</h2>
-          {objectifs.length > 0 && (
-            <Link
-              href="/objectifs"
-              className="inline-flex items-center gap-1 text-[13px] font-medium text-primary"
-            >
-              Tout voir
-              <ArrowRight className="size-3.5" />
-            </Link>
-          )}
-        </div>
-        {objectifs.length > 0 ? (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {objectifs.slice(0, 2).map((o) => (
-              <CarteObjectif key={o.id} objectif={o} compact />
-            ))}
-          </div>
-        ) : (
-          <section className="carte p-5">
-            <EtatVide
-              dense
-              titre="Commence par le matelas de sécurité"
-              texte="Trois à six mois de charges, de côté, avant tout le reste."
-              action={{ href: '/objectifs/nouveau?inspiration=matelas', libelle: 'Commencer' }}
-            />
-          </section>
-        )}
-      </section>
-
       {guide && (
-        <section className="apparait" style={{ '--delai': '140ms' } as CSSProperties}>
+        <section className="apparait" style={{ '--delai': '70ms' } as CSSProperties}>
           <h2 className="mb-3 text-[20px] font-bold">Apprendre</h2>
           <Link
             href={`/apprendre/${guide.slug}`}
             className="carte carte-interactive flex items-center gap-4 p-4"
           >
-            <PastilleIcone icone={BookOpen} teinte="azur" taille="grande" />
+            <PastilleIcone icone="book-2" teinte="azur" taille="grande" />
             <span className="min-w-0 flex-1">
               <span className="block text-[15px] font-semibold leading-snug">{guide.titre}</span>
               <span className="mt-0.5 block text-[12.5px] text-text-muted">

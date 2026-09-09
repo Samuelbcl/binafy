@@ -1,13 +1,4 @@
-import {
-  Bank,
-  Buildings,
-  Calculator,
-  FileText,
-  PiggyBank,
-  TrendUp,
-  Wallet,
-} from '@phosphor-icons/react/dist/ssr';
-import type { Icon } from '@phosphor-icons/react';
+import type { BaseIcone } from '@/lib/icones/solar';
 import type { Teinte } from '@/components/ui/pastille-icone';
 
 /**
@@ -23,7 +14,7 @@ export type Outil = {
   titre: string;
   /** Ce que l'outil répond, en une phrase — pas ce qu'il contient. */
   description: string;
-  icone: Icon;
+  icone: BaseIcone;
   /**
    * Couleur de la pastille. Elle suit le sujet, pas l'ordre de la liste :
    * l'immobilier reste ambre partout, la bourse reste violette. On retrouve un
@@ -40,7 +31,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Frais d’acquisition immobilière',
     description:
       'Le cash réel à sortir le jour de l’acte, par Région, et ce que coûte un locatif acheté avant sa résidence principale.',
-    icone: Bank,
+    icone: 'home-2',
     teinte: 'ambre',
     vedette: true,
   },
@@ -49,7 +40,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Capacité d’emprunt',
     description:
       'Combien tu peux emprunter, et surtout ce qu’il te resterait pour vivre — le chiffre que les banques ne montrent pas.',
-    icone: Buildings,
+    icone: 'buildings-2',
     teinte: 'terre',
     vedette: true,
   },
@@ -58,7 +49,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Intérêts composés',
     description:
       'La projection classique, mais avec la version nette de fiscalité belge. Personne d’autre ne la donne.',
-    icone: Calculator,
+    icone: 'calculator-minimalistic',
     teinte: 'violet',
     vedette: true,
   },
@@ -67,7 +58,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Budget et taux d’épargne',
     description:
       'Épargner et investir ne sont pas la même chose. Les deux taux, séparés, et la cible d’épargne de précaution qui en découle.',
-    icone: Wallet,
+    icone: 'wallet-money',
     teinte: 'menthe',
   },
   {
@@ -75,7 +66,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Rendement locatif belge',
     description:
       'Tu n’es pas taxé sur les loyers mais sur le revenu cadastral indexé. Voici ton cash-flow réel après impôt.',
-    icone: FileText,
+    icone: 'document-text',
     teinte: 'azur',
   },
   {
@@ -83,7 +74,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Indépendant complémentaire',
     description:
       'Cotisations, frais de caisse et impôt marginal : sur ce que tu factures, ce qui arrive vraiment dans ta poche.',
-    icone: PiggyBank,
+    icone: 'hand-money',
     teinte: 'rose',
   },
   {
@@ -91,7 +82,7 @@ export const OUTILS: readonly Outil[] = [
     titre: 'Simulateur de patrimoine',
     description:
       'Où mène ton rythme d’épargne actuel, sur dix ou trente ans, taxe sur les plus-values comprise.',
-    icone: TrendUp,
+    icone: 'graph-up',
     teinte: 'lagune',
   },
 ];

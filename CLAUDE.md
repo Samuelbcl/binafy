@@ -107,6 +107,8 @@ npm test            # Vitest — le moteur de calcul doit rester vert
 npm run typecheck   # tsc --noEmit
 npm run build       # build de production
 node scripts/generer-seed-fiscal.mjs   # régénère le seed SQL et docs/11
+node scripts/generer-icones.mjs       # régénère src/lib/icones/solar.ts
+                                      # (ajouter un nom Solar dans BASES)
 node scripts/verifier-fraicheur.mjs   # liste les valeurs fiscales périmées
                                       # (sort en code 1 s'il y en a)
 node scripts/captures-mobile.mjs captures   # capture chaque écran en 390×844

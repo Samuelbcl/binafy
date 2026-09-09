@@ -74,11 +74,26 @@ un grotesque dessiné pour la presse, dont le *a*, le *g* et le *y* ont une infl
 des chiffres tabulaires. Les montants sont en graisse moyenne (500–600), grands plutôt
 que gros : un chiffre qui n'a pas besoin de crier.
 
-**Les icônes.** Phosphor, en deux tons (`duotone`) dans les pastilles — la forme pleine
-en transparence sous le trait, ce qui fait qu'une icône ressemble à un objet, pas à un
-schéma — et en plein (`fill`) pour l'onglet actif de la barre, au trait sinon : on
-reconnaît où l'on est à la forme avant la couleur. Lucide reste pour les glyphes
-utilitaires (flèches, chevrons, croix, corbeille), où la neutralité est la qualité.
+**Les icônes.** **Solar** (480 Design, CC BY 4.0), choisie en cherchant — pas Lucide,
+pas Phosphor, les deux que tout générateur sort. Solar a un dessin à part : des coins
+adoucis jusqu'au bout, une chaleur de pictogramme d'objet plutôt que de schéma. Trois
+styles : `bold-duotone` dans les pastilles (la forme pleine en transparence sous le
+trait), `bold` pour ce qui est choisi ou actif, `linear` au repos. Les icônes sont
+extraites une par une dans `src/lib/icones/solar.ts` par `node scripts/generer-icones.mjs`
+(pas de paquet React : le paquet officiel pèse cinquante mégaoctets et passe par un
+contexte, donc pas de rendu serveur). Lucide reste pour les glyphes utilitaires (flèches,
+chevrons, croix, plus). **Aucune émoticône, nulle part.**
+
+**Pas d'orange.** Samuel ne l'aime pas. Le second accent est un rose framboise, qui tient
+aussi le rôle de couleur d'attention ; le bouton flottant et les boutons d'engagement sont
+violets. Aucune teinte de la palette de données n'est orange.
+
+**Une section vide se replie** sur une ligne (`<details>`) : un titre au-dessus de rien
+prend la place d'une section pleine et se lit comme un trou.
+
+**Mis de côté pour le moment** (le code reste, sans lien vers lui) : les objectifs — trop
+de choses à la fois, on y reviendra quand le reste sera limpide — et le simulateur
+d'épargne-pension.
 
 **Les pastilles.** Rondes, éclairées par le haut, avec un liseré : des jetons, pas des
 carrés teintés. Chaque outil et chaque zone d'écran garde sa couleur d'une page à l'autre

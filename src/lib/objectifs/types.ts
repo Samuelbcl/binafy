@@ -1,16 +1,4 @@
-import {
-  Airplane,
-  Baby,
-  Car,
-  Compass,
-  Diamond,
-  GraduationCap,
-  House,
-  PiggyBank,
-  ShieldCheck,
-  SunHorizon,
-} from '@phosphor-icons/react/dist/ssr';
-import type { Icon } from '@phosphor-icons/react';
+import type { BaseIcone } from '@/lib/icones/solar';
 import { z } from 'zod';
 import { TEINTES, type Teinte } from '@/components/ui/pastille-icone';
 
@@ -45,20 +33,20 @@ export const VERSEMENTS_PAR_AN: Record<FrequenceContribution, number> = {
 /**
  * Les icônes qu'un objectif peut porter. Dix, pas cinquante : au-delà, on
  * cherche l'icône au lieu de nommer l'objectif. Les clés sont stables et
- * stockées en base ; les composants Lucide derrière peuvent changer.
+ * stockées en base ; les icônes Solar derrière peuvent changer.
  */
 export const ICONES_OBJECTIF = {
-  bouclier: ShieldCheck,
-  maison: House,
-  soleil: SunHorizon,
-  diplome: GraduationCap,
-  voiture: Car,
-  bague: Diamond,
-  avion: Airplane,
-  boussole: Compass,
-  tirelire: PiggyBank,
-  bebe: Baby,
-} satisfies Record<string, Icon>;
+  bouclier: 'shield-check',
+  maison: 'home-2',
+  soleil: 'sun-2',
+  diplome: 'square-academic-cap',
+  voiture: 'wheel',
+  bague: 'hearts',
+  avion: 'suitcase-tag',
+  boussole: 'compass',
+  tirelire: 'money-bag',
+  bebe: 'balloon',
+} satisfies Record<string, BaseIcone>;
 
 export type IconeObjectif = keyof typeof ICONES_OBJECTIF;
 export const CLES_ICONE = Object.keys(ICONES_OBJECTIF) as [IconeObjectif, ...IconeObjectif[]];

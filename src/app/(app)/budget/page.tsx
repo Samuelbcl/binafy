@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { createElement } from 'react';
 import { iconeCategorie } from '@/lib/budget/icones';
+import { Icone } from '@/components/ui/icone';
 import {} from 'lucide-react';
 import { SankeyBudget } from '@/components/charts/sankey-budget';
 import { ImportCSV } from '@/components/budget/import-csv';
@@ -142,19 +142,23 @@ export default async function BudgetPage() {
           )}
         </section>
 
+        {/* Vide, la section se replie sur une ligne : un titre au-dessus de
+            rien prend la place d'une section pleine et se lit comme un trou. */}
+        {budget.abonnements.length === 0 ? (
+          <details className="carte group px-5 py-4 sm:px-6">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-[15px] font-semibold">
+              Abonnements
+              <span className="text-[12px] font-normal text-text-subtle">aucun repéré</span>
+            </summary>
+            <p className="mt-3 text-[13px] leading-relaxed text-text-muted">
+              Il faut trois mois de même montant pour qu’un abonnement soit sûr. Importe
+              quelques mois de plus.
+            </p>
+          </details>
+        ) : (
         <section className="carte p-5 sm:p-6">
           <h2 className="font-display text-[17px]">Abonnements détectés</h2>
-          <p className="mt-1 text-[12px] text-text-subtle">
-            Regroupés par libellé et périodicité, avec le coût annualisé
-          </p>
-
-          {budget.abonnements.length === 0 ? (
-            <EtatVide
-              dense
-              titre="Aucun abonnement repéré pour l’instant"
-              texte="Nestor cherche des montants stables qui reviennent chaque mois. Il en faut trois pour être sûr qu’il s’agit d’un abonnement et non d’une coïncidence — importe quelques mois de plus."
-            />
-          ) : (
+          {(
             <ul className="mt-4 divide-y divide-border/50">
               {budget.abonnements.slice(0, 8).map((abo) => (
                 <li key={abo.libelle} className="flex items-center justify-between gap-4 py-3">
@@ -173,6 +177,7 @@ export default async function BudgetPage() {
             </ul>
           )}
         </section>
+        )}
       </div>
 
       <section className="carte overflow-hidden">
@@ -221,9 +226,14 @@ export default async function BudgetPage() {
       </section>
 
       {budget.imports.length > 0 && (
-        <section className="carte p-5 sm:p-6">
-          <h2 className="font-display text-[17px]">Imports récents</h2>
-          <ul className="mt-4 divide-y divide-border/50 text-[13px]">
+        <details className="carte px-5 py-4 sm:px-6">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-[15px] font-semibold">
+            Imports
+            <span className="text-[12px] font-normal text-text-subtle">
+              {budget.imports.length} fichier{budget.imports.length > 1 ? 's' : ''}
+            </span>
+          </summary>
+          <ul className="mt-3 divide-y divide-border/50 text-[13px]">
             {budget.imports.map((i) => (
               <li key={i.id} className="flex items-center justify-between gap-4 py-2.5">
                 <span className="min-w-0 truncate">{i.nomFichier}</span>
@@ -234,7 +244,7 @@ export default async function BudgetPage() {
               </li>
             ))}
           </ul>
-        </section>
+        </details>
       )}
 
       <PanneauExplication calcul={epargne} titre="Comment le taux d’épargne est calculé" />
@@ -284,9 +294,7 @@ function IconeCategorie({ nom, couleur }: { nom: string; couleur: string }) {
       className="grid size-9 shrink-0 place-items-center rounded-[0.7rem] text-white shadow-[var(--pastille-relief)]"
       style={{ background: couleur }}
     >
-      {/* L'icone depend du nom : on la rend par createElement plutot que par
-          une balise dont le type changerait a chaque rendu. */}
-      {createElement(iconeCategorie(nom), { weight: 'fill', className: 'size-[18px]' })}
+      <Icone nom={iconeCategorie(nom)} style="bold" className="size-[18px]" />
     </span>
   );
 }

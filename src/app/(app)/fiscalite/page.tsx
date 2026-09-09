@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
-import { Bank, Bell, Buildings, Coins, PiggyBank } from '@phosphor-icons/react/dist/ssr';
 import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { CarteKPI, CarteKPITexte } from '@/components/ui/carte-kpi';
 import { Jauge } from '@/components/ui/jauge';
@@ -23,7 +22,6 @@ import { TAX_PARAMS_2026, parametresNonVerifies } from '@/lib/tax/parametres';
 import { calculerImpotLatent } from '@/lib/tax/plus-values';
 import { calculerPrecompteEpargneReglementee } from '@/lib/tax/precompte';
 import { parametresARevoir, getCents } from '@/lib/tax/types';
-import { SimulateurEpargnePension } from '@/components/fiscalite/simulateur-epargne-pension';
 
 export const metadata: Metadata = {
   title: 'Fiscalité',
@@ -126,17 +124,17 @@ export default async function FiscalitePage() {
         <h1 className="titre-degrade text-[30px] font-bold tracking-tight">Fiscalité</h1>
         <p className="mt-1.5 text-[14px] text-text-muted">
           Ta position pour l’année {params.annee} — {PROFIL_DEMO.commune}, additionnels
-          communaux de {PROFIL_DEMO.additionnelsCommunauxPourcent} %.
+          communaux de {String(PROFIL_DEMO.additionnelsCommunauxPourcent).replace('.', ',')} %.
         </p>
       </header>
 
       {/* 1 — Position fiscale de l'année */}
       <section className="space-y-4 apparait" style={{ '--delai': '70ms' } as CSSProperties}>
         <div className="flex gap-3">
-          <PastilleIcone icone={Buildings} teinte="violet" className="mt-0.5" />
+          <PastilleIcone icone="buildings-2" teinte="violet" className="mt-0.5 hidden sm:grid" />
           <div className="min-w-0">
             <h2 className="text-[17px] tracking-[-0.01em]">Ma position fiscale</h2>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">
               Ce que l’État prélèvera sur tes revenus de cette année, et ce qu’il te laisse.
             </p>
           </div>
@@ -178,10 +176,10 @@ export default async function FiscalitePage() {
       {/* 2 — Impôt latent */}
       <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '140ms' } as CSSProperties}>
         <div className="flex gap-3">
-          <PastilleIcone icone={Bank} teinte="ambre" className="mt-0.5" />
+          <PastilleIcone icone="banknote" teinte="ambre" className="mt-0.5 hidden sm:grid" />
           <div className="min-w-0">
             <h2 className="text-[17px] tracking-[-0.01em]">Impôt latent</h2>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">
               L’impôt qui dort dans tes plus-values. Il ne se paie qu’à la vente — mais il existe déjà.
             </p>
           </div>
@@ -192,63 +190,38 @@ export default async function FiscalitePage() {
             ailleurs, un patrimoine s’affiche brut.
           </p>
 
-          <div className="mt-5 overflow-x-auto">
-            <table className="w-full text-[13.5px] sm:min-w-[560px] sm:text-[14px]">
-              <caption className="sr-only">Impôt latent par position</caption>
-              <thead>
-                <tr className="border-b border-border text-left text-[12px] text-text-muted">
-                  <th scope="col" className="py-2 font-medium">Position</th>
-                  <th scope="col" className="py-2 text-right font-medium">Valeur</th>
-                  <th scope="col" className="hidden py-2 text-right font-medium sm:table-cell">
-                    Base de référence
-                  </th>
-                  <th scope="col" className="py-2 text-right font-medium">Plus-value latente</th>
-                  <th scope="col" className="hidden py-2 text-right font-medium sm:table-cell">
-                    TOB de sortie
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {impotLatent.result.lignes.map((ligne) => (
-                  <tr key={ligne.id} className="border-b border-border/40 last:border-0">
-                    <td className="py-2.5">
-                      {ligne.nom}
-                      {ligne.origineBase === 'valeur_2025' && (
-                        <span className="ml-2 rounded-full bg-surface-2 px-2 py-0.5 text-[10px] text-text-subtle">
-                          base 31/12/2025
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-2.5 text-right">
-                      <Montant cents={ligne.valeurActuelleCents} decimals={0} />
-                    </td>
-                    <td className="hidden py-2.5 text-right text-text-muted sm:table-cell">
-                      {ligne.baseReferenceCents !== null ? (
-                        <Montant cents={ligne.baseReferenceCents} decimals={0} />
-                      ) : (
-                        <span className="text-[12px]">à renseigner</span>
-                      )}
-                    </td>
-                    <td className="py-2.5 text-right">
-                      <Montant cents={ligne.plusValueLatenteCents} decimals={0} colore />
-                    </td>
-                    <td className="hidden py-2.5 text-right text-text-muted sm:table-cell">
-                      <Montant cents={ligne.tobSortieCents} decimals={2} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="border-t border-border font-medium">
-                  <td className="py-3">Impôt latent total</td>
-                  <td colSpan={3} />
-                  <td className="py-3 text-right">
-                    <Montant cents={impotLatent.result.impotLatentCents} />
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+          {/* Une liste, pas une table : cinq colonnes ne tiennent pas dans 390 px,
+              et une table qu'on fait defiler se lit de travers. Chaque position a
+              sa ligne — le nom et sa base a gauche, la plus-value et l'impot a droite. */}
+          <ul className="mt-4 divide-y divide-border/50">
+            {impotLatent.result.lignes.map((ligne) => (
+              <li key={ligne.id} className="flex items-center justify-between gap-4 py-3">
+                <div className="min-w-0">
+                  <p className="truncate text-[14px] font-medium">{ligne.nom}</p>
+                  <p className="text-[12px] text-text-subtle">
+                    <Montant cents={ligne.valeurActuelleCents} decimals={0} className="font-normal" />
+                    {ligne.baseReferenceCents !== null ? (
+                      <>
+                        {' · base '}
+                        <Montant cents={ligne.baseReferenceCents} decimals={0} className="font-normal" />
+                        {ligne.origineBase === 'valeur_2025' && ' (31/12/2025)'}
+                      </>
+                    ) : (
+                      ' · base à renseigner'
+                    )}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <Montant cents={ligne.plusValueLatenteCents} decimals={0} colore sign="always" />
+                  <p className="text-[11px] text-text-subtle">plus-value</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 flex items-baseline justify-between border-t border-border pt-3 text-[14px]">
+            <span className="font-semibold">Impôt latent total</span>
+            <Montant cents={impotLatent.result.impotLatentCents} decimals={0} className="text-[16px]" />
+          </p>
         </div>
         <PanneauExplication calcul={impotLatent} titre="Le détail du calcul" />
       </section>
@@ -256,10 +229,10 @@ export default async function FiscalitePage() {
       {/* 3 — Alertes */}
       <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '210ms' } as CSSProperties}>
         <div className="flex gap-3">
-          <PastilleIcone icone={Bell} teinte="rose" className="mt-0.5" />
+          <PastilleIcone icone="bell" teinte="rose" className="mt-0.5 hidden sm:grid" />
           <div className="min-w-0">
             <h2 className="text-[17px] tracking-[-0.01em]">Alertes</h2>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">
               Ce qui mérite ton attention avant la fin de l’année.
             </p>
           </div>
@@ -274,7 +247,7 @@ export default async function FiscalitePage() {
               )}
               <div>
                 <p className="text-[14px] font-medium">{alerte.titre}</p>
-                <p className="mt-1 text-[13px] leading-relaxed text-text-muted">{alerte.texte}</p>
+                <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">{alerte.texte}</p>
               </div>
             </li>
           ))}
@@ -285,10 +258,10 @@ export default async function FiscalitePage() {
       {interetsEpargne && (
         <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '280ms' } as CSSProperties}>
           <div className="flex gap-3">
-          <PastilleIcone icone={Coins} teinte="menthe" className="mt-0.5" />
+          <PastilleIcone icone="money-bag" teinte="menthe" className="mt-0.5 hidden sm:grid" />
           <div className="min-w-0">
             <h2 className="text-[17px] tracking-[-0.01em]">Revenus mobiliers</h2>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">
               Intérêts et dividendes encaissés, et ce que tu peux récupérer.
             </p>
           </div>
@@ -304,10 +277,10 @@ export default async function FiscalitePage() {
       {/* 5 — Enveloppes d'épargne fiscale */}
       <section className="mt-10 space-y-4 border-t border-text-subtle/25 pt-8 apparait" style={{ '--delai': '350ms' } as CSSProperties}>
         <div className="flex gap-3">
-          <PastilleIcone icone={PiggyBank} teinte="lagune" className="mt-0.5" />
+          <PastilleIcone icone="safe-2" teinte="lagune" className="mt-0.5 hidden sm:grid" />
           <div className="min-w-0">
             <h2 className="text-[17px] tracking-[-0.01em]">Enveloppes d’épargne</h2>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-muted">
+            <p className="mt-1 hidden text-[13px] leading-relaxed text-text-muted sm:block">
               Les dispositifs qui réduisent ton impôt, et jusqu’où tu peux les remplir.
             </p>
           </div>
@@ -321,7 +294,6 @@ export default async function FiscalitePage() {
             au seul dépassement.
           </p>
 
-          <SimulateurEpargnePension />
 
           <div className="mt-4">
             <PanneauExplication calcul={pension} titre="Le détail du calcul" />

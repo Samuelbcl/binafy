@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import type { Icon } from '@phosphor-icons/react';
+import type { BaseIcone } from '@/lib/icones/solar';
 import { cn } from '@/lib/cn';
 import { PastilleIcone, type Teinte } from './pastille-icone';
 
@@ -39,7 +39,7 @@ export function SectionEcran({
   /** À quoi répond cette zone, en une phrase. */
   sousTitre?: string;
   /** Icône de la zone. Décorative : elle double le titre, elle ne le remplace pas. */
-  icone?: Icon;
+  icone?: BaseIcone;
   teinte?: Teinte;
   /** Lien secondaire aligné à droite du titre. */
   action?: ReactNode;

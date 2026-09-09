@@ -38,7 +38,7 @@ export function LogoNestor({ className }: { className?: string }) {
  * écran et l'accent ne désigne plus rien.
  */
 export function MarqueNestor({
-  ton = 'accent',
+  ton = 'sobre',
   taille = 'normale',
   className,
 }: {

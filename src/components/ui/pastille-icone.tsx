@@ -1,4 +1,5 @@
-import type { Icon } from '@phosphor-icons/react';
+import { Icone } from './icone';
+import type { BaseIcone } from '@/lib/icones/solar';
 import { cn } from '@/lib/cn';
 
 /**
@@ -30,14 +31,14 @@ const CLASSE: Record<Teinte, string> = {
  * une information, passer `libelle` — elle devient alors une image nommée.
  */
 export function PastilleIcone({
-  icone: Icone,
+  icone,
   teinte = 'violet',
   taille = 'normale',
   poids = 'duotone',
   libelle,
   className,
 }: {
-  icone: Icon;
+  icone: BaseIcone;
   teinte?: Teinte;
   taille?: 'petite' | 'normale' | 'grande';
   /** `fill` pour l'element choisi : on reconnait un choix a la forme avant la couleur. */
@@ -60,7 +61,8 @@ export function PastilleIcone({
       {/* Deux tons : la forme pleine en transparence, le trait par-dessus.
           C'est ce qui fait qu'une icône ressemble à un objet, pas à un schéma. */}
       <Icone
-        weight={poids}
+        nom={icone}
+        style={poids === 'fill' ? 'bold' : 'bold-duotone'}
         className={taille === 'grande' ? 'size-7' : taille === 'petite' ? 'size-4' : 'size-[22px]'}
       />
     </span>

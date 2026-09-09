@@ -1,21 +1,12 @@
 'use client';
 
 import { Eye, EyeOff, LogOut, Menu, Moon, Plus, Settings, Sun, X } from 'lucide-react';
-import {
-  BookOpen,
-  Buildings,
-  Calculator,
-  Receipt,
-  SquaresFour,
-  Target,
-  TrendUp,
-  Wallet,
-} from '@phosphor-icons/react/dist/ssr';
-import type { Icon } from '@phosphor-icons/react';
+import { Icone } from '@/components/ui/icone';
+import type { BaseIcone } from '@/lib/icones/solar';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef, useState, type PointerEvent as PointerEventReact } from 'react';
+import { useRef, useState, type CSSProperties, type PointerEvent as PointerEventReact } from 'react';
 import { useDiscretion, useEstMonte } from '@/components/providers';
 import { cn } from '@/lib/cn';
 import { supabaseNavigateur } from '@/lib/db/client';
@@ -34,21 +25,27 @@ const NAVIGATION = [
   {
     titre: 'Mon patrimoine',
     liens: [
-      { href: '/dashboard', libelle: 'Vue d’ensemble', icone: SquaresFour },
-      { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
-      { href: '/budget', libelle: 'Budget', icone: Receipt },
-      { href: '/projections', libelle: 'Projections', icone: TrendUp },
-      { href: '/objectifs', libelle: 'Objectifs', icone: Target },
-      { href: '/fiscalite', libelle: 'Fiscalité', icone: Buildings },
+      { href: '/dashboard', libelle: 'Vue d’ensemble', icone: 'home-smile' },
+      { href: '/patrimoine', libelle: 'Patrimoine', icone: 'wallet-money' },
+      { href: '/budget', libelle: 'Budget', icone: 'bill-list' },
+      { href: '/projections', libelle: 'Projections', icone: 'chart-2' },
+      { href: '/fiscalite', libelle: 'Fiscalité', icone: 'buildings-2' },
     ],
   },
   {
     titre: 'Comprendre',
     liens: [
-      { href: '/apprendre', libelle: 'Apprendre', icone: BookOpen },
-      { href: '/outils', libelle: 'Outils', icone: Calculator },
+      { href: '/apprendre', libelle: 'Apprendre', icone: 'book-2' },
+      { href: '/outils', libelle: 'Outils', icone: 'calculator-minimalistic' },
     ],
   },
+] as const;
+
+const ONGLETS = [
+  { href: '/dashboard', libelle: 'Accueil', icone: 'home-smile' },
+  { href: '/patrimoine', libelle: 'Patrimoine', icone: 'wallet-money' },
+  { href: '/budget', libelle: 'Budget', icone: 'bill-list' },
+  { href: '/fiscalite', libelle: 'Fiscalité', icone: 'buildings-2' },
 ] as const;
 
 function BoutonDiscretion() {
@@ -115,8 +112,11 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
           <p className="px-3 pb-1.5 text-[11.5px] font-semibold text-text-subtle">
             {groupe.titre}
           </p>
-          {groupe.liens.map(({ href, libelle, icone: Icone }) => {
+          {groupe.liens.map(({ href, libelle, icone }) => {
             const actif = pathname === href || pathname.startsWith(`${href}/`);
+            // Sur telephone, le tiroir ne repete pas ce que la barre du bas
+            // montre deja ; a partir de lg, la barre disparait et il porte tout.
+            const dansOnglets = ONGLETS.some((o) => o.href === href);
             return (
               <Link
                 key={href}
@@ -124,13 +124,14 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
                 onClick={onNavigate}
                 aria-current={actif ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-11 items-center gap-3 rounded-[var(--radius)] px-3 text-[14px] transition-colors',
+                  'min-h-11 items-center gap-3 rounded-[var(--radius)] px-3 text-[14px] transition-colors',
+                  dansOnglets ? 'hidden lg:flex' : 'flex',
                   actif
                     ? 'bg-primary-soft font-semibold text-primary'
                     : 'text-text-muted hover:bg-surface-hover hover:text-text',
                 )}
               >
-                <Icone weight={actif ? 'fill' : 'regular'} className="size-5 shrink-0" />
+                <Icone nom={icone} style={actif ? 'bold' : 'linear'} className="size-5 shrink-0" />
                 {libelle}
               </Link>
             );
@@ -147,16 +148,10 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
  *
  * Un menu hamburger en haut à gauche est le point le plus difficile à atteindre
  * au pouce sur un écran de 390 px. Les quatre destinations les plus consultées
- * descendent donc en bas, et le tiroir du haut garde le reste — projections,
- * objectifs, paramètres.
+ * descendent donc en bas. « Apprendre » n'en fait pas partie : il mène au site
+ * public, et changer d'univers depuis la barre déroute. Il vit dans le tiroir,
+ * avec les outils, les projections et les paramètres.
  */
-const ONGLETS = [
-  { href: '/dashboard', libelle: 'Accueil', icone: SquaresFour },
-  { href: '/patrimoine', libelle: 'Patrimoine', icone: Wallet },
-  { href: '/budget', libelle: 'Budget', icone: Receipt },
-  { href: '/fiscalite', libelle: 'Fiscalité', icone: Buildings },
-  { href: '/apprendre', libelle: 'Apprendre', icone: BookOpen },
-] as const;
 
 /**
  * La barre d'onglets, en verre liquide.
@@ -246,6 +241,7 @@ function BarreOnglets() {
       ref={nav}
       aria-label="Navigation principale"
       className="barre-onglets fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 lg:hidden"
+      style={{ '--onglets': n } as CSSProperties}
       data-glisse={glisse !== null ? '' : undefined}
       onPointerDown={surPointerDown}
       onPointerMove={surPointerMove}
@@ -263,7 +259,7 @@ function BarreOnglets() {
           key={href}
           href={href}
           libelle={libelle}
-          Icone={icone}
+          icone={icone}
           actif={i === index}
           onClick={(e) => {
             if (aGlisse.current) {
@@ -287,19 +283,13 @@ function BarreOnglets() {
  * revient à l'apprentissage.
  */
 function BoutonAjout() {
-  const pathname = usePathname();
-  // Sur les objectifs, le « + » cree un objectif ; partout ailleurs, un actif.
-  // Et sur l'ecran de creation lui-meme, il n'a rien a proposer.
-  const objectifs = pathname.startsWith('/objectifs');
-  if (pathname === '/objectifs/nouveau') return null;
-
   return (
     <Link
-      href={objectifs ? '/objectifs/nouveau' : '/patrimoine#ajouter'}
+      href="/patrimoine#ajouter"
       className="bouton-flottant fixed right-4 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] z-30 lg:hidden"
     >
       <Plus className="size-6" />
-      <span className="sr-only">{objectifs ? 'Nouvel objectif' : 'Ajouter un actif'}</span>
+      <span className="sr-only">Ajouter un actif</span>
     </Link>
   );
 }
@@ -307,13 +297,13 @@ function BoutonAjout() {
 function OngletLien({
   href,
   libelle,
-  Icone,
+  icone,
   actif,
   onClick,
 }: {
   href: string;
   libelle: string;
-  Icone: Icon;
+  icone: BaseIcone;
   actif: boolean;
   onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
@@ -330,7 +320,7 @@ function OngletLien({
     >
       {/* Pleine quand on y est, au trait sinon : l'onglet actif se reconnait
           a la forme avant la couleur — et la lentille fait le reste. */}
-      <Icone weight={actif ? 'fill' : 'regular'} className="size-[22px]" />
+      <Icone nom={icone} style={actif ? 'bold' : 'linear'} className="size-[22px]" />
       <span className="text-[10.5px] font-medium">{libelle}</span>
     </Link>
   );

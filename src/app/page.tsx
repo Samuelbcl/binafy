@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { PastilleIcone } from '@/components/ui/pastille-icone';
 import { OUTILS } from '@/lib/outils';
+import { utilisateurCourant } from '@/lib/db/serveur';
+import { modeDemo } from '@/lib/env';
 import { MarqueNestor } from '@/components/ui/marque';
 
 export const metadata: Metadata = {
-  title: 'Nestor — Le patrimoine, version belge',
+  title: 'Nestor — Ton patrimoine, clair.',
   description:
-    'Suivre, comprendre et piloter son patrimoine en Belgique. Fiscalité belge intégrée à chaque calcul : précompte, TOB, taxe sur les plus-values, droits d’enregistrement par Région.',
+    'Gérer son patrimoine, le comprendre, apprendre la fiscalité belge et éviter les erreurs que la plupart des gens font.',
 };
 
 
@@ -33,7 +35,8 @@ const DONNEES_STRUCTUREES = {
   audience: { '@type': 'Audience', geographicArea: { '@type': 'Country', name: 'Belgique' } },
 };
 
-export default function AccueilPage() {
+export default async function AccueilPage() {
+  const connecte = !modeDemo && (await utilisateurCourant()) !== null;
   return (
     <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-24">
       <script
@@ -55,16 +58,21 @@ export default function AccueilPage() {
           ligne se lise même si le navigateur ne sait pas découper un fond sur
           du texte.
         */}
+        {/*
+          Pas de « version belge » : l'application est faite pour des Belges, ils
+          n'ont pas a se le faire dire. Pas de comparaison avec la France non
+          plus : on vient sur Nestor pour Nestor. Une phrase qui dit ce qu'on
+          gagne, et une qui dit a quoi ca sert.
+        */}
         <h1 className="mt-10 font-display text-[clamp(2.25rem,6vw,3.5rem)] leading-[1.05] tracking-[-0.03em]">
-          Le patrimoine,
+          Ton patrimoine,
           <br />
-          <span className="titre-degrade">version belge.</span>
+          <span className="titre-degrade">enfin clair.</span>
         </h1>
 
         <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-text-muted">
-          Suivre. Comprendre. Décider. Sans devoir traduire la fiscalité française.
-          Précompte mobilier, TOB, taxe sur les plus-values, revenu cadastral, droits
-          d’enregistrement par Région — intégrés à chaque calcul, pas en option.
+          Nestor t’aide à gérer ton patrimoine, à le comprendre, à apprendre la fiscalité belge —
+          et à éviter les erreurs que la plupart des gens font.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -74,10 +82,18 @@ export default function AccueilPage() {
             attire est honnête. Dans l'application, l'action principale reste
             noire — là, ce qui doit attirer l'œil, ce sont les chiffres.
           */}
-          <Link href="/connexion" className="bouton-chaud">
-            Créer mon compte
-            <ArrowRight className="size-4" />
-          </Link>
+          {/* Connecte, on ne se voit pas proposer de creer un compte. */}
+          {connecte ? (
+            <Link href="/dashboard" className="bouton-marque">
+              Ouvrir mon espace
+              <ArrowRight className="size-4" />
+            </Link>
+          ) : (
+            <Link href="/connexion" className="bouton-marque">
+              Créer mon compte
+              <ArrowRight className="size-4" />
+            </Link>
+          )}
           <Link href="/apprendre" className="bouton-secondaire">
             Apprendre la fiscalité belge
           </Link>

@@ -1,8 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#4F3FF0"/>
-  <g transform="translate(4 4) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round">
+  <!-- Le meme jeton que dans l'application : rond, lavande, le nid en violet. -->
+  <circle cx="16" cy="16" r="16" fill="#EFE9FF"/>
+  <g transform="translate(4 4)" fill="none" stroke="#6D3BEF" stroke-width="1.9" stroke-linecap="round">
     <path d="M3 11.5a9 9 0 0 0 18 0"/>
     <path d="M6.5 11.5a5.5 5.5 0 0 0 11 0"/>
-    <circle cx="12" cy="8" r="2.4" fill="#FFFFFF" stroke="none"/>
+    <circle cx="12" cy="8" r="2.4" fill="#6D3BEF" stroke="none"/>
   </g>
 </svg>
