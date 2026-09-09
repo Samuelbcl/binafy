@@ -1,21 +1,25 @@
 import type { Metadata, Viewport } from 'next';
-import { Atkinson_Hyperlegible_Next } from 'next/font/google';
+import { Nunito_Sans } from 'next/font/google';
 import { AppProviders } from '@/components/providers';
 import { siteUrl } from '@/lib/env';
 import './globals.css';
 
 /**
- * Une seule famille — Atkinson Hyperlegible Next.
+ * Une seule famille — Nunito Sans.
  *
- * Dessinee par le Braille Institute pour des gens qui ont du mal a lire :
- * chaque lettre est faite pour ne pas etre confondue avec une autre (le l, le
- * I et le 1 ; le b et le d ; le O et le 0). C'est le test qu'on a rate — la
- * mere de Samuel n'a rien compris — et c'est la police qui a ete faite pour
- * le passer. Sept graisses, variable, republiee sur Google Fonts en 2025.
+ * Samuel veut « une police comme Revolut ». Revolut ecrit en Aeonik Pro, une
+ * police commerciale (CoType Foundry) : un grotesque a base geometrique,
+ * chaleureux, aux terminaisons un peu adoucies. Parmi les polices libres,
+ * Nunito Sans est celle que les comparateurs placent le plus pres (75 % de
+ * proximite, devant DM Sans et Inter) : memes proportions ouvertes, meme
+ * rondeur retenue, sans les bouts arrondis de Nunito. Variable, de 200 a 1000.
  * Une seule famille pour tout, titres compris : les titres se distinguent par
- * la taille et le gras, pas par une autre voix. Moins de choses a lire.
+ * la taille et le gras, pas par une seconde voix.
+ *
+ * Si Samuel veut l'original, Aeonik Pro se licencie chez CoType et se monte
+ * en `next/font/local` sans rien changer d'autre.
  */
-const ui = Atkinson_Hyperlegible_Next({
+const ui = Nunito_Sans({
   variable: '--font-ui',
   subsets: ['latin'],
   display: 'swap',

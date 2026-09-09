@@ -318,7 +318,7 @@
   h2,
   .font-display {
     font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
-    font-weight: var(--graisse-titre, 700);
+    font-weight: var(--graisse-titre, 800);
     letter-spacing: -0.015em;
     line-height: 1.15;
   }
