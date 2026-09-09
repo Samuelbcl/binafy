@@ -90,6 +90,9 @@ export async function chargerBudgetReel(): Promise<Budget | null> {
     // Un transfert entre ses propres comptes n'est ni un revenu ni une dépense :
     // le compter fausserait le taux d'épargne dans les deux sens.
     if (t.exclue_du_budget) continue;
+    // Ceinture et bretelles : une ligne rangée en transfert par l'utilisateur
+    // sans le drapeau ne doit pas non plus compter.
+    if ((t.categories as CategorieJointe)?.type === 'transfert') continue;
 
     const mois = t.date.slice(0, 7);
     const entree = parMois.get(mois) ?? {

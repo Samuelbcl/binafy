@@ -2,7 +2,11 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { categoriser, type RegleCategorisation } from '@/lib/banking/categorisation';
+import {
+  categoriser,
+  detecterTransfertsMiroir,
+  type RegleCategorisation,
+} from '@/lib/banking/categorisation';
 import {
   analyserCSV,
   dedupliquer,
@@ -40,7 +44,7 @@ export type ApercuImport = {
 };
 
 export type ResultatImport =
-  | { ok: true; importees: number; ignorees: number; rejetees: number }
+  | { ok: true; importees: number; ignorees: number; rejetees: number; transferts?: number }
   | { ok: false; message: string };
 
 const schemaMappage = z.object({
@@ -220,6 +224,11 @@ export async function importerTransactions(
   const importees = inserees?.length ?? 0;
   const ignorees = doublons + (uniques.length - importees);
 
+  // Les virements entre ses propres comptes : leur reflet est peut-être dans
+  // un import précédent (le compte d'épargne importé la semaine dernière).
+  // On regarde donc tout l'historique, pas seulement ce fichier.
+  const transferts = await marquerTransfertsMiroir(supabase, utilisateur.id, idParCle.get('transfert') ?? null);
+
   await supabase
     .from('imports')
     .update({ lignes_importees: importees, lignes_ignorees: ignorees })
@@ -229,7 +238,48 @@ export async function importerTransactions(
   revalidatePath('/dashboard');
   revalidatePath('/objectifs');
 
-  return { ok: true, importees, ignorees, rejetees: analyse.rejets.length };
+  return { ok: true, importees, ignorees, rejetees: analyse.rejets.length, transferts };
+}
+
+/**
+ * Marque comme transferts les débits et crédits qui se reflètent d'un import à
+ * l'autre. Renvoie le nombre de lignes nouvellement exclues du budget.
+ */
+async function marquerTransfertsMiroir(
+  supabase: Awaited<ReturnType<typeof supabaseServeur>>,
+  userId: string,
+  categorieTransfertId: string | null,
+): Promise<number> {
+  const depuis = new Date();
+  depuis.setUTCFullYear(depuis.getUTCFullYear() - 2);
+
+  const { data } = await supabase
+    .from('transactions')
+    .select('id, date, montant_cents, import_id, exclue_du_budget')
+    .eq('user_id', userId)
+    .gte('date', depuis.toISOString().slice(0, 10));
+
+  const lignes = (data ?? []).map((t) => ({
+    id: t.id,
+    date: t.date,
+    montantCents: Number(t.montant_cents),
+    importId: t.import_id,
+    exclue: t.exclue_du_budget,
+  }));
+
+  const reflets = detecterTransfertsMiroir(lignes);
+  const aMarquer = lignes.filter((t) => reflets.has(t.id) && !t.exclue).map((t) => t.id);
+  if (aMarquer.length === 0) return 0;
+
+  await supabase
+    .from('transactions')
+    .update({
+      exclue_du_budget: true,
+      ...(categorieTransfertId ? { category_id: categorieTransfertId } : {}),
+    })
+    .in('id', aMarquer);
+
+  return aMarquer.length;
 }
 
 /** Annule un import complet — les transactions qu'il a créées disparaissent. */

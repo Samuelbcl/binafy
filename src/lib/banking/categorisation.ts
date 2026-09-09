@@ -435,3 +435,60 @@ export function detecterAbonnements(
 
   return abonnements.sort((a, b) => b.coutAnnuelCents - a.coutAnnuelCents);
 }
+
+/**
+ * Détecte les virements entre ses propres comptes par leur miroir.
+ *
+ * Samuel a importé son compte courant et son compte d'épargne : chaque
+ * virement de l'un vers l'autre apparaît deux fois, en sortie ici et en
+ * entrée là, et le libellé de sa banque ne dit pas « virement interne ». Les
+ * règles par mots-clés ne suffisent donc pas. Ce qui trahit un transfert,
+ * c'est son reflet : un débit dans un import et un crédit du même montant
+ * dans un autre import, à deux jours près. Les deux lignes sont alors
+ * exclues du budget — sinon le taux d'épargne compte une dépense qui n'en
+ * est pas une, et un revenu qui n'en est pas un.
+ *
+ * Deux imports différents, c'est la garantie : un achat remboursé le
+ * lendemain sur le même compte ne doit pas passer pour un transfert. Chaque
+ * ligne n'est appariée qu'une fois.
+ */
+export function detecterTransfertsMiroir(
+  transactions: readonly {
+    id: string;
+    date: string;
+    montantCents: number;
+    importId: string | null;
+  }[],
+  toleranceJours = 2,
+): Set<string> {
+  const jour = (iso: string) => Math.round(new Date(`${iso}T00:00:00Z`).getTime() / 86_400_000);
+  const credits = transactions
+    .filter((t) => t.montantCents > 0)
+    .map((t) => ({ ...t, j: jour(t.date) }))
+    .sort((a, b) => a.j - b.j);
+  const debits = transactions
+    .filter((t) => t.montantCents < 0)
+    .map((t) => ({ ...t, j: jour(t.date) }))
+    .sort((a, b) => a.j - b.j);
+
+  const apparies = new Set<string>();
+  const pris = new Set<string>();
+
+  for (const debit of debits) {
+    const reflet = credits.find(
+      (c) =>
+        !pris.has(c.id) &&
+        c.montantCents === -debit.montantCents &&
+        Math.abs(c.j - debit.j) <= toleranceJours &&
+        c.importId !== null &&
+        debit.importId !== null &&
+        c.importId !== debit.importId,
+    );
+    if (!reflet) continue;
+    pris.add(reflet.id);
+    apparies.add(debit.id);
+    apparies.add(reflet.id);
+  }
+
+  return apparies;
+}

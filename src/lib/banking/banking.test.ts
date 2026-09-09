@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { categoriser, detecterAbonnements, normaliserLibelle } from './categorisation';
+import {
+  categoriser,
+  detecterAbonnements,
+  detecterTransfertsMiroir,
+  normaliserLibelle,
+} from './categorisation';
 import {
   analyserCSV,
   dedupliquer,
@@ -392,5 +397,57 @@ describe('détection des abonnements', () => {
     ];
     const abos = detecterAbonnements(transactions);
     expect(abos[0]?.libelle).toContain('PROXIMUS');
+  });
+});
+
+describe('detecterTransfertsMiroir', () => {
+  const t = (id: string, date: string, montantCents: number, importId: string | null) => ({
+    id,
+    date,
+    montantCents,
+    importId,
+  });
+
+  it('apparie un débit et son crédit dans un autre import, à deux jours près', () => {
+    const ids = detecterTransfertsMiroir([
+      t('a', '2026-08-03', -50_000, 'courant'),
+      t('b', '2026-08-04', 50_000, 'epargne'),
+      t('c', '2026-08-05', -3_299, 'courant'),
+    ]);
+    expect([...ids].sort()).toEqual(['a', 'b']);
+  });
+
+  it('ignore un reflet trop éloigné dans le temps', () => {
+    const ids = detecterTransfertsMiroir([
+      t('a', '2026-08-03', -50_000, 'courant'),
+      t('b', '2026-08-10', 50_000, 'epargne'),
+    ]);
+    expect(ids.size).toBe(0);
+  });
+
+  it('ne prend pas un remboursement sur le même compte pour un transfert', () => {
+    const ids = detecterTransfertsMiroir([
+      t('a', '2026-08-03', -4_999, 'courant'),
+      t('b', '2026-08-04', 4_999, 'courant'),
+    ]);
+    expect(ids.size).toBe(0);
+  });
+
+  it('n’apparie chaque ligne qu’une fois', () => {
+    const ids = detecterTransfertsMiroir([
+      t('a', '2026-08-03', -10_000, 'courant'),
+      t('b', '2026-08-03', -10_000, 'courant'),
+      t('c', '2026-08-03', 10_000, 'epargne'),
+    ]);
+    expect(ids.size).toBe(2);
+    expect(ids.has('c')).toBe(true);
+  });
+
+  it('exige que les deux lignes viennent d’un import', () => {
+    const ids = detecterTransfertsMiroir([
+      t('a', '2026-08-03', -10_000, null),
+      t('b', '2026-08-03', 10_000, 'epargne'),
+    ]);
+    expect(ids.size).toBe(0);
   });
 });
