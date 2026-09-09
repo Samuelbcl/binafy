@@ -28,8 +28,6 @@ const NAVIGATION = [
       { href: '/dashboard', libelle: 'Vue d’ensemble', icone: 'home-smile' },
       { href: '/patrimoine', libelle: 'Patrimoine', icone: 'wallet-money' },
       { href: '/budget', libelle: 'Budget', icone: 'bill-list' },
-      { href: '/projections', libelle: 'Projections', icone: 'chart-2' },
-      { href: '/fiscalite', libelle: 'Fiscalité', icone: 'buildings-2' },
     ],
   },
   {
@@ -45,7 +43,6 @@ const ONGLETS = [
   { href: '/dashboard', libelle: 'Accueil', icone: 'home-smile' },
   { href: '/patrimoine', libelle: 'Patrimoine', icone: 'wallet-money' },
   { href: '/budget', libelle: 'Budget', icone: 'bill-list' },
-  { href: '/fiscalite', libelle: 'Fiscalité', icone: 'buildings-2' },
 ] as const;
 
 function BoutonDiscretion() {
@@ -146,9 +143,13 @@ function LiensNavigation({ onNavigate }: { onNavigate?: () => void }) {
 /**
  * Barre d'onglets mobile (docs/05).
  *
+ * Pour le moment, l'espace tient en trois écrans — accueil, patrimoine,
+ * budget — et rien d'autre : Samuel veut avancer étape par étape, et chaque
+ * écran de plus est un écran de moins bien fait. Fiscalité, projections et
+ * objectifs restent dans le code, sans lien vers eux.
+ *
  * Un menu hamburger en haut à gauche est le point le plus difficile à atteindre
- * au pouce sur un écran de 390 px. Les quatre destinations les plus consultées
- * descendent donc en bas. « Apprendre » n'en fait pas partie : il mène au site
+ * au pouce sur un écran de 390 px. Les trois destinations descendent donc en bas. « Apprendre » n'en fait pas partie : il mène au site
  * public, et changer d'univers depuis la barre déroute. Il vit dans le tiroir,
  * avec les outils, les projections et les paramètres.
  */

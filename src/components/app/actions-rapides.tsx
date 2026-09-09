@@ -7,7 +7,7 @@ import { cn } from '@/lib/cn';
 /**
  * Les trois gestes du quotidien, sous le chiffre principal.
  *
- * Ajouter un actif, importer un extrait, simuler : ils étaient dispersés sur
+ * Ajouter un actif, importer un extrait, apprendre : ils étaient dispersés sur
  * trois pages. Réunis ici en tuiles pastel — chacune sa
  * couleur, la même que celle du sujet ailleurs dans l'app —, ils sont à un
  * pouce du premier écran. C'est la seule chose des maquettes de référence qui
@@ -16,7 +16,7 @@ import { cn } from '@/lib/cn';
 const ACTIONS: readonly { href: string; libelle: string; icone: BaseIcone; teinte: Teinte }[] = [
   { href: '/patrimoine#ajouter', libelle: 'Ajouter', icone: 'add-circle', teinte: 'violet' },
   { href: '/budget', libelle: 'Importer', icone: 'file-send', teinte: 'terre' },
-  { href: '/projections', libelle: 'Simuler', icone: 'graph-up', teinte: 'menthe' },
+  { href: '/apprendre', libelle: 'Apprendre', icone: 'book-2', teinte: 'azur' },
 ];
 
 const CLASSE_TEINTE: Record<Teinte, string> = {
