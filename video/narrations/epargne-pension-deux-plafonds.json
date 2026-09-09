@@ -1,0 +1,87 @@
+{
+  "slug": "epargne-pension-deux-plafonds",
+  "titre": "Épargne-pension : les deux plafonds",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "L'épargne-pension a deux plafonds : mille cinquante euros avec trente pour cent de réduction d'impôt, ou mille trois cent cinquante avec vingt-cinq.",
+      "motsCles": [
+        "deux plafonds",
+        "mille cinquante",
+        "trente",
+        "mille trois cent cinquante",
+        "vingt-cinq"
+      ],
+      "requete": "two jars coins",
+      "image": "Two glass jars of coins on a shelf, one fuller than the other, soft daylight",
+      "mouvement": "slow push-in between the jars"
+    },
+    {
+      "texte": "Le piège : dès le premier euro au-dessus du plafond bas, le taux réduit s'applique à tout le versement.",
+      "motsCles": [
+        "piège",
+        "premier euro",
+        "tout"
+      ],
+      "requete": "overflowing glass water",
+      "image": "A glass of water filled to the brim, one drop about to overflow, macro, dark background",
+      "mouvement": "a drop falls, the water trembles, slow push-in"
+    },
+    {
+      "texte": "Il existe donc une zone où tu verses plus — et reçois moins. Il faut atteindre un point de bascule pour seulement revenir à égalité.",
+      "motsCles": [
+        "zone",
+        "plus",
+        "moins",
+        "bascule"
+      ],
+      "requete": "balance scale",
+      "image": "An old brass balance scale on a desk, slightly tilted, warm side light",
+      "mouvement": "the scale tips slowly and settles"
+    },
+    {
+      "texte": "Le choix se fait à la banque, pas sur la déclaration, et il vaut pour l'année en cours.",
+      "motsCles": [
+        "banque",
+        "déclaration",
+        "année"
+      ],
+      "requete": "bank advisor meeting",
+      "image": "A person talking with a bank advisor at a desk, documents between them, bright office",
+      "mouvement": "gentle handheld motion, the advisor points at the document"
+    },
+    {
+      "texte": "À soixante ans, une taxe anticipative de huit pour cent — calculée sur un capital théorique, pas sur ce que ton fonds a vraiment gagné.",
+      "motsCles": [
+        "soixante",
+        "huit",
+        "théorique"
+      ],
+      "requete": "retirement birthday cake",
+      "image": "A birthday cake with candles reading 60 on a family table, warm evening light, blurred people",
+      "mouvement": "candles flicker, slow push-in"
+    },
+    {
+      "texte": "Une réforme est annoncée. Tant qu'elle n'est pas votée, ces chiffres restent ceux qui s'appliquent.",
+      "motsCles": [
+        "réforme",
+        "votée",
+        "s'appliquent"
+      ],
+      "requete": "belgian parliament brussels",
+      "image": "The Belgian federal parliament building in Brussels, flags, overcast sky",
+      "mouvement": "slow tilt up the facade"
+    },
+    {
+      "texte": "Nestor te montre ce que rend chaque euro versé, et nomme la zone perdante. Le montant, c'est toi qui le choisis.",
+      "motsCles": [
+        "Nestor",
+        "zone perdante",
+        "toi"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A person adjusting a slider on a smartphone app, close-up on the thumb, lavender glow",
+      "mouvement": "the thumb slides, slow push-in"
+    }
+  ]
+}

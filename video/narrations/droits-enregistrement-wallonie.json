@@ -1,0 +1,84 @@
+{
+  "slug": "droits-enregistrement-wallonie",
+  "titre": "Droits d'enregistrement en Wallonie",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "En Wallonie, acheter un logement coûte trois pour cent de droits d'enregistrement — ou douze et demi. Le même bien, deux prix.",
+      "motsCles": [
+        "trois",
+        "douze et demi",
+        "deux prix"
+      ],
+      "requete": "wallonia brick houses street",
+      "image": "A quiet street of red-brick houses in a Walloon town, morning light, a bicycle leaning on a wall",
+      "mouvement": "slow tracking shot along the houses"
+    },
+    {
+      "texte": "Le taux réduit tient à quatre conditions. La quatrième : au moment de l'acte, ce doit être ta seule habitation.",
+      "motsCles": [
+        "quatre",
+        "seule",
+        "habitation"
+      ],
+      "requete": "notary act signing",
+      "image": "Close-up of a notarial deed being signed with a fountain pen, a stamp and keys nearby, warm office light",
+      "mouvement": "the pen signs, slow push-in on the keys"
+    },
+    {
+      "texte": "Le piège : acheter un petit locatif avant sa résidence principale. Ce jour-là, tu n'as plus une habitation unique — ta maison bascule au taux plein.",
+      "motsCles": [
+        "piège",
+        "locatif",
+        "avant",
+        "taux plein"
+      ],
+      "requete": "small studio apartment keys",
+      "image": "A small bright studio apartment with a set of keys on the counter, empty, sunlight through the window",
+      "mouvement": "slow push-in on the keys"
+    },
+    {
+      "texte": "Le surcoût ne dépend pas du prix du locatif, seulement de celui du logement acheté ensuite. Sur deux cent cinquante mille euros, l'écart se compte en dizaines de milliers.",
+      "motsCles": [
+        "surcoût",
+        "deux cent cinquante mille",
+        "dizaines de milliers"
+      ],
+      "requete": "house model calculator",
+      "image": "A small wooden house model next to a calculator on a desk, soft daylight, shallow depth of field",
+      "mouvement": "slow orbit around the house model"
+    },
+    {
+      "texte": "Un garage, un terrain, une part en indivision avec un tiers ne bloquent pas le taux réduit. Une habitation entière, si.",
+      "motsCles": [
+        "garage",
+        "terrain",
+        "habitation entière"
+      ],
+      "requete": "garage door land plot",
+      "image": "A closed garage door beside a small plot of land with a fence, overcast Belgian light",
+      "mouvement": "slow lateral slide"
+    },
+    {
+      "texte": "Pas de portabilité en Wallonie : les droits payés une fois ne se reportent pas sur l'achat suivant.",
+      "motsCles": [
+        "portabilité",
+        "reportent"
+      ],
+      "requete": "two houses side by side",
+      "image": "Two houses side by side on a street, one older, one newer, soft evening light",
+      "mouvement": "slow push-in between the two houses"
+    },
+    {
+      "texte": "Nestor calcule le cash réel à sortir le jour de l'acte, par Région, et te montre ce que coûte l'ordre de tes achats.",
+      "motsCles": [
+        "Nestor",
+        "cash réel",
+        "ordre"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A couple looking at a smartphone together in a kitchen, smiling, lavender screen glow",
+      "mouvement": "they lean in, slow push-in"
+    }
+  ]
+}

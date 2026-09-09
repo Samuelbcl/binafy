@@ -1,0 +1,84 @@
+{
+  "slug": "rendement-locatif-reel-belgique",
+  "titre": "Rendement locatif réel",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "En Belgique, tu n'es pas taxé sur tes loyers. Le fisc regarde autre chose : le revenu cadastral de ton bien.",
+      "motsCles": [
+        "pas",
+        "loyers",
+        "revenu cadastral"
+      ],
+      "requete": "apartment building facade belgium",
+      "image": "A Belgian apartment building facade with balconies, morning light, a bicycle in front",
+      "mouvement": "slow tilt up the facade"
+    },
+    {
+      "texte": "Ce revenu cadastral, indexé et majoré de quarante pour cent, s'ajoute à tes revenus et se fait taxer dans ta tranche marginale.",
+      "motsCles": [
+        "indexé",
+        "quarante",
+        "tranche marginale"
+      ],
+      "requete": "tax calculation desk",
+      "image": "A desk with a calculator, a tax booklet and a small house key ring, warm lamp light",
+      "mouvement": "slow slide across the desk"
+    },
+    {
+      "texte": "Un locataire particulier qui occupe le bien à titre privé : c'est ce régime. Le même studio loué à une société bascule sur le loyer réel.",
+      "motsCles": [
+        "particulier",
+        "société",
+        "loyer réel"
+      ],
+      "requete": "office nameplate door",
+      "image": "A brass company nameplate on a townhouse door, close-up, soft daylight",
+      "mouvement": "slow push-in on the nameplate"
+    },
+    {
+      "texte": "Du rendement affiché au cash-flow réel : précompte immobilier, assurance, entretien, vide locatif, et l'impôt. C'est ce qu'il reste qui compte.",
+      "motsCles": [
+        "précompte",
+        "assurance",
+        "entretien",
+        "reste"
+      ],
+      "requete": "repair invoices tools",
+      "image": "A stack of invoices next to a toolbox and paint roller on a floor, apartment renovation, daylight",
+      "mouvement": "slow push-in on the invoices"
+    },
+    {
+      "texte": "Les coefficients changent chaque année. Un calcul qui ne dit pas l'année de revenus peut être juste — pour l'année d'à côté.",
+      "motsCles": [
+        "chaque année",
+        "année de revenus"
+      ],
+      "requete": "calendar pages turning",
+      "image": "Calendar pages turning on a wall in a bright room, plant beside",
+      "mouvement": "pages turn slowly"
+    },
+    {
+      "texte": "Une pièce affectée à une activité professionnelle par le locataire fait basculer tout le bien, sauf bail enregistré qui sépare les parties.",
+      "motsCles": [
+        "professionnelle",
+        "tout le bien",
+        "bail enregistré"
+      ],
+      "requete": "home office desk apartment",
+      "image": "A small home office corner in an apartment with a desk, monitor and plants, natural light",
+      "mouvement": "slow orbit around the desk"
+    },
+    {
+      "texte": "Nestor calcule ton cash-flow réel après impôt, en année de revenus 2026, et cite ses sources.",
+      "motsCles": [
+        "Nestor",
+        "après impôt",
+        "sources"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A landlord checking a smartphone app in front of a building, smiling, lavender glow",
+      "mouvement": "slow push-in"
+    }
+  ]
+}

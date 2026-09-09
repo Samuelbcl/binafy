@@ -1,0 +1,85 @@
+{
+  "slug": "compte-epargne-reglemente-prime-fidelite",
+  "titre": "Compte d'épargne réglementé",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "Ton compte d'épargne affiche « jusqu'à X pour cent ». Ce chiffre additionne deux choses qui n'obéissent pas aux mêmes règles.",
+      "motsCles": [
+        "jusqu'à",
+        "deux",
+        "règles"
+      ],
+      "requete": "bank window rate sign",
+      "image": "A bank branch window with a savings rate poster, reflection of the street, daytime",
+      "mouvement": "slow push-in on the poster"
+    },
+    {
+      "texte": "Le taux de base court sur tout, dès le lendemain d'un versement. La prime de fidélité, elle, ne récompense que l'argent resté douze mois complets.",
+      "motsCles": [
+        "taux de base",
+        "prime",
+        "douze mois"
+      ],
+      "requete": "calendar twelve months",
+      "image": "A desk calendar being flipped month by month, a coin on the desk, warm light",
+      "mouvement": "pages flip slowly"
+    },
+    {
+      "texte": "Chaque versement a sa propre horloge. Un dépôt de janvier retiré en novembre ne rapportera jamais sa prime — même si le reste du compte dort là depuis des années.",
+      "motsCles": [
+        "horloge",
+        "janvier",
+        "novembre",
+        "jamais"
+      ],
+      "requete": "clock coins desk",
+      "image": "An old alarm clock next to a few euro coins on a wooden table, soft side light, macro",
+      "mouvement": "the clock hand moves, slow push-in"
+    },
+    {
+      "texte": "Le fisc, lui, exonère une première tranche d'intérêts par an et par personne : mille vingt euros en 2026. Au-delà, quinze pour cent de précompte au lieu de trente.",
+      "motsCles": [
+        "mille vingt",
+        "quinze",
+        "trente"
+      ],
+      "requete": "interest statement",
+      "image": "A savings account statement on a table with a cup of coffee, glasses, morning light",
+      "mouvement": "slow slide across the statement"
+    },
+    {
+      "texte": "Plusieurs banques, une seule exonération : si le total dépasse le plafond, c'est à toi de déclarer l'excédent.",
+      "motsCles": [
+        "Plusieurs",
+        "une seule",
+        "déclarer"
+      ],
+      "requete": "several bank cards",
+      "image": "Three different bank cards fanned out on a dark table, soft spotlight",
+      "mouvement": "slow orbit around the cards"
+    },
+    {
+      "texte": "Le geste qui coûte : vider le compte avant les douze mois. Rien n'a changé aux taux, et tu as pourtant perdu de l'argent.",
+      "motsCles": [
+        "vider",
+        "douze mois",
+        "perdu"
+      ],
+      "requete": "atm withdrawal",
+      "image": "A hand taking banknotes from an ATM in a Belgian street, evening, shallow depth",
+      "mouvement": "the hand pulls the notes, slow push-in"
+    },
+    {
+      "texte": "Nestor connaît la date de tes versements : il te dit, avant un retrait, ce qu'il te coûterait en prime.",
+      "motsCles": [
+        "Nestor",
+        "avant",
+        "prime"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A person at a café table checking a smartphone, relaxed, lavender screen glow",
+      "mouvement": "slow push-in, the person smiles"
+    }
+  ]
+}

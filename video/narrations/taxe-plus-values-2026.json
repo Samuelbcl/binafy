@@ -1,0 +1,84 @@
+{
+  "slug": "taxe-plus-values-2026",
+  "titre": "La taxe sur les plus-values",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "Depuis 2026, la Belgique taxe les plus-values sur actions et fonds. Pour la plupart des gens : rien à payer.",
+      "motsCles": [
+        "2026",
+        "plus-values",
+        "rien"
+      ],
+      "requete": "calendar 2026 desk",
+      "image": "A wall calendar showing the year 2026 in a bright home office, a plant and a mug on the desk",
+      "mouvement": "slow push-in on the calendar"
+    },
+    {
+      "texte": "Le taux : dix pour cent. Mais seulement au-delà de dix mille euros de plus-value par an et par personne.",
+      "motsCles": [
+        "dix",
+        "dix mille",
+        "personne"
+      ],
+      "requete": "coins stack calculator",
+      "image": "A neat stack of euro coins next to a calculator on a marble table, soft daylight, macro",
+      "mouvement": "one coin drops on the stack, slow push-in"
+    },
+    {
+      "texte": "Le chiffre à ne pas perdre : la valeur de tes positions au trente et un décembre 2025. Tout ce qui a été gagné avant n'est pas taxé.",
+      "motsCles": [
+        "trente et un",
+        "décembre",
+        "2025",
+        "avant"
+      ],
+      "requete": "year end statement desk",
+      "image": "A printed year-end portfolio statement with a highlighter marking one line, desk lamp, evening",
+      "mouvement": "the highlighter slides across the line"
+    },
+    {
+      "texte": "Sans cette valeur de référence, le calcul repart de ton prix d'achat — et tout le gain, même ancien, devient taxable.",
+      "motsCles": [
+        "référence",
+        "prix d'achat",
+        "taxable"
+      ],
+      "requete": "old receipts magnifier",
+      "image": "A pile of old paper receipts and a magnifying glass on a wooden table, warm light, shallow depth",
+      "mouvement": "the magnifier moves slowly over the receipts"
+    },
+    {
+      "texte": "Rien n'est automatique : ton courtier retient le taux plein sur chaque plus-value. C'est dans ta déclaration que tu réclames l'exonération.",
+      "motsCles": [
+        "automatique",
+        "déclaration",
+        "exonération"
+      ],
+      "requete": "tax return laptop",
+      "image": "A laptop showing an online tax return form, hands on the keyboard, cup of tea, morning light",
+      "mouvement": "hands type slowly, subtle screen glow"
+    },
+    {
+      "texte": "Ce que tu n'utilises pas de l'exonération pourra se reporter — mais seulement à partir des revenus de 2027.",
+      "motsCles": [
+        "reporter",
+        "2027"
+      ],
+      "requete": "hourglass calendar",
+      "image": "An hourglass on a desk beside a small calendar, sand flowing, soft backlight",
+      "mouvement": "sand flows, very slow push-in"
+    },
+    {
+      "texte": "Nestor garde la valeur au trente et un décembre 2025 de chaque ligne et calcule ton impôt latent. Tu sais où tu en es, avant de vendre.",
+      "motsCles": [
+        "Nestor",
+        "impôt latent",
+        "avant"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A person checking a smartphone app on a sofa, relaxed, lavender-tinted glow, bright room",
+      "mouvement": "the person nods slightly, slow push-in"
+    }
+  ]
+}

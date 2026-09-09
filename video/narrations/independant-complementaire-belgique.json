@@ -1,0 +1,86 @@
+{
+  "slug": "independant-complementaire-belgique",
+  "titre": "Indépendant complémentaire",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "Devenir indépendant complémentaire, c'est trois coûts qui s'empilent : les cotisations sociales, la caisse, et l'impôt.",
+      "motsCles": [
+        "trois",
+        "cotisations",
+        "caisse",
+        "impôt"
+      ],
+      "requete": "laptop side business evening",
+      "image": "A person working on a laptop at a kitchen table in the evening, lamp light, a mug, focused",
+      "mouvement": "gentle handheld motion, typing"
+    },
+    {
+      "texte": "Sous un seuil de revenu net annuel — mille neuf cent vingt-deux euros en 2026 — pas de cotisation. Un euro au-dessus, et la cotisation porte sur la totalité : c'est un couperet, pas une franchise.",
+      "motsCles": [
+        "seuil",
+        "mille neuf cent vingt-deux",
+        "totalité",
+        "couperet"
+      ],
+      "requete": "cliff edge threshold",
+      "image": "A person standing at the edge of a low stone ledge on a path, dramatic soft light, wide shot",
+      "mouvement": "very slow push-in"
+    },
+    {
+      "texte": "Au-delà : vingt virgule cinq pour cent du revenu net, plus les frais de gestion de ta caisse.",
+      "motsCles": [
+        "vingt virgule cinq",
+        "frais de gestion"
+      ],
+      "requete": "invoice percentage calculator",
+      "image": "An invoice on a desk with a calculator showing a percentage, pen, warm light",
+      "mouvement": "slow slide across the invoice"
+    },
+    {
+      "texte": "Le piège qui coûte le plus cher : l'impôt. Ton revenu complémentaire s'ajoute à ton salaire et se taxe dans la tranche du dessus — souvent plus de la moitié, additionnels compris.",
+      "motsCles": [
+        "piège",
+        "impôt",
+        "tranche du dessus",
+        "moitié"
+      ],
+      "requete": "coins stack shrinking",
+      "image": "A tall stack of coins with a hand removing coins from the top, dark background, spotlight",
+      "mouvement": "the hand removes coins, slow push-in"
+    },
+    {
+      "texte": "Rien n'est retenu à la source. C'est à toi de mettre de côté, et la facture arrive un an plus tard.",
+      "motsCles": [
+        "source",
+        "mettre de côté",
+        "un an"
+      ],
+      "requete": "envelope letter calendar",
+      "image": "A brown envelope with a tax letter on a doormat, calendar on the wall behind, morning light",
+      "mouvement": "slow push-in on the envelope"
+    },
+    {
+      "texte": "Sous vingt-cinq mille euros de chiffre d'affaires, tu peux rester en franchise de TVA. Mais depuis 2026, la facture électronique via Peppol s'impose quand même.",
+      "motsCles": [
+        "vingt-cinq mille",
+        "franchise",
+        "Peppol"
+      ],
+      "requete": "e-invoice screen",
+      "image": "A laptop screen showing a clean electronic invoice, hands on the keyboard, bright desk",
+      "mouvement": "subtle screen glow, hands type"
+    },
+    {
+      "texte": "Nestor part de ce que tu factures et te montre ce qui arrive vraiment dans ta poche, impôt compris.",
+      "motsCles": [
+        "Nestor",
+        "factures",
+        "poche"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A freelancer checking a smartphone app in a workshop, smiling, lavender glow",
+      "mouvement": "slow push-in"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "slug": "fiscalite-etf-belgique",
+  "titre": "La fiscalité des ETF",
+  "voix": "fr-BE-CharlineNeural",
+  "scenes": [
+    {
+      "texte": "Un ETF acheté depuis la Belgique se taxe à trois moments : à l'achat, pendant, et à la vente.",
+      "motsCles": [
+        "trois",
+        "achat",
+        "pendant",
+        "vente"
+      ],
+      "requete": "investing desk laptop chart",
+      "image": "A tidy desk with a laptop showing a simple line chart, a notebook and a coffee, soft window light, Belgian apartment",
+      "mouvement": "slow push-in on the laptop, chart line subtly moving"
+    },
+    {
+      "texte": "À l'achat, la TOB : une taxe sur chaque ordre. Son taux dépend du fonds — zéro virgule douze pour cent pour un ETF coté hors registre belge, un virgule trente-deux pour un capitalisant inscrit en Belgique. Dix fois plus.",
+      "motsCles": [
+        "TOB",
+        "douze",
+        "trente-deux",
+        "Dix"
+      ],
+      "requete": "stock exchange facade brussels",
+      "image": "The Brussels stock exchange building facade at golden hour, people passing, classical columns",
+      "mouvement": "slow lateral tracking shot along the columns"
+    },
+    {
+      "texte": "Le réflexe « capitalisant, c'est mieux » se retourne sur la TOB : le même produit, inscrit ou non, ne coûte pas le même prix.",
+      "motsCles": [
+        "capitalisant",
+        "même",
+        "prix"
+      ],
+      "requete": "two identical jars labels",
+      "image": "Two identical glass jars side by side on a shelf, one with a small red label, one with a green label, macro, soft light",
+      "mouvement": "very slow push-in, light shifts across the jars"
+    },
+    {
+      "texte": "Pendant la détention, le précompte mobilier : trente pour cent sur chaque dividende, retenu par ton courtier.",
+      "motsCles": [
+        "précompte",
+        "trente",
+        "dividende"
+      ],
+      "requete": "bank statement dividend",
+      "image": "A printed brokerage statement on a wooden desk with a pair of glasses and a pen, top-down, warm lamp",
+      "mouvement": "slow slide across the statement"
+    },
+    {
+      "texte": "Une première tranche de dividendes est exonérée chaque année — mais le courtier ne peut pas l'appliquer. C'est à toi de réclamer le trop-perçu dans ta déclaration.",
+      "motsCles": [
+        "exonérée",
+        "réclamer",
+        "déclaration"
+      ],
+      "requete": "tax form filling pen",
+      "image": "Hands filling a paper tax form with a fountain pen, a laptop beside, evening lamp light",
+      "mouvement": "the pen writes slowly, gentle handheld motion"
+    },
+    {
+      "texte": "À la vente, depuis 2026, une taxe de dix pour cent sur les plus-values, au-delà de dix mille euros exonérés par an. Et la taxe Reynders pour les fonds obligataires.",
+      "motsCles": [
+        "dix",
+        "plus-values",
+        "dix mille",
+        "Reynders"
+      ],
+      "requete": "selling shares phone",
+      "image": "A person tapping a sell button on a smartphone investing app, blurred living room behind, screen glow",
+      "mouvement": "slow push-in on the phone, thumb taps"
+    },
+    {
+      "texte": "Nestor connaît le taux de TOB de chaque ligne et calcule l'impôt qui dort dans tes positions. Tu vois ce que tu paierais avant de vendre.",
+      "motsCles": [
+        "Nestor",
+        "TOB",
+        "avant"
+      ],
+      "requete": "smartphone finance app smiling person",
+      "image": "A smiling person holding a smartphone in a bright living room, lavender-tinted screen glow, plants behind",
+      "mouvement": "the person looks up and smiles, slow push-in"
+    }
+  ]
+}
