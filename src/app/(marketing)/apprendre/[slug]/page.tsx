@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Clock, ExternalLink, ShieldCheck } from 'lucide-react';
+import { VideoGuide } from '@/components/apprendre/video-guide';
 import { CouvertureGuide } from '@/components/apprendre/couverture';
 import { RenduGuide } from '@/components/apprendre/rendu-guide';
 import { GUIDES, guideParSlug } from '@/lib/apprendre/guides';
@@ -105,6 +106,9 @@ export default async function GuidePage({ params }: PageProps<'/apprendre/[slug]
           </span>
         </div>
       </header>
+
+      {/* La video d'abord, quand elle existe : c'est le guide en une minute. */}
+      <VideoGuide slug={guide.slug} className="mt-8" />
 
       <CouvertureGuide
         slug={guide.slug}
